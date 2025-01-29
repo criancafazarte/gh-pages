@@ -1,0 +1,3 @@
+User-agent: *
+Disallow:
+Sitemap: https://www.criancafazarte.com.br/sitemap.xml

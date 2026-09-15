@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5 dicas para encontrar a casa editorial ideal para obras infantis - Criança Faz Arte</title>
+    <meta name="description" content="Descubra 5 dicas essenciais para escolher a casa editorial perfeita para publicar suas obras infantis com sucesso. Leia agora!">
+    
+    
+    
+    <link rel="icon" href="/static/uploads/iocne.png" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/static/uploads/iocne.png">
+    
+
+    <link rel="stylesheet" href="/themes/gshow_pop_v2/assets/css/style.css?v=2.0">
+    <!-- Bootstrap Icons (Usado internamente pelo CMS e para redes sociais) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Algumas lógicas do CMS dependem de classes Bootstrap puras (RaioX). Injetamos a versão ultra-leve do bootstrap apenas para os blocos do CMS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Sistema de Paletas de Cores -->
+    
+    <style>
+        :root {
+            --accent-color: #6f42c1 !important;
+            --accent-hover: #59359a !important;
+            --accent-dark: #472a7b !important;
+        }
+    </style>
+    
+
+    
+</head>
+<body>
+<header class="gs-header">
+    <div class="gs-header__container">
+        <!-- Lado Esquerdo -->
+        <div class="gs-header__left">
+            <button class="gs-header__menu-btn" id="gs-menu-toggle" aria-label="Abrir Menu">
+                <i class="bi bi-list"></i>
+                <span class="gs-header__menu-text">MENU</span>
+            </button>
+
+            <a href="/" class="gs-header__logo">
+                
+                    <img src="/static/uploads/crianca-faz-arte-2.png" alt="Criança Faz Arte">
+                
+            </a>
+        </div>
+
+        <!-- Centro: Nome do Site com fonte fina -->
+        <a href="/" class="gs-header__center">
+            Criança Faz Arte
+        </a>
+
+        <!-- Lado Direito: Buscar -->
+        <div class="gs-header__right">
+            <button class="gs-header__right-item" id="gs-search-toggle" aria-label="Pesquisar" style="background:none; border:none; color:#fff;">
+                <i class="bi bi-search"></i>
+                <span style="text-transform: uppercase;">Buscar</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- Overlay de Busca (Search Modal) -->
+<div class="gs-search-overlay" id="gs-search-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:9999; padding:2rem;">
+    <button id="gs-search-close" style="position:absolute; top:20px; right:30px; background:none; border:none; color:#fff; font-size:2rem; cursor:pointer;"><i class="bi bi-x-lg"></i></button>
+    <div style="max-width:600px; margin: 4rem auto 0; text-align:center;">
+        <input type="text" id="gs-search-input" placeholder="O que você está procurando?" style="width:100%; padding:1rem; font-size:1.5rem; border:none; border-bottom:2px solid var(--accent-color); background:transparent; color:#fff; outline:none; font-family:var(--font-ui);">
+        <div id="gs-search-results" style="margin-top:2rem; text-align:left; max-height:60vh; overflow-y:auto; font-family:var(--font-ui);"></div>
+    </div>
+</div>
+
+<!-- Sub-Barra de Categoria (Rosa Escuro) -->
+<div class="gs-header__subbar">
+    
+        <a href="/categoria/educacao/" style="color:#ffffff;">Educação</a>
+    
+</div>
+
+<!-- Overlay Escuro do Menu -->
+<div class="gs-overlay" id="gs-overlay"></div>
+
+<!-- Menu Oculto (Offcanvas) -->
+<nav class="gs-nav-offcanvas" id="gs-offcanvas">
+    <button class="gs-nav-offcanvas__close" id="gs-menu-close" aria-label="Fechar Menu">
+        <i class="bi bi-x-lg"></i>
+    </button>
+    <br><br>
+    
+        <a href="/">INÍCIO</a>
+        
+            <a href="/categoria/atividades/">Atividades</a>
+        
+            <a href="/categoria/bebes/">Bebês</a>
+        
+            <a href="/categoria/blog/">Blog</a>
+        
+            <a href="/categoria/criancas/">Crianças</a>
+        
+            <a href="/categoria/educacao/">Educação</a>
+        
+    
+</nav>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- MENU HAMBURGUER LOGIC ---
+        const toggleBtn = document.getElementById('gs-menu-toggle');
+        const closeBtn = document.getElementById('gs-menu-close');
+        const offcanvas = document.getElementById('gs-offcanvas');
+        const overlay = document.getElementById('gs-overlay');
+
+        function openMenu() {
+            offcanvas.classList.add('open');
+            overlay.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMenu() {
+            offcanvas.classList.remove('open');
+            overlay.classList.remove('open');
+            document.body.style.overflow = 'auto';
+        }
+
+        if (toggleBtn) toggleBtn.addEventListener('click', openMenu);
+        if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+        if (overlay) overlay.addEventListener('click', closeMenu);
+
+        // --- SEARCH LOGIC ---
+        const searchToggle = document.getElementById('gs-search-toggle');
+        const searchOverlay = document.getElementById('gs-search-overlay');
+        const searchClose = document.getElementById('gs-search-close');
+        const searchInput = document.getElementById('gs-search-input');
+        const searchResults = document.getElementById('gs-search-results');
+        let postsData = [];
+
+        if (searchToggle && searchOverlay) {
+            searchToggle.addEventListener('click', function() {
+                searchOverlay.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+                searchInput.focus();
+                
+                // Fetch posts.json only once
+                if (postsData.length === 0) {
+                    fetch('/posts.json')
+                        .then(response => response.json())
+                        .then(data => { postsData = data; })
+                        .catch(err => console.error('Erro ao carregar pesquisa', err));
+                }
+            });
+            
+            searchClose.addEventListener('click', function() {
+                searchOverlay.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+            
+            searchInput.addEventListener('input', function(e) {
+                const query = e.target.value.toLowerCase();
+                searchResults.innerHTML = '';
+                if (query.length < 2) return;
+                
+                const filtered = postsData.filter(post => post.title.toLowerCase().includes(query));
+                
+                if (filtered.length === 0) {
+                    searchResults.innerHTML = '<p style="color:#aaa; text-align:center; padding:1rem;">Nenhum resultado encontrado.</p>';
+                    return;
+                }
+                
+                filtered.forEach(post => {
+                    const link = document.createElement('a');
+                    link.href = '/' + post.slug + '/';
+                    link.style.display = 'flex';
+                    link.style.gap = '15px';
+                    link.style.alignItems = 'center';
+                    link.style.padding = '10px 0';
+                    link.style.borderBottom = '1px solid #333';
+                    link.style.color = '#fff';
+                    link.style.textDecoration = 'none';
+                    
+                    let imgHtml = post.image ? `<img src="${post.image}" style="width:60px; height:60px; object-fit:cover; border-radius:4px;">` : `<div style="width:60px; height:60px; background:#444; border-radius:4px;"></div>`;
+                    
+                    link.innerHTML = imgHtml + `<div><div style="font-size:0.8rem; color:#aaa;">${post.date || ''}</div><div style="font-weight:700;">${post.title}</div></div>`;
+                    searchResults.appendChild(link);
+                });
+            });
+        }
+    });
+</script>
+
+<main class="container" style="padding-top: 3rem;">
+    <article>
+        <header class="post-header">
+            
+            <h1 class="post-title">5 dicas para encontrar a casa editorial ideal para obras infantis</h1>
+            
+            
+                <p style="font-size: 1.25rem; color: var(--text-muted); max-width: 800px; margin: 0 auto 2rem; line-height: 1.5;">Descubra 5 dicas essenciais para escolher a casa editorial perfeita para publicar suas obras infantis com sucesso. Leia agora!</p>
+            
+
+            <div class="post-meta" style="margin-top: 1rem; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); padding: 1rem 0; max-width: 760px; margin-left: auto; margin-right: auto;">
+                
+                    <div style="display: flex; align-items: center; gap: 0.5rem; justify-content: center;">
+                        
+                            <i class="bi bi-person-circle" style="font-size: 2rem; color: var(--text-muted);"></i>
+                        
+                        <span style="font-weight: 700; color: var(--text-main);">Por <a href="/autor/nadine-a-queiroga/" style="color: var(--accent-color);">Nadine A Queiroga</a></span>
+                    </div>
+                
+                <div style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 1rem; flex: 1 1 auto;">
+                    <time datetime="2026-09-03" style="color: var(--text-muted);">
+                        03/09/2026 00:00
+                    </time>
+                    <div style="display: flex; gap: 15px; font-size: 1.3rem; color: var(--accent-color);">
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        
+            <figure class="post-featured-image">
+                <img src="/static/uploads/5-dicas-para-encontrar-a-casa-editorial-ideal-para-obras-infantis.jpg" alt="5 dicas para encontrar a casa editorial ideal para obras infantis">
+            </figure>
+        
+
+        
+
+        <div class="post-content">
+            <p>Encontrar a <strong>casa editorial ideal</strong> para obras infantis pode ser um desafio para muitos autores, especialmente aqueles que est&atilde;o iniciando no mercado liter&aacute;rio.</p>
+<p>A literatura infantil exige um cuidado especial, pois envolve um p&uacute;blico sens&iacute;vel e uma linguagem que deve ser clara, educativa e envolvente. Para garantir que seu livro tenha o impacto desejado, &eacute; fundamental escolher uma editora que compreenda esse universo e ofere&ccedil;a suporte adequado durante todo o processo de publica&ccedil;&atilde;o.</p>
+<p>A seguir, confira cinco dicas essenciais para identificar a melhor editora para seu projeto de literatura infantil.</p>
+<h2>1. Entenda O Perfil Da Editora</h2>
+<p>Antes de enviar seu manuscrito, pesquise cuidadosamente o <strong>perfil da editora</strong>. Nem todas as casas editoriais trabalham com literatura infantil, e aquelas que atuam nesse segmento podem ter estilos e p&uacute;blicos-alvo diferentes.</p>
+<h3>Pesquise os t&iacute;tulos publicados</h3>
+<p>Verifique o cat&aacute;logo da editora e analise os livros infantis que ela j&aacute; publicou. Observe se eles t&ecirc;m uma linha editorial que combina com o estilo e a proposta da sua obra. Isso ajuda a garantir que seu trabalho ser&aacute; valorizado e ter&aacute; chances maiores de ser aceito.</p>
+<h3>Avalie a reputa&ccedil;&atilde;o e experi&ecirc;ncia</h3>
+<p>A experi&ecirc;ncia da editora no mercado de livros infantis &eacute; outro ponto importante. Uma editora consolidada geralmente possui canais de distribui&ccedil;&atilde;o eficientes, parceiros para divulga&ccedil;&atilde;o e profissionais especializados para orientar a produ&ccedil;&atilde;o do livro.</p>
+<h2>2. Considere O Suporte Editorial Oferecido</h2>
+<p>Um dos aspectos que fazem diferen&ccedil;a na escolha da <strong>casa editorial ideal</strong> &eacute; o suporte oferecido durante o processo de publica&ccedil;&atilde;o. Al&eacute;m da revis&atilde;o e edi&ccedil;&atilde;o do texto, a editora deve estar preparada para ajudar em outros aspectos fundamentais.</p>
+<h3>Revis&atilde;o e adapta&ccedil;&atilde;o do texto</h3>
+<p>Para obras infantis, a linguagem deve ser adequada &agrave; faixa et&aacute;ria do p&uacute;blico-alvo. Uma editora que oferece uma revis&atilde;o cuidadosa e, se necess&aacute;rio, adapta&ccedil;&otilde;es no texto, contribui para que o livro seja compreendido e apreciado pelos pequenos leitores.</p>
+<h3>Ilustra&ccedil;&atilde;o e design</h3>
+<p>Os livros infantis dependem muito da parte visual para atrair a aten&ccedil;&atilde;o das crian&ccedil;as. Verifique se a editora possui uma equipe de ilustradores talentosos ou se trabalha com profissionais parceiros que possam transformar seu texto em uma obra visualmente encantadora.</p>
+<h2>3. An&aacute;lise Das Condi&ccedil;&otilde;es Contratuais</h2>
+<p>Antes de assinar qualquer contrato, &eacute; fundamental analisar todas as cl&aacute;usulas com aten&ccedil;&atilde;o. Muitas vezes, o autor n&atilde;o tem familiaridade com termos jur&iacute;dicos e pode acabar fechando um acordo desfavor&aacute;vel.</p>
+<h3>Direitos autorais e royalties</h3>
+<p>Entenda claramente como ser&aacute; feita a divis&atilde;o dos direitos autorais e qual a porcentagem de royalties que voc&ecirc; receber&aacute; sobre as vendas do livro. Uma editora justa oferece transpar&ecirc;ncia nessas quest&otilde;es.</p>
+<h3>Prazo de publica&ccedil;&atilde;o e tiragem</h3>
+<p>Confira o prazo estimado para a publica&ccedil;&atilde;o do livro e a quantidade inicial de exemplares que ser&atilde;o produzidos. Esses fatores influenciam diretamente na exposi&ccedil;&atilde;o e distribui&ccedil;&atilde;o da obra.</p>
+<h2>4. Avalie As Estrat&eacute;gias De Divulga&ccedil;&atilde;o E Distribui&ccedil;&atilde;o</h2>
+<p>Ter um excelente livro publicado n&atilde;o &eacute; suficiente para garantir o sucesso. &Eacute; preciso que a obra chegue at&eacute; o p&uacute;blico-alvo e seja divulgada de forma eficaz.</p>
+<h3>Canais de distribui&ccedil;&atilde;o</h3>
+<p>Verifique se a editora possui parcerias com livrarias, escolas e bibliotecas, al&eacute;m de atua&ccedil;&atilde;o em plataformas digitais. Uma boa rede de distribui&ccedil;&atilde;o amplia o alcance do livro infantil.</p>
+<h3>Marketing e divulga&ccedil;&atilde;o</h3>
+<p>Pergunte sobre as estrat&eacute;gias de marketing que a editora utiliza. Algumas casas editoriais investem em eventos de lan&ccedil;amento, participa&ccedil;&atilde;o em feiras liter&aacute;rias, a&ccedil;&otilde;es em redes sociais e envio de exemplares para influenciadores do segmento infantil.</p>
+<h2>5. Busque Opini&otilde;es E Depoimentos De Outros Autores</h2>
+<p>Nada melhor do que ouvir quem j&aacute; passou pela experi&ecirc;ncia de publicar um livro infantil em determinada editora. Busque depoimentos e avalia&ccedil;&otilde;es de autores que tenham trabalhado com a casa editorial que voc&ecirc; est&aacute; considerando.</p>
+<h3>Grupos e f&oacute;runs de autores</h3>
+<p>Participar de grupos online e f&oacute;runs especializados em literatura pode ser uma &oacute;tima forma de trocar informa&ccedil;&otilde;es e receber recomenda&ccedil;&otilde;es confi&aacute;veis.</p>
+<h3>Contato direto com autores</h3>
+<p>Se poss&iacute;vel, entre em contato diretamente com autores para conversar sobre como foi o processo, os pr&oacute;s e contras da editora, e se recomendariam o trabalho conjunto.</p>
+<h2>Considera&ccedil;&otilde;es Finais Para Encontrar A Editora Ideal</h2>
+<p>A escolha da editora para obras infantis &eacute; um passo crucial que pode determinar o sucesso do seu livro. Avaliar o perfil da casa editorial, o suporte oferecido, as condi&ccedil;&otilde;es contratuais, as estrat&eacute;gias de divulga&ccedil;&atilde;o e a opini&atilde;o de outros autores s&atilde;o pontos que devem ser levados em conta para uma decis&atilde;o consciente e segura.</p>
+<p>Al&eacute;m disso, &eacute; importante lembrar que o mercado editorial infantil &eacute; especializado e demanda aten&ccedil;&atilde;o ao formato, linguagem e design do livro. Por isso, buscar uma <a href="https://printstore.com.br/blog/editora-de-livros-descubra-como-escolher-a-certa-para-publicar-o-seu-livro/" target="_blank" rel="noopener">editora de livros</a> que realmente entenda as particularidades desse p&uacute;blico faz toda a diferen&ccedil;a para que seu projeto seja valorizado e chegue com qualidade at&eacute; as m&atilde;os dos pequenos leitores.</p>
+<p>Seguindo essas dicas, a jornada rumo &agrave; publica&ccedil;&atilde;o do seu livro infantil ser&aacute; mais tranquila e alinhada com seus objetivos como autor.</p>
+        </div>
+
+        
+    </article>
+</main>
+
+<footer class="gs-footer">
+    <div class="container">
+        <div class="gs-footer__social">
+            
+            
+            
+            
+        </div>
+        
+        <ul class="gs-footer__menu">
+            
+        </ul>
+        
+        <div class="gs-footer__description" style="max-width: 600px; margin: 0 auto 2rem; color: var(--text-muted); font-size: 0.95rem; font-family: var(--font-ui);">
+            Um espaço dedicado a compartilhar ideias, artigos e tutoriais. Nossa missão é entregar conteúdo de valor e com qualidade para todos os nossos leitores.
+        </div>
+        
+        
+        <div class="gs-footer__copyright">
+            Somos um blog voltado para as crianças! Aqui você irá encontrar brincadeiras, sugestões, viagens, passeios, recreações, técnicas de aprendizado infantil e muito mais! O mundo da criança agora tem nome: Criança faz Arte! Todos os artigos aqui do site são revisados por uma pedagoga experiente. Então seja muito bem vindo e fique com a gente =)
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Carrossel nativo simplificado (substituto das chamadas de script originais caso tenha blocos CMS)
+    document.addEventListener('DOMContentLoaded', function() {
+        document.body.addEventListener('click', function(e) {
+            const btnPrev = e.target.closest('.btn-carousel-prev');
+            if (btnPrev) {
+                const wrapper = btnPrev.closest('div[id^="carrossel-"]');
+                const track = wrapper.querySelector('.dsc-track');
+                const item = track.querySelector('.dsc-item');
+                if (track && item) {
+                    const scrollAmount = item.offsetWidth + 20;
+                    if (track.scrollLeft <= 5) { track.scrollTo({ left: track.scrollWidth, behavior: 'smooth' }); } 
+                    else { track.scrollBy({ left: -scrollAmount, behavior: 'smooth' }); }
+                }
+                return;
+            }
+            const btnNext = e.target.closest('.btn-carousel-next');
+            if (btnNext) {
+                const wrapper = btnNext.closest('div[id^="carrossel-"]');
+                const track = wrapper.querySelector('.dsc-track');
+                const item = track.querySelector('.dsc-item');
+                if (track && item) {
+                    const scrollAmount = item.offsetWidth + 20;
+                    if (track.scrollLeft + track.offsetWidth >= track.scrollWidth - 5) { track.scrollTo({ left: 0, behavior: 'smooth' }); } 
+                    else { track.scrollBy({ left: scrollAmount, behavior: 'smooth' }); }
+                }
+                return;
+            }
+        });
+    });
+</script>
+</body>
+</html>

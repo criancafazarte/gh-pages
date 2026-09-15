@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Como escolher nomes clássicos para seu filho com significado - Criança Faz Arte</title>
+    <meta name="description" content="Descubra como escolher nomes clássicos para seu filho com significado profundo e tradição. Inspire-se em opções atemporais e cheias de história!">
+    
+    
+    
+    <link rel="icon" href="/static/uploads/iocne.png" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/static/uploads/iocne.png">
+    
+
+    <link rel="stylesheet" href="/themes/gshow_pop_v2/assets/css/style.css?v=2.0">
+    <!-- Bootstrap Icons (Usado internamente pelo CMS e para redes sociais) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Algumas lógicas do CMS dependem de classes Bootstrap puras (RaioX). Injetamos a versão ultra-leve do bootstrap apenas para os blocos do CMS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Sistema de Paletas de Cores -->
+    
+    <style>
+        :root {
+            --accent-color: #6f42c1 !important;
+            --accent-hover: #59359a !important;
+            --accent-dark: #472a7b !important;
+        }
+    </style>
+    
+
+    
+</head>
+<body>
+<header class="gs-header">
+    <div class="gs-header__container">
+        <!-- Lado Esquerdo -->
+        <div class="gs-header__left">
+            <button class="gs-header__menu-btn" id="gs-menu-toggle" aria-label="Abrir Menu">
+                <i class="bi bi-list"></i>
+                <span class="gs-header__menu-text">MENU</span>
+            </button>
+
+            <a href="/" class="gs-header__logo">
+                
+                    <img src="/static/uploads/crianca-faz-arte-2.png" alt="Criança Faz Arte">
+                
+            </a>
+        </div>
+
+        <!-- Centro: Nome do Site com fonte fina -->
+        <a href="/" class="gs-header__center">
+            Criança Faz Arte
+        </a>
+
+        <!-- Lado Direito: Buscar -->
+        <div class="gs-header__right">
+            <button class="gs-header__right-item" id="gs-search-toggle" aria-label="Pesquisar" style="background:none; border:none; color:#fff;">
+                <i class="bi bi-search"></i>
+                <span style="text-transform: uppercase;">Buscar</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- Overlay de Busca (Search Modal) -->
+<div class="gs-search-overlay" id="gs-search-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:9999; padding:2rem;">
+    <button id="gs-search-close" style="position:absolute; top:20px; right:30px; background:none; border:none; color:#fff; font-size:2rem; cursor:pointer;"><i class="bi bi-x-lg"></i></button>
+    <div style="max-width:600px; margin: 4rem auto 0; text-align:center;">
+        <input type="text" id="gs-search-input" placeholder="O que você está procurando?" style="width:100%; padding:1rem; font-size:1.5rem; border:none; border-bottom:2px solid var(--accent-color); background:transparent; color:#fff; outline:none; font-family:var(--font-ui);">
+        <div id="gs-search-results" style="margin-top:2rem; text-align:left; max-height:60vh; overflow-y:auto; font-family:var(--font-ui);"></div>
+    </div>
+</div>
+
+<!-- Sub-Barra de Categoria (Rosa Escuro) -->
+<div class="gs-header__subbar">
+    
+        <a href="/categoria/blog/" style="color:#ffffff;">Blog</a>
+    
+</div>
+
+<!-- Overlay Escuro do Menu -->
+<div class="gs-overlay" id="gs-overlay"></div>
+
+<!-- Menu Oculto (Offcanvas) -->
+<nav class="gs-nav-offcanvas" id="gs-offcanvas">
+    <button class="gs-nav-offcanvas__close" id="gs-menu-close" aria-label="Fechar Menu">
+        <i class="bi bi-x-lg"></i>
+    </button>
+    <br><br>
+    
+        <a href="/">INÍCIO</a>
+        
+            <a href="/categoria/atividades/">Atividades</a>
+        
+            <a href="/categoria/bebes/">Bebês</a>
+        
+            <a href="/categoria/blog/">Blog</a>
+        
+            <a href="/categoria/criancas/">Crianças</a>
+        
+            <a href="/categoria/educacao/">Educação</a>
+        
+    
+</nav>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- MENU HAMBURGUER LOGIC ---
+        const toggleBtn = document.getElementById('gs-menu-toggle');
+        const closeBtn = document.getElementById('gs-menu-close');
+        const offcanvas = document.getElementById('gs-offcanvas');
+        const overlay = document.getElementById('gs-overlay');
+
+        function openMenu() {
+            offcanvas.classList.add('open');
+            overlay.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMenu() {
+            offcanvas.classList.remove('open');
+            overlay.classList.remove('open');
+            document.body.style.overflow = 'auto';
+        }
+
+        if (toggleBtn) toggleBtn.addEventListener('click', openMenu);
+        if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+        if (overlay) overlay.addEventListener('click', closeMenu);
+
+        // --- SEARCH LOGIC ---
+        const searchToggle = document.getElementById('gs-search-toggle');
+        const searchOverlay = document.getElementById('gs-search-overlay');
+        const searchClose = document.getElementById('gs-search-close');
+        const searchInput = document.getElementById('gs-search-input');
+        const searchResults = document.getElementById('gs-search-results');
+        let postsData = [];
+
+        if (searchToggle && searchOverlay) {
+            searchToggle.addEventListener('click', function() {
+                searchOverlay.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+                searchInput.focus();
+                
+                // Fetch posts.json only once
+                if (postsData.length === 0) {
+                    fetch('/posts.json')
+                        .then(response => response.json())
+                        .then(data => { postsData = data; })
+                        .catch(err => console.error('Erro ao carregar pesquisa', err));
+                }
+            });
+            
+            searchClose.addEventListener('click', function() {
+                searchOverlay.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+            
+            searchInput.addEventListener('input', function(e) {
+                const query = e.target.value.toLowerCase();
+                searchResults.innerHTML = '';
+                if (query.length < 2) return;
+                
+                const filtered = postsData.filter(post => post.title.toLowerCase().includes(query));
+                
+                if (filtered.length === 0) {
+                    searchResults.innerHTML = '<p style="color:#aaa; text-align:center; padding:1rem;">Nenhum resultado encontrado.</p>';
+                    return;
+                }
+                
+                filtered.forEach(post => {
+                    const link = document.createElement('a');
+                    link.href = '/' + post.slug + '/';
+                    link.style.display = 'flex';
+                    link.style.gap = '15px';
+                    link.style.alignItems = 'center';
+                    link.style.padding = '10px 0';
+                    link.style.borderBottom = '1px solid #333';
+                    link.style.color = '#fff';
+                    link.style.textDecoration = 'none';
+                    
+                    let imgHtml = post.image ? `<img src="${post.image}" style="width:60px; height:60px; object-fit:cover; border-radius:4px;">` : `<div style="width:60px; height:60px; background:#444; border-radius:4px;"></div>`;
+                    
+                    link.innerHTML = imgHtml + `<div><div style="font-size:0.8rem; color:#aaa;">${post.date || ''}</div><div style="font-weight:700;">${post.title}</div></div>`;
+                    searchResults.appendChild(link);
+                });
+            });
+        }
+    });
+</script>
+
+<main class="container" style="padding-top: 3rem;">
+    <article>
+        <header class="post-header">
+            
+            <h1 class="post-title">Como escolher nomes clássicos para seu filho com significado</h1>
+            
+            
+                <p style="font-size: 1.25rem; color: var(--text-muted); max-width: 800px; margin: 0 auto 2rem; line-height: 1.5;">Descubra como escolher nomes clássicos para seu filho com significado profundo e tradição. Inspire-se em opções atemporais e cheias de história!</p>
+            
+
+            <div class="post-meta" style="margin-top: 1rem; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); padding: 1rem 0; max-width: 760px; margin-left: auto; margin-right: auto;">
+                
+                    <div style="display: flex; align-items: center; gap: 0.5rem; justify-content: center;">
+                        
+                            <i class="bi bi-person-circle" style="font-size: 2rem; color: var(--text-muted);"></i>
+                        
+                        <span style="font-weight: 700; color: var(--text-main);">Por <a href="/autor/nadine-a-queiroga/" style="color: var(--accent-color);">Nadine A Queiroga</a></span>
+                    </div>
+                
+                <div style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 1rem; flex: 1 1 auto;">
+                    <time datetime="2026-07-09" style="color: var(--text-muted);">
+                        09/07/2026 00:00
+                    </time>
+                    <div style="display: flex; gap: 15px; font-size: 1.3rem; color: var(--accent-color);">
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        
+            <figure class="post-featured-image">
+                <img src="/static/uploads/como-escolher-nomes-classicos-para-seu-filho-com-significado.jpg" alt="Como escolher nomes clássicos para seu filho com significado">
+            </figure>
+        
+
+        
+
+        <div class="post-content">
+            <p>Escolher o nome do filho &eacute; uma das decis&otilde;es mais importantes e emocionantes para os pais. Um <strong>nome cl&aacute;ssico</strong> carrega hist&oacute;rias, tradi&ccedil;&otilde;es e significados profundos que podem influenciar a identidade e a personalidade da crian&ccedil;a ao longo da vida. Al&eacute;m de refletir valores culturais, um nome com significado pode transmitir mensagens de esperan&ccedil;a, for&ccedil;a, sabedoria e virtudes que os pais desejam para seus filhos.</p>
+<p>Neste guia completo, voc&ecirc; encontrar&aacute; dicas valiosas para escolher <strong>nomes cl&aacute;ssicos para seu filho</strong> que sejam ao mesmo tempo atemporais e repletos de significado. A inten&ccedil;&atilde;o &eacute; ajudar a tomar uma decis&atilde;o consciente e afetiva, criando uma conex&atilde;o especial entre o nome e a hist&oacute;ria da fam&iacute;lia.</p>
+<h2>Por Que Escolher Um Nome Cl&aacute;ssico?</h2>
+<p>Antes de entender como escolher, &eacute; importante compreender o valor dos <strong>nomes cl&aacute;ssicos</strong>. Eles s&atilde;o aqueles que resistiram ao teste do tempo, permanecendo populares ou sempre respeitados em diversas gera&ccedil;&otilde;es. Geralmente, esses nomes t&ecirc;m ra&iacute;zes culturais profundas e s&atilde;o associados a figuras hist&oacute;ricas, liter&aacute;rias ou religiosas.</p>
+<h3>Vantagens dos nomes cl&aacute;ssicos</h3>
+<p>- <strong>Durabilidade:</strong> Nomes cl&aacute;ssicos dificilmente saem de moda, garantindo que seu filho n&atilde;o sofra com tend&ecirc;ncias passageiras.</p>
+<p>- <strong>Respeito e credibilidade:</strong> Em ambientes profissionais e sociais, nomes tradicionais costumam transmitir seriedade e confiabilidade.</p>
+<p>- <strong>Liga&ccedil;&atilde;o cultural:</strong> Muitos nomes cl&aacute;ssicos carregam significados que remetem &agrave;s origens familiares, tradi&ccedil;&otilde;es religiosas e valores &eacute;ticos.</p>
+<p>- <strong>Facilidade de pron&uacute;ncia:</strong> Por serem conhecidos h&aacute; muito tempo, costumam ser facilmente reconhecidos e pronunciados corretamente.</p>
+<p>---</p>
+<h2>Como Encontrar Nomes Cl&aacute;ssicos Com Significado</h2>
+<p>Escolher um nome que seja cl&aacute;ssico e significativo requer pesquisa e reflex&atilde;o. A seguir, algumas estrat&eacute;gias para ajudar nessa escolha.</p>
+<h3>1. Pesquise a origem e o significado do nome</h3>
+<p>Todo nome tem uma etimologia, ou seja, uma origem, e um significado espec&iacute;fico. Descobrir o que o nome representa pode fortalecer a conex&atilde;o dos pais com a escolha.</p>
+<p>- <strong>Nomes de origem latina:</strong> Muitos nomes cl&aacute;ssicos v&ecirc;m do latim, como *Marcus* (guerreiro) e *Lucius* (luz).</p>
+<p>- <strong>Nomes de origem grega:</strong> Tamb&eacute;m s&atilde;o comuns e possuem significados fortes, como *Alexandre* (defensor do homem) e *Dimitri* (amante da terra).</p>
+<p>- <strong>Nomes religiosos:</strong> A influ&ecirc;ncia das tradi&ccedil;&otilde;es religiosas &eacute; marcante na escolha de nomes, especialmente os que carregam valores espirituais.</p>
+<h3>2. Considere as hist&oacute;rias familiares</h3>
+<p>Muitas fam&iacute;lias t&ecirc;m nomes que passaram de gera&ccedil;&atilde;o em gera&ccedil;&atilde;o. Esses nomes n&atilde;o apenas mant&ecirc;m a tradi&ccedil;&atilde;o, mas tamb&eacute;m honram antepassados e mant&ecirc;m viva a mem&oacute;ria familiar. Resgatar um nome antigo pode ser uma bela homenagem.</p>
+<h3>3. Avalie a sonoridade e a combina&ccedil;&atilde;o com o sobrenome</h3>
+<p>Al&eacute;m do significado, o nome deve soar bem quando falado em conjunto com o sobrenome. A harmonia entre os nomes ajuda na fluidez e na aceita&ccedil;&atilde;o social.</p>
+<h3>4. Pense na versatilidade do nome</h3>
+<p>Nomes cl&aacute;ssicos geralmente t&ecirc;m apelidos carinhosos e varia&ccedil;&otilde;es que podem ser usadas em diferentes fases da vida. Por exemplo, *Gabriel* pode ser chamado de *Gabe* ou *Biel*.</p>
+<p>---</p>
+<h2>Exemplos De Nomes Cl&aacute;ssicos Masculinos Com Significado</h2>
+<p>A seguir, uma lista com alguns nomes tradicionais que possuem um significado especial e carregam uma hist&oacute;ria rica.</p>
+<h3>Nomes latinos cl&aacute;ssicos</h3>
+<ul>
+<li>
+<p><strong>Caio</strong> &mdash; Alegre, feliz</p>
+</li>
+<li>
+<p><strong>J&uacute;lio</strong> &mdash; Jovem, descendente de J&uacute;piter</p>
+</li>
+<li>
+<p><strong>Marco</strong> &mdash; Guerreiro, valente</p>
+</li>
+<li>
+<p><strong>C&eacute;sar</strong> &mdash; Cabeludo, imperador</p>
+</li>
+</ul>
+<h3>Nomes gregos cl&aacute;ssicos</h3>
+<ul>
+<li>
+<p><strong>Andr&eacute;</strong> &mdash; Homem, viril</p>
+</li>
+<li>
+<p><strong>Davi</strong> &mdash; Amado, querido</p>
+</li>
+<li>
+<p><strong>Lucas</strong> &mdash; Luminoso, iluminado</p>
+</li>
+<li>
+<p><strong>Sebasti&atilde;o</strong> &mdash; Vener&aacute;vel, respeit&aacute;vel</p>
+</li>
+</ul>
+<h3>Nomes b&iacute;blicos masculinos</h3>
+<p>Os <a href="https://planetadosbaixinhos.com/nomes-biblicos-de-meninos/" target="_blank" rel="noopener">nomes b&iacute;blicos masculinos</a> s&atilde;o uma rica fonte de nomes cl&aacute;ssicos e cheios de significado. Eles trazem hist&oacute;rias de f&eacute;, coragem e lideran&ccedil;a que atravessaram s&eacute;culos.</p>
+<ul>
+<li>
+<p><strong>Jos&eacute;</strong> &mdash; Aquele que acrescenta</p>
+</li>
+<li>
+<p><strong>Isaac</strong> &mdash; Riso, aquele que alegra</p>
+</li>
+<li>
+<p><strong>Daniel</strong> &mdash; Deus &eacute; meu juiz</p>
+</li>
+<li>
+<p><strong>Samuel</strong> &mdash; Ouvido por Deus</p>
+</li>
+</ul>
+<h2>Dicas Para Escolher O Nome Ideal</h2>
+<h3>Pense no futuro</h3>
+<p>O nome que voc&ecirc; escolher acompanhar&aacute; seu filho por toda a vida. Reflita se ele ser&aacute; adequado para diferentes fases, desde a inf&acirc;ncia at&eacute; a idade adulta.</p>
+<h3>Evite nomes que possam causar constrangimento</h3>
+<p>Certos nomes, mesmo sendo cl&aacute;ssicos, podem ter conota&ccedil;&otilde;es ou associa&ccedil;&otilde;es negativas em alguma cultura ou regi&atilde;o. Pesquise poss&iacute;veis significados duplicados ou apelidos que possam ser usados contra a crian&ccedil;a.</p>
+<h3>Consulte o parceiro(a)</h3>
+<p>A escolha do nome deve ser uma decis&atilde;o conjunta. Conversar e alinhar as prefer&ecirc;ncias evita desentendimentos futuros.</p>
+<h3>Teste a combina&ccedil;&atilde;o</h3>
+<p>Diga o nome completo em voz alta v&aacute;rias vezes para ter certeza de que gosta da sonoridade e da fluidez.</p>
+<p>---</p>
+<h2>Como Usar O Significado Do Nome Para Inspirar A Escolha</h2>
+<p>O significado do nome pode refletir qualidades que os pais desejam para o filho. Por exemplo:</p>
+<p>- <strong>Coragem:</strong> Nomes como *Leonardo* (valente como um le&atilde;o) ou *Gustavo* (protegido dos deuses) podem inspirar for&ccedil;a.</p>
+<p>- <strong>Sabedoria:</strong> *S&eacute;rgio* (aquele que protege) ou *Artur* (nobre, corajoso) remetem a virtudes de lideran&ccedil;a.</p>
+<p>- <strong>Bondade:</strong> *Mateus* (dom de Deus) ou *Felipe* (amigo dos cavalos, s&iacute;mbolo de amizade e lealdade).</p>
+<p>---</p>
+<h2>A Influ&ecirc;ncia Cultural E Religiosa Na Escolha Do Nome</h2>
+<p>Em muitas fam&iacute;lias, a escolha do nome est&aacute; diretamente ligada &agrave; religi&atilde;o ou &agrave; cultura. Os nomes cl&aacute;ssicos frequentemente s&atilde;o inspirados em santos, personagens hist&oacute;ricos ou mitol&oacute;gicos, que representam ideais importantes.</p>
+<h3>Nomes cl&aacute;ssicos e a tradi&ccedil;&atilde;o religiosa</h3>
+<p>Al&eacute;m dos nomes b&iacute;blicos masculinos, h&aacute; nomes que v&ecirc;m de outras tradi&ccedil;&otilde;es, como:</p>
+<p>- <strong>Santos cat&oacute;licos:</strong> *Francisco*, *Ant&ocirc;nio*, *Jo&atilde;o*.</p>
+<p>- <strong>Personagens da mitologia greco-romana:</strong> *H&eacute;lio*, *Dion&iacute;sio*.</p>
+<p>- <strong>Nomes de reis e imperadores:</strong> *Carlos*, *Henrique*.</p>
+<p>---</p>
+<h2>Erros Comuns Ao Escolher Nomes Cl&aacute;ssicos</h2>
+<h3>Ignorar o significado</h3>
+<p>Muitos pais escolhem nomes apenas pela est&eacute;tica, sem considerar o valor ou as implica&ccedil;&otilde;es do significado.</p>
+<h3>Focar apenas em modismos</h3>
+<p>Apesar de serem cl&aacute;ssicos, alguns nomes voltam &agrave; moda por causa de celebridades ou personagens populares, o que pode descaracterizar a proposta original.</p>
+<h3>N&atilde;o pensar no sobrenome</h3>
+<p>Um nome bonito pode n&atilde;o combinar com o sobrenome, gerando combina&ccedil;&otilde;es dif&iacute;ceis ou engra&ccedil;adas.</p>
+<p>---</p>
+<h2>Como Registrar Nomes Cl&aacute;ssicos Com Significado</h2>
+<p>Ao escolher o nome, &eacute; fundamental verificar as regras do registro civil no seu pa&iacute;s. No Brasil, por exemplo, n&atilde;o h&aacute; restri&ccedil;&otilde;es para nomes cl&aacute;ssicos, desde que n&atilde;o causem constrangimento. &Eacute; poss&iacute;vel combinar nomes para formar composi&ccedil;&otilde;es que valorizem ainda mais o significado, como *Jo&atilde;o Pedro* ou *Carlos Eduardo*.</p>
+<p>---</p>
+<h2>Nomes Cl&aacute;ssicos Para Diferentes Estilos De Fam&iacute;lia</h2>
+<p>Cada fam&iacute;lia tem seu pr&oacute;prio estilo e prefer&ecirc;ncias. Aqui est&atilde;o algumas sugest&otilde;es de nomes cl&aacute;ssicos que se encaixam em diferentes perfis:</p>
+<h3>Para fam&iacute;lias tradicionais</h3>
+<p>- *Miguel*</p>
+<p>- *Eduardo*</p>
+<p>- *Ricardo*</p>
+<p>- *Fernando*</p>
+<h3>Para fam&iacute;lias modernas que gostam do cl&aacute;ssico</h3>
+<p>- *Henrique*</p>
+<p>- *Gabriel*</p>
+<p>- *Rafael*</p>
+<p>- *Leonardo*</p>
+<h3>Para fam&iacute;lias religiosas</h3>
+<p>- *Tiago*</p>
+<p>- *Mateus*</p>
+<p>- *Lucas*</p>
+<p>- *Pedro*</p>
+<p>---</p>
+<h2>Considera&ccedil;&otilde;es Finais</h2>
+<p>Escolher <strong>nomes cl&aacute;ssicos para seu filho com significado</strong> &eacute; uma forma de garantir que a identidade do seu filho seja constru&iacute;da sobre uma base s&oacute;lida e carregada de valor. Nomes cl&aacute;ssicos transmitem respeito e tradi&ccedil;&atilde;o, ao mesmo tempo que oferecem um universo de hist&oacute;rias e virtudes para inspirar a vida da crian&ccedil;a.</p>
+<p>Lembre-se de que o nome &eacute; o primeiro presente que voc&ecirc; dar&aacute; ao seu filho, por isso merece aten&ccedil;&atilde;o, carinho e reflex&atilde;o. Ao combinar beleza, tradi&ccedil;&atilde;o e significado, voc&ecirc; estar&aacute; contribuindo para a forma&ccedil;&atilde;o de uma identidade forte e positiva.</p>
+<p>---</p>
+<h2>Faqs - Perguntas Frequentes Sobre Nomes Cl&aacute;ssicos Para Filhos</h2>
+<p><strong>1. Nomes cl&aacute;ssicos s&atilde;o sempre uma boa escolha?</strong></p>
+<p>Sim, pois eles s&atilde;o atemporais e carregam significados profundos, mas a escolha deve sempre levar em conta o contexto familiar e cultural.</p>
+<p><strong>2. Como saber o significado de um nome?</strong></p>
+<p>&Eacute; poss&iacute;vel consultar livros especializados, sites confi&aacute;veis de etimologia e dicion&aacute;rios de nomes.</p>
+<p><strong>3. Posso combinar nomes cl&aacute;ssicos com modernos?</strong></p>
+<p>Sim, a combina&ccedil;&atilde;o pode trazer originalidade e equil&iacute;brio entre tradi&ccedil;&atilde;o e contemporaneidade.</p>
+<p><strong>4. Qual a import&acirc;ncia do significado do nome?</strong></p>
+<p>O significado pode inspirar valores e caracter&iacute;sticas que os pais desejam para a crian&ccedil;a, influenciando positivamente sua autoestima.</p>
+<p><strong>5. H&aacute; restri&ccedil;&otilde;es para nomes cl&aacute;ssicos no registro civil?</strong></p>
+<p>Normalmente n&atilde;o, desde que o nome n&atilde;o cause constrangimento ou ofensa. &Eacute; sempre bom verificar a legisla&ccedil;&atilde;o local.</p>
+<p>---</p>
+<p>Definir o nome certo &eacute; uma jornada emocionante e significativa. Com um pouco de pesquisa e reflex&atilde;o, &eacute; poss&iacute;vel encontrar o nome cl&aacute;ssico perfeito que acompanhar&aacute; seu filho durante toda a vida, carregado de significado e beleza.</p>
+        </div>
+
+        
+    </article>
+</main>
+
+<footer class="gs-footer">
+    <div class="container">
+        <div class="gs-footer__social">
+            
+            
+            
+            
+        </div>
+        
+        <ul class="gs-footer__menu">
+            
+        </ul>
+        
+        <div class="gs-footer__description" style="max-width: 600px; margin: 0 auto 2rem; color: var(--text-muted); font-size: 0.95rem; font-family: var(--font-ui);">
+            Um espaço dedicado a compartilhar ideias, artigos e tutoriais. Nossa missão é entregar conteúdo de valor e com qualidade para todos os nossos leitores.
+        </div>
+        
+        
+        <div class="gs-footer__copyright">
+            Somos um blog voltado para as crianças! Aqui você irá encontrar brincadeiras, sugestões, viagens, passeios, recreações, técnicas de aprendizado infantil e muito mais! O mundo da criança agora tem nome: Criança faz Arte! Todos os artigos aqui do site são revisados por uma pedagoga experiente. Então seja muito bem vindo e fique com a gente =)
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Carrossel nativo simplificado (substituto das chamadas de script originais caso tenha blocos CMS)
+    document.addEventListener('DOMContentLoaded', function() {
+        document.body.addEventListener('click', function(e) {
+            const btnPrev = e.target.closest('.btn-carousel-prev');
+            if (btnPrev) {
+                const wrapper = btnPrev.closest('div[id^="carrossel-"]');
+                const track = wrapper.querySelector('.dsc-track');
+                const item = track.querySelector('.dsc-item');
+                if (track && item) {
+                    const scrollAmount = item.offsetWidth + 20;
+                    if (track.scrollLeft <= 5) { track.scrollTo({ left: track.scrollWidth, behavior: 'smooth' }); } 
+                    else { track.scrollBy({ left: -scrollAmount, behavior: 'smooth' }); }
+                }
+                return;
+            }
+            const btnNext = e.target.closest('.btn-carousel-next');
+            if (btnNext) {
+                const wrapper = btnNext.closest('div[id^="carrossel-"]');
+                const track = wrapper.querySelector('.dsc-track');
+                const item = track.querySelector('.dsc-item');
+                if (track && item) {
+                    const scrollAmount = item.offsetWidth + 20;
+                    if (track.scrollLeft + track.offsetWidth >= track.scrollWidth - 5) { track.scrollTo({ left: 0, behavior: 'smooth' }); } 
+                    else { track.scrollBy({ left: scrollAmount, behavior: 'smooth' }); }
+                }
+                return;
+            }
+        });
+    });
+</script>
+</body>
+</html>

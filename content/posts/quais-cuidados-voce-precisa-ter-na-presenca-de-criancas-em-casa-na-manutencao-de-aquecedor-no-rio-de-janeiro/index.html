@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quais cuidados você precisa ter na presença de crianças em casa na Manutenção de aquecedor no Rio de Janeiro - Criança Faz Arte</title>
+    <meta name="description" content="Saiba os cuidados essenciais na manutenção de aquecedores para garantir a segurança das crianças em casa no Rio de Janeiro. Segurança em primeiro lugar!">
+    
+    
+    
+    <link rel="icon" href="/static/uploads/iocne.png" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/static/uploads/iocne.png">
+    
+
+    <link rel="stylesheet" href="/themes/gshow_pop_v2/assets/css/style.css?v=2.0">
+    <!-- Bootstrap Icons (Usado internamente pelo CMS e para redes sociais) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Algumas lógicas do CMS dependem de classes Bootstrap puras (RaioX). Injetamos a versão ultra-leve do bootstrap apenas para os blocos do CMS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Sistema de Paletas de Cores -->
+    
+    <style>
+        :root {
+            --accent-color: #6f42c1 !important;
+            --accent-hover: #59359a !important;
+            --accent-dark: #472a7b !important;
+        }
+    </style>
+    
+
+    
+</head>
+<body>
+<header class="gs-header">
+    <div class="gs-header__container">
+        <!-- Lado Esquerdo -->
+        <div class="gs-header__left">
+            <button class="gs-header__menu-btn" id="gs-menu-toggle" aria-label="Abrir Menu">
+                <i class="bi bi-list"></i>
+                <span class="gs-header__menu-text">MENU</span>
+            </button>
+
+            <a href="/" class="gs-header__logo">
+                
+                    <img src="/static/uploads/crianca-faz-arte-2.png" alt="Criança Faz Arte">
+                
+            </a>
+        </div>
+
+        <!-- Centro: Nome do Site com fonte fina -->
+        <a href="/" class="gs-header__center">
+            Criança Faz Arte
+        </a>
+
+        <!-- Lado Direito: Buscar -->
+        <div class="gs-header__right">
+            <button class="gs-header__right-item" id="gs-search-toggle" aria-label="Pesquisar" style="background:none; border:none; color:#fff;">
+                <i class="bi bi-search"></i>
+                <span style="text-transform: uppercase;">Buscar</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- Overlay de Busca (Search Modal) -->
+<div class="gs-search-overlay" id="gs-search-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:9999; padding:2rem;">
+    <button id="gs-search-close" style="position:absolute; top:20px; right:30px; background:none; border:none; color:#fff; font-size:2rem; cursor:pointer;"><i class="bi bi-x-lg"></i></button>
+    <div style="max-width:600px; margin: 4rem auto 0; text-align:center;">
+        <input type="text" id="gs-search-input" placeholder="O que você está procurando?" style="width:100%; padding:1rem; font-size:1.5rem; border:none; border-bottom:2px solid var(--accent-color); background:transparent; color:#fff; outline:none; font-family:var(--font-ui);">
+        <div id="gs-search-results" style="margin-top:2rem; text-align:left; max-height:60vh; overflow-y:auto; font-family:var(--font-ui);"></div>
+    </div>
+</div>
+
+<!-- Sub-Barra de Categoria (Rosa Escuro) -->
+<div class="gs-header__subbar">
+    
+        <a href="/categoria/criancas/" style="color:#ffffff;">Crianças</a>
+    
+</div>
+
+<!-- Overlay Escuro do Menu -->
+<div class="gs-overlay" id="gs-overlay"></div>
+
+<!-- Menu Oculto (Offcanvas) -->
+<nav class="gs-nav-offcanvas" id="gs-offcanvas">
+    <button class="gs-nav-offcanvas__close" id="gs-menu-close" aria-label="Fechar Menu">
+        <i class="bi bi-x-lg"></i>
+    </button>
+    <br><br>
+    
+        <a href="/">INÍCIO</a>
+        
+            <a href="/categoria/atividades/">Atividades</a>
+        
+            <a href="/categoria/bebes/">Bebês</a>
+        
+            <a href="/categoria/blog/">Blog</a>
+        
+            <a href="/categoria/criancas/">Crianças</a>
+        
+            <a href="/categoria/educacao/">Educação</a>
+        
+    
+</nav>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- MENU HAMBURGUER LOGIC ---
+        const toggleBtn = document.getElementById('gs-menu-toggle');
+        const closeBtn = document.getElementById('gs-menu-close');
+        const offcanvas = document.getElementById('gs-offcanvas');
+        const overlay = document.getElementById('gs-overlay');
+
+        function openMenu() {
+            offcanvas.classList.add('open');
+            overlay.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMenu() {
+            offcanvas.classList.remove('open');
+            overlay.classList.remove('open');
+            document.body.style.overflow = 'auto';
+        }
+
+        if (toggleBtn) toggleBtn.addEventListener('click', openMenu);
+        if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+        if (overlay) overlay.addEventListener('click', closeMenu);
+
+        // --- SEARCH LOGIC ---
+        const searchToggle = document.getElementById('gs-search-toggle');
+        const searchOverlay = document.getElementById('gs-search-overlay');
+        const searchClose = document.getElementById('gs-search-close');
+        const searchInput = document.getElementById('gs-search-input');
+        const searchResults = document.getElementById('gs-search-results');
+        let postsData = [];
+
+        if (searchToggle && searchOverlay) {
+            searchToggle.addEventListener('click', function() {
+                searchOverlay.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+                searchInput.focus();
+                
+                // Fetch posts.json only once
+                if (postsData.length === 0) {
+                    fetch('/posts.json')
+                        .then(response => response.json())
+                        .then(data => { postsData = data; })
+                        .catch(err => console.error('Erro ao carregar pesquisa', err));
+                }
+            });
+            
+            searchClose.addEventListener('click', function() {
+                searchOverlay.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+            
+            searchInput.addEventListener('input', function(e) {
+                const query = e.target.value.toLowerCase();
+                searchResults.innerHTML = '';
+                if (query.length < 2) return;
+                
+                const filtered = postsData.filter(post => post.title.toLowerCase().includes(query));
+                
+                if (filtered.length === 0) {
+                    searchResults.innerHTML = '<p style="color:#aaa; text-align:center; padding:1rem;">Nenhum resultado encontrado.</p>';
+                    return;
+                }
+                
+                filtered.forEach(post => {
+                    const link = document.createElement('a');
+                    link.href = '/' + post.slug + '/';
+                    link.style.display = 'flex';
+                    link.style.gap = '15px';
+                    link.style.alignItems = 'center';
+                    link.style.padding = '10px 0';
+                    link.style.borderBottom = '1px solid #333';
+                    link.style.color = '#fff';
+                    link.style.textDecoration = 'none';
+                    
+                    let imgHtml = post.image ? `<img src="${post.image}" style="width:60px; height:60px; object-fit:cover; border-radius:4px;">` : `<div style="width:60px; height:60px; background:#444; border-radius:4px;"></div>`;
+                    
+                    link.innerHTML = imgHtml + `<div><div style="font-size:0.8rem; color:#aaa;">${post.date || ''}</div><div style="font-weight:700;">${post.title}</div></div>`;
+                    searchResults.appendChild(link);
+                });
+            });
+        }
+    });
+</script>
+
+<main class="container" style="padding-top: 3rem;">
+    <article>
+        <header class="post-header">
+            
+            <h1 class="post-title">Quais cuidados você precisa ter na presença de crianças em casa na Manutenção de aquecedor no Rio de Janeiro</h1>
+            
+            
+                <p style="font-size: 1.25rem; color: var(--text-muted); max-width: 800px; margin: 0 auto 2rem; line-height: 1.5;">Saiba os cuidados essenciais na manutenção de aquecedores para garantir a segurança das crianças em casa no Rio de Janeiro. Segurança em primeiro lugar!</p>
+            
+
+            <div class="post-meta" style="margin-top: 1rem; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); padding: 1rem 0; max-width: 760px; margin-left: auto; margin-right: auto;">
+                
+                    <div style="display: flex; align-items: center; gap: 0.5rem; justify-content: center;">
+                        
+                            <i class="bi bi-person-circle" style="font-size: 2rem; color: var(--text-muted);"></i>
+                        
+                        <span style="font-weight: 700; color: var(--text-main);">Por <a href="/autor/nadine-a-queiroga/" style="color: var(--accent-color);">Nadine A Queiroga</a></span>
+                    </div>
+                
+                <div style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 1rem; flex: 1 1 auto;">
+                    <time datetime="2026-09-02" style="color: var(--text-muted);">
+                        02/09/2026 00:00
+                    </time>
+                    <div style="display: flex; gap: 15px; font-size: 1.3rem; color: var(--accent-color);">
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        
+            <figure class="post-featured-image">
+                <img src="/static/uploads/quais-cuidados-voce-precisa-ter-na-presenca-de-criancas-em-casa-na-manutencao-de-aquecedor-no-rio-de-janeiro.jpg" alt="Quais cuidados você precisa ter na presença de crianças em casa na Manutenção de aquecedor no Rio de Janeiro">
+            </figure>
+        
+
+        
+
+        <div class="post-content">
+            <p>A presen&ccedil;a de crian&ccedil;as em casa exige uma aten&ccedil;&atilde;o redobrada quando o assunto &eacute; a <strong>seguran&ccedil;a dom&eacute;stica</strong>. Equipamentos como aquecedores s&atilde;o essenciais para garantir conforto, especialmente durante os meses mais frios, mas podem representar riscos se n&atilde;o forem usados e mantidos adequadamente. No contexto do Rio de Janeiro, onde o clima varia bastante, a <strong>manuten&ccedil;&atilde;o de aquecedor</strong> se torna ainda mais importante para assegurar um ambiente seguro para os pequenos.</p>
+<p>Este texto traz orienta&ccedil;&otilde;es detalhadas sobre os cuidados necess&aacute;rios para proteger as crian&ccedil;as em ambientes onde h&aacute; aquecedores, destacando boas pr&aacute;ticas, preven&ccedil;&otilde;es e recomenda&ccedil;&otilde;es espec&iacute;ficas para o p&uacute;blico infantil.</p>
+<p>O clima do Rio de Janeiro, com varia&ccedil;&otilde;es de temperatura e umidade, pode afetar o desempenho dos aquecedores. A <a href="https://configas.net/" target="_blank" rel="noopener"><strong>manuten&ccedil;&atilde;o de aquecedor no Rio de Janeiro</strong></a> &eacute; indispens&aacute;vel para garantir que o equipamento funcione de maneira eficiente e segura, evitando surpresas desagrad&aacute;veis e protegendo toda a fam&iacute;lia.</p>
+<p>&nbsp;</p>
+<h2>Por Que A Seguran&ccedil;a Em Volta Do Aquecedor &Eacute; Fundamental Para Crian&ccedil;as?</h2>
+<p>Crian&ccedil;as t&ecirc;m uma curiosidade natural e, muitas vezes, ainda n&atilde;o compreendem os perigos de certos objetos. Um aquecedor, por exemplo, pode parecer um objeto comum, mas possui partes quentes que podem causar queimaduras s&eacute;rias. Al&eacute;m disso, existem riscos relacionados a vazamentos de g&aacute;s, choques el&eacute;tricos e at&eacute; intoxica&ccedil;&atilde;o por mon&oacute;xido de carbono em caso de falhas.</p>
+<h3>Principais riscos do aquecedor para crian&ccedil;as</h3>
+<p>- <strong>Queimaduras:</strong> O contato direto com superf&iacute;cies quentes do aquecedor pode causar ferimentos graves.</p>
+<p>- <strong>Intoxica&ccedil;&atilde;o por gases:</strong> Equipamentos a g&aacute;s mal regulados podem liberar mon&oacute;xido de carbono, um g&aacute;s inodoro e altamente t&oacute;xico.</p>
+<p>- <strong>Inc&ecirc;ndios:</strong> Falhas el&eacute;tricas ou vazamentos podem provocar inc&ecirc;ndios, colocando toda a fam&iacute;lia em risco.</p>
+<p>- <strong>Choques el&eacute;tricos:</strong> Aquecedores el&eacute;tricos mal instalados ou com fios expostos representam perigo de choque.</p>
+<h2>Cuidados Essenciais Na Presen&ccedil;a De Crian&ccedil;as</h2>
+<p>Para garantir que o aquecedor seja uma fonte de conforto e n&atilde;o de perigo, algumas medidas simples e eficazes podem ser adotadas.</p>
+<h3>Posicionamento seguro do aquecedor</h3>
+<p>Manter o aquecedor em locais onde as crian&ccedil;as n&atilde;o tenham acesso direto &eacute; fundamental. Evite &aacute;reas com circula&ccedil;&atilde;o intensa de crian&ccedil;as e prefira cantos altos ou protegidos por barreiras.</p>
+<p>- Utilize protetores espec&iacute;ficos para aquecedores.</p>
+<p>- Nunca deixe o equipamento pr&oacute;ximo a objetos inflam&aacute;veis, como cortinas e brinquedos.</p>
+<p>- Assegure que o aquecedor esteja firmemente fixado para evitar quedas.</p>
+<h3>Supervis&atilde;o constante</h3>
+<p>Mesmo com todos os cuidados, a presen&ccedil;a de um adulto atento &eacute; a melhor forma de prevenir acidentes.</p>
+<p>- Nunca deixe crian&ccedil;as sozinhas perto do aquecedor.</p>
+<p>- Oriente-as sobre os perigos e a import&acirc;ncia de n&atilde;o tocar no aparelho.</p>
+<p>- Crie regras claras para o uso do ambiente onde o aquecedor est&aacute; instalado.</p>
+<h3>Manuten&ccedil;&atilde;o preventiva e regular</h3>
+<p>Um aquecedor bem cuidado &eacute; um aquecedor seguro. A manuten&ccedil;&atilde;o regular ajuda a identificar e corrigir falhas antes que se tornem problemas graves.</p>
+<p>- Realize inspe&ccedil;&otilde;es peri&oacute;dicas para verificar o estado do equipamento.</p>
+<p>- Limpe filtros, dutos e componentes conforme as recomenda&ccedil;&otilde;es do fabricante.</p>
+<p>- Substitua pe&ccedil;as desgastadas ou danificadas imediatamente.</p>
+<h2>Equipamentos Recomendados Para Resid&ecirc;ncias Com Crian&ccedil;as</h2>
+<p>Alguns tipos de aquecedores oferecem mais seguran&ccedil;a e s&atilde;o mais indicados para lares com crian&ccedil;as pequenas.</p>
+<h3>Aquecedores el&eacute;tricos com prote&ccedil;&atilde;o anti-queda</h3>
+<p>Modelos que desligam automaticamente em caso de queda evitam acidentes graves.</p>
+<h3>Aquecedores com superf&iacute;cies frias</h3>
+<p>Existem aquecedores desenvolvidos para que a parte externa permane&ccedil;a fria, reduzindo o risco de queimaduras.</p>
+<h3>Aquecedores a g&aacute;s com sensores de seguran&ccedil;a</h3>
+<p>Equipamentos modernos possuem sensores que detectam vazamentos e desligam o aparelho automaticamente.</p>
+<h2>Import&acirc;ncia Da Instala&ccedil;&atilde;o Profissional</h2>
+<p>A instala&ccedil;&atilde;o de aquecedores deve ser feita por profissionais qualificados, garantindo que o aparelho funcione corretamente e com seguran&ccedil;a.</p>
+<p>- Evite instala&ccedil;&otilde;es improvisadas que podem causar vazamentos ou falhas el&eacute;tricas.</p>
+<p>- Pe&ccedil;a sempre um laudo t&eacute;cnico ap&oacute;s a instala&ccedil;&atilde;o.</p>
+<p>- Solicite orienta&ccedil;&otilde;es espec&iacute;ficas para o uso seguro na presen&ccedil;a de crian&ccedil;as.</p>
+<h2>Como Ensinar As Crian&ccedil;as Sobre Seguran&ccedil;a Com Aquecedores</h2>
+<p>Educar as crian&ccedil;as sobre os riscos e cuidados &eacute; uma forma eficaz de preven&ccedil;&atilde;o.</p>
+<p>- Use linguagem simples para explicar o que &eacute; perigoso.</p>
+<p>- Estabele&ccedil;a regras claras e consistentes.</p>
+<p>- Reforce a import&acirc;ncia de nunca mexer no aquecedor sem a supervis&atilde;o de um adulto.</p>
+<h2>Sinais De Alerta Para Problemas No Aquecedor</h2>
+<p>Reconhecer os sintomas de falhas no equipamento pode evitar acidentes.</p>
+<p>- Cheiro forte de g&aacute;s ou queimado.</p>
+<p>- Barulhos incomuns durante o funcionamento.</p>
+<p>- Aparelho desligando sozinho ou n&atilde;o ligando.</p>
+<p>- Presen&ccedil;a de manchas de fuligem ou fuma&ccedil;a.</p>
+<p>Ao identificar qualquer desses sinais, interrompa o uso imediatamente e chame um profissional.</p>
+<h2>Procedimentos Em Caso De Acidente</h2>
+<p>Se mesmo com todos os cuidados ocorrer um acidente, &eacute; fundamental saber como agir rapidamente.</p>
+<h3>Queimaduras</h3>
+<p>- Resfrie a &aacute;rea atingida com &aacute;gua corrente fria por pelo menos 10 minutos.</p>
+<p>- N&atilde;o aplique pomadas ou subst&acirc;ncias caseiras.</p>
+<p>- Procure atendimento m&eacute;dico imediatamente em casos graves.</p>
+<h3>Inala&ccedil;&atilde;o de gases</h3>
+<p>- Leve a crian&ccedil;a para um local arejado.</p>
+<p>- Ligue para os servi&ccedil;os de emerg&ecirc;ncia e informe o ocorrido.</p>
+<p>- Mantenha a calma e siga as orienta&ccedil;&otilde;es dos profissionais.</p>
+<h2>Vantagens De Manter A Manuten&ccedil;&atilde;o Em Dia No Rio De Janeiro</h2>
+<p>- Previne acidentes e falhas.</p>
+<p>- Aumenta a vida &uacute;til do equipamento.</p>
+<p>- Garante o conforto t&eacute;rmico de forma cont&iacute;nua.</p>
+<p>- Evita gastos extras com consertos emergenciais.</p>
+<h2>Dicas Finais Para Um Ambiente Seguro</h2>
+<p>- Nunca utilize extens&otilde;es ou adaptadores para ligar o aquecedor.</p>
+<p>- Mantenha o ambiente ventilado para evitar ac&uacute;mulo de gases.</p>
+<p>- Guarde controles e componentes fora do alcance infantil.</p>
+<p>- Realize a limpeza conforme o manual do fabricante.</p>
+<h2>Conclus&atilde;o</h2>
+<p>Garantir a seguran&ccedil;a das crian&ccedil;as em ambientes com aquecedores envolve uma combina&ccedil;&atilde;o de cuidados pr&aacute;ticos, manuten&ccedil;&atilde;o adequada e educa&ccedil;&atilde;o. A aten&ccedil;&atilde;o constante, o posicionamento correto do equipamento e a instala&ccedil;&atilde;o profissional s&atilde;o pilares essenciais para evitar acidentes. No Rio de Janeiro, a manuten&ccedil;&atilde;o adequada do aquecedor &eacute; ainda mais importante devido &agrave;s condi&ccedil;&otilde;es clim&aacute;ticas espec&iacute;ficas da regi&atilde;o.</p>
+<p>Assim, o conforto t&eacute;rmico pode ser desfrutado por toda a fam&iacute;lia com tranquilidade, sabendo que cada detalhe foi pensado para proteger os pequenos e manter a harmonia do lar.</p>
+        </div>
+
+        
+    </article>
+</main>
+
+<footer class="gs-footer">
+    <div class="container">
+        <div class="gs-footer__social">
+            
+            
+            
+            
+        </div>
+        
+        <ul class="gs-footer__menu">
+            
+        </ul>
+        
+        <div class="gs-footer__description" style="max-width: 600px; margin: 0 auto 2rem; color: var(--text-muted); font-size: 0.95rem; font-family: var(--font-ui);">
+            Um espaço dedicado a compartilhar ideias, artigos e tutoriais. Nossa missão é entregar conteúdo de valor e com qualidade para todos os nossos leitores.
+        </div>
+        
+        
+        <div class="gs-footer__copyright">
+            Somos um blog voltado para as crianças! Aqui você irá encontrar brincadeiras, sugestões, viagens, passeios, recreações, técnicas de aprendizado infantil e muito mais! O mundo da criança agora tem nome: Criança faz Arte! Todos os artigos aqui do site são revisados por uma pedagoga experiente. Então seja muito bem vindo e fique com a gente =)
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Carrossel nativo simplificado (substituto das chamadas de script originais caso tenha blocos CMS)
+    document.addEventListener('DOMContentLoaded', function() {
+        document.body.addEventListener('click', function(e) {
+            const btnPrev = e.target.closest('.btn-carousel-prev');
+            if (btnPrev) {
+                const wrapper = btnPrev.closest('div[id^="carrossel-"]');
+                const track = wrapper.querySelector('.dsc-track');
+                const item = track.querySelector('.dsc-item');
+                if (track && item) {
+                    const scrollAmount = item.offsetWidth + 20;
+                    if (track.scrollLeft <= 5) { track.scrollTo({ left: track.scrollWidth, behavior: 'smooth' }); } 
+                    else { track.scrollBy({ left: -scrollAmount, behavior: 'smooth' }); }
+                }
+                return;
+            }
+            const btnNext = e.target.closest('.btn-carousel-next');
+            if (btnNext) {
+                const wrapper = btnNext.closest('div[id^="carrossel-"]');
+                const track = wrapper.querySelector('.dsc-track');
+                const item = track.querySelector('.dsc-item');
+                if (track && item) {
+                    const scrollAmount = item.offsetWidth + 20;
+                    if (track.scrollLeft + track.offsetWidth >= track.scrollWidth - 5) { track.scrollTo({ left: 0, behavior: 'smooth' }); } 
+                    else { track.scrollBy({ left: scrollAmount, behavior: 'smooth' }); }
+                }
+                return;
+            }
+        });
+    });
+</script>
+</body>
+</html>

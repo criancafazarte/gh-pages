@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Melhores dicas passeio dia das crianças - Criança Faz Arte</title>
+    <meta name="description" content="Descubra as melhores dicas para um passeio inesquecível no Dia das Crianças. Diversão, segurança e alegria para toda a família!">
+    
+    
+    
+    <link rel="icon" href="/static/uploads/iocne.png" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/static/uploads/iocne.png">
+    
+
+    <link rel="stylesheet" href="/themes/gshow_pop_v2/assets/css/style.css?v=2.0">
+    <!-- Bootstrap Icons (Usado internamente pelo CMS e para redes sociais) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Algumas lógicas do CMS dependem de classes Bootstrap puras (RaioX). Injetamos a versão ultra-leve do bootstrap apenas para os blocos do CMS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Sistema de Paletas de Cores -->
+    
+    <style>
+        :root {
+            --accent-color: #6f42c1 !important;
+            --accent-hover: #59359a !important;
+            --accent-dark: #472a7b !important;
+        }
+    </style>
+    
+
+    
+</head>
+<body>
+<header class="gs-header">
+    <div class="gs-header__container">
+        <!-- Lado Esquerdo -->
+        <div class="gs-header__left">
+            <button class="gs-header__menu-btn" id="gs-menu-toggle" aria-label="Abrir Menu">
+                <i class="bi bi-list"></i>
+                <span class="gs-header__menu-text">MENU</span>
+            </button>
+
+            <a href="/" class="gs-header__logo">
+                
+                    <img src="/static/uploads/crianca-faz-arte-2.png" alt="Criança Faz Arte">
+                
+            </a>
+        </div>
+
+        <!-- Centro: Nome do Site com fonte fina -->
+        <a href="/" class="gs-header__center">
+            Criança Faz Arte
+        </a>
+
+        <!-- Lado Direito: Buscar -->
+        <div class="gs-header__right">
+            <button class="gs-header__right-item" id="gs-search-toggle" aria-label="Pesquisar" style="background:none; border:none; color:#fff;">
+                <i class="bi bi-search"></i>
+                <span style="text-transform: uppercase;">Buscar</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- Overlay de Busca (Search Modal) -->
+<div class="gs-search-overlay" id="gs-search-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:9999; padding:2rem;">
+    <button id="gs-search-close" style="position:absolute; top:20px; right:30px; background:none; border:none; color:#fff; font-size:2rem; cursor:pointer;"><i class="bi bi-x-lg"></i></button>
+    <div style="max-width:600px; margin: 4rem auto 0; text-align:center;">
+        <input type="text" id="gs-search-input" placeholder="O que você está procurando?" style="width:100%; padding:1rem; font-size:1.5rem; border:none; border-bottom:2px solid var(--accent-color); background:transparent; color:#fff; outline:none; font-family:var(--font-ui);">
+        <div id="gs-search-results" style="margin-top:2rem; text-align:left; max-height:60vh; overflow-y:auto; font-family:var(--font-ui);"></div>
+    </div>
+</div>
+
+<!-- Sub-Barra de Categoria (Rosa Escuro) -->
+<div class="gs-header__subbar">
+    
+        <a href="/categoria/atividades/" style="color:#ffffff;">Atividades</a>
+    
+</div>
+
+<!-- Overlay Escuro do Menu -->
+<div class="gs-overlay" id="gs-overlay"></div>
+
+<!-- Menu Oculto (Offcanvas) -->
+<nav class="gs-nav-offcanvas" id="gs-offcanvas">
+    <button class="gs-nav-offcanvas__close" id="gs-menu-close" aria-label="Fechar Menu">
+        <i class="bi bi-x-lg"></i>
+    </button>
+    <br><br>
+    
+        <a href="/">INÍCIO</a>
+        
+            <a href="/categoria/atividades/">Atividades</a>
+        
+            <a href="/categoria/bebes/">Bebês</a>
+        
+            <a href="/categoria/blog/">Blog</a>
+        
+            <a href="/categoria/criancas/">Crianças</a>
+        
+            <a href="/categoria/educacao/">Educação</a>
+        
+    
+</nav>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- MENU HAMBURGUER LOGIC ---
+        const toggleBtn = document.getElementById('gs-menu-toggle');
+        const closeBtn = document.getElementById('gs-menu-close');
+        const offcanvas = document.getElementById('gs-offcanvas');
+        const overlay = document.getElementById('gs-overlay');
+
+        function openMenu() {
+            offcanvas.classList.add('open');
+            overlay.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMenu() {
+            offcanvas.classList.remove('open');
+            overlay.classList.remove('open');
+            document.body.style.overflow = 'auto';
+        }
+
+        if (toggleBtn) toggleBtn.addEventListener('click', openMenu);
+        if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+        if (overlay) overlay.addEventListener('click', closeMenu);
+
+        // --- SEARCH LOGIC ---
+        const searchToggle = document.getElementById('gs-search-toggle');
+        const searchOverlay = document.getElementById('gs-search-overlay');
+        const searchClose = document.getElementById('gs-search-close');
+        const searchInput = document.getElementById('gs-search-input');
+        const searchResults = document.getElementById('gs-search-results');
+        let postsData = [];
+
+        if (searchToggle && searchOverlay) {
+            searchToggle.addEventListener('click', function() {
+                searchOverlay.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+                searchInput.focus();
+                
+                // Fetch posts.json only once
+                if (postsData.length === 0) {
+                    fetch('/posts.json')
+                        .then(response => response.json())
+                        .then(data => { postsData = data; })
+                        .catch(err => console.error('Erro ao carregar pesquisa', err));
+                }
+            });
+            
+            searchClose.addEventListener('click', function() {
+                searchOverlay.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+            
+            searchInput.addEventListener('input', function(e) {
+                const query = e.target.value.toLowerCase();
+                searchResults.innerHTML = '';
+                if (query.length < 2) return;
+                
+                const filtered = postsData.filter(post => post.title.toLowerCase().includes(query));
+                
+                if (filtered.length === 0) {
+                    searchResults.innerHTML = '<p style="color:#aaa; text-align:center; padding:1rem;">Nenhum resultado encontrado.</p>';
+                    return;
+                }
+                
+                filtered.forEach(post => {
+                    const link = document.createElement('a');
+                    link.href = '/' + post.slug + '/';
+                    link.style.display = 'flex';
+                    link.style.gap = '15px';
+                    link.style.alignItems = 'center';
+                    link.style.padding = '10px 0';
+                    link.style.borderBottom = '1px solid #333';
+                    link.style.color = '#fff';
+                    link.style.textDecoration = 'none';
+                    
+                    let imgHtml = post.image ? `<img src="${post.image}" style="width:60px; height:60px; object-fit:cover; border-radius:4px;">` : `<div style="width:60px; height:60px; background:#444; border-radius:4px;"></div>`;
+                    
+                    link.innerHTML = imgHtml + `<div><div style="font-size:0.8rem; color:#aaa;">${post.date || ''}</div><div style="font-weight:700;">${post.title}</div></div>`;
+                    searchResults.appendChild(link);
+                });
+            });
+        }
+    });
+</script>
+
+<main class="container" style="padding-top: 3rem;">
+    <article>
+        <header class="post-header">
+            
+            <h1 class="post-title">Melhores dicas passeio dia das crianças</h1>
+            
+            
+                <p style="font-size: 1.25rem; color: var(--text-muted); max-width: 800px; margin: 0 auto 2rem; line-height: 1.5;">Descubra as melhores dicas para um passeio inesquecível no Dia das Crianças. Diversão, segurança e alegria para toda a família!</p>
+            
+
+            <div class="post-meta" style="margin-top: 1rem; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); padding: 1rem 0; max-width: 760px; margin-left: auto; margin-right: auto;">
+                
+                    <div style="display: flex; align-items: center; gap: 0.5rem; justify-content: center;">
+                        
+                            <i class="bi bi-person-circle" style="font-size: 2rem; color: var(--text-muted);"></i>
+                        
+                        <span style="font-weight: 700; color: var(--text-main);">Por <a href="/autor/nadine-a-queiroga/" style="color: var(--accent-color);">Nadine A Queiroga</a></span>
+                    </div>
+                
+                <div style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 1rem; flex: 1 1 auto;">
+                    <time datetime="2026-07-17" style="color: var(--text-muted);">
+                        17/07/2026 00:00
+                    </time>
+                    <div style="display: flex; gap: 15px; font-size: 1.3rem; color: var(--accent-color);">
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        
+            <figure class="post-featured-image">
+                <img src="/static/uploads/melhores-dicas-passeio-dia-das-criancas.jpg" alt="Melhores dicas passeio dia das crianças">
+            </figure>
+        
+
+        
+
+        <div class="post-content">
+            <p dir="ltr">O m&ecirc;s de outubro sempre traz aquela ansiedade boa para planejar momentos inesquec&iacute;veis, e por isso separamos as melhores op&ccedil;&otilde;es para garantir a divers&atilde;o de toda a fam&iacute;lia.&nbsp;</p>
+<p dir="ltr">Planejar um roteiro que agrade aos pequenos e seja tranquilo para os adultos pode parecer um desafio, mas com um pouco de organiza&ccedil;&atilde;o, &eacute; poss&iacute;vel criar mem&oacute;rias maravilhosas.&nbsp;</p>
+<p dir="ltr">Seja um piquenique no parque, uma visita a um museu interativo ou um dia de brincadeiras ao ar livre, o importante &eacute; focar na alegria, no conforto e na seguran&ccedil;a.</p>
+<p dir="ltr">Para ajudar nessa miss&atilde;o, reunimos algumas sugest&otilde;es pr&aacute;ticas que v&atilde;o transformar essa data em um evento verdadeiramente especial.</p>
+<h2 dir="ltr">Escolhendo o destino perfeito</h2>
+<p dir="ltr">A primeira etapa para o sucesso &eacute; alinhar a escolha do local com a idade e as prefer&ecirc;ncias dos seus filhos.</p>
+<p dir="ltr">Parques com ampla &aacute;rea verde s&atilde;o excelentes para gastar energia, correr e brincar livremente.&nbsp;</p>
+<p dir="ltr">Se o clima estiver inst&aacute;vel, considere op&ccedil;&otilde;es em locais fechados, como centros de entretenimento, teatros infantis ou exposi&ccedil;&otilde;es interativas.&nbsp;</p>
+<p dir="ltr">O segredo &eacute; envolver as crian&ccedil;as na decis&atilde;o, oferecendo duas ou tr&ecirc;s alternativas seguras e deixando que elas escolham a favorita.</p>
+<h2 dir="ltr">Preparando a mochila de aventuras</h2>
+<p dir="ltr">Um dia inteiro fora de casa exige um preparo log&iacute;stico cuidadoso para evitar contratempos. Monte uma mochila com itens essenciais, como garrafas de &aacute;gua, lanches saud&aacute;veis, protetor solar e repelente contra insetos.&nbsp;</p>
+<p dir="ltr">N&atilde;o se esque&ccedil;a de levar uma troca de roupas extra, pois brincadeiras animadas frequentemente terminam com roupas sujas ou molhadas.&nbsp;</p>
+<p dir="ltr">Ter um kit b&aacute;sico de primeiros socorros com curativos e antiss&eacute;ptico tamb&eacute;m &eacute; uma medida inteligente que garante a tranquilidade dos pais durante toda a jornada.</p>
+<h2 dir="ltr">Cuidados com a sa&uacute;de infantil</h2>
+<p dir="ltr">Durante a divers&atilde;o, &eacute; fundamental manter a aten&ccedil;&atilde;o aos sinais do corpo da garotada.&nbsp;</p>
+<p dir="ltr">A exposi&ccedil;&atilde;o ao sol, ao vento ou &agrave; poeira pode causar pequenos desconfortos que precisam de aten&ccedil;&atilde;o r&aacute;pida.&nbsp;</p>
+<p dir="ltr">Se voc&ecirc; notar o <a href="https://lumonoftalmologia.com.br/por-que-o-olho-da-crianca-fica-remelando/" target="_blank" rel="noopener">olho de crian&ccedil;a remelando</a> ou um pouco avermelhado, limpe suavemente com soro fisiol&oacute;gico e evite que ela esfregue as m&atilde;os sujas no rosto.&nbsp;</p>
+<p dir="ltr">Manter a higiene b&aacute;sica e garantir que todos estejam bem hidratados far&aacute; com que o passeio continue agrad&aacute;vel e sem interrup&ccedil;&otilde;es indesejadas por problemas de sa&uacute;de.</p>
+<h2 dir="ltr">Guardando mem&oacute;rias para o futuro</h2>
+<p dir="ltr">Aproveite o dia para tirar fotos espont&acirc;neas e gravar v&iacute;deos curtos das brincadeiras, mas sem deixar que a tela do celular atrapalhe a sua intera&ccedil;&atilde;o real com a fam&iacute;lia.&nbsp;</p>
+<p dir="ltr">O mais valioso desse dia &eacute; a sua presen&ccedil;a e aten&ccedil;&atilde;o plena nas atividades conjuntas.&nbsp;</p>
+<p dir="ltr">Tire algumas fotos posadas no in&iacute;cio e depois foque em registrar os sorrisos sinceros e as gargalhadas enquanto eles se divertem.&nbsp;</p>
+<p dir="ltr">Assim, voc&ecirc; construir&aacute; um belo &aacute;lbum de lembran&ccedil;as para revisitar sempre que a saudade desses dias bater.</p>
+        </div>
+
+        
+    </article>
+</main>
+
+<footer class="gs-footer">
+    <div class="container">
+        <div class="gs-footer__social">
+            
+            
+            
+            
+        </div>
+        
+        <ul class="gs-footer__menu">
+            
+        </ul>
+        
+        <div class="gs-footer__description" style="max-width: 600px; margin: 0 auto 2rem; color: var(--text-muted); font-size: 0.95rem; font-family: var(--font-ui);">
+            Um espaço dedicado a compartilhar ideias, artigos e tutoriais. Nossa missão é entregar conteúdo de valor e com qualidade para todos os nossos leitores.
+        </div>
+        
+        
+        <div class="gs-footer__copyright">
+            Somos um blog voltado para as crianças! Aqui você irá encontrar brincadeiras, sugestões, viagens, passeios, recreações, técnicas de aprendizado infantil e muito mais! O mundo da criança agora tem nome: Criança faz Arte! Todos os artigos aqui do site são revisados por uma pedagoga experiente. Então seja muito bem vindo e fique com a gente =)
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Carrossel nativo simplificado (substituto das chamadas de script originais caso tenha blocos CMS)
+    document.addEventListener('DOMContentLoaded', function() {
+        document.body.addEventListener('click', function(e) {
+            const btnPrev = e.target.closest('.btn-carousel-prev');
+            if (btnPrev) {
+                const wrapper = btnPrev.closest('div[id^="carrossel-"]');
+                const track = wrapper.querySelector('.dsc-track');
+                const item = track.querySelector('.dsc-item');
+                if (track && item) {
+                    const scrollAmount = item.offsetWidth + 20;
+                    if (track.scrollLeft <= 5) { track.scrollTo({ left: track.scrollWidth, behavior: 'smooth' }); } 
+                    else { track.scrollBy({ left: -scrollAmount, behavior: 'smooth' }); }
+                }
+                return;
+            }
+            const btnNext = e.target.closest('.btn-carousel-next');
+            if (btnNext) {
+                const wrapper = btnNext.closest('div[id^="carrossel-"]');
+                const track = wrapper.querySelector('.dsc-track');
+                const item = track.querySelector('.dsc-item');
+                if (track && item) {
+                    const scrollAmount = item.offsetWidth + 20;
+                    if (track.scrollLeft + track.offsetWidth >= track.scrollWidth - 5) { track.scrollTo({ left: 0, behavior: 'smooth' }); } 
+                    else { track.scrollBy({ left: scrollAmount, behavior: 'smooth' }); }
+                }
+                return;
+            }
+        });
+    });
+</script>
+</body>
+</html>

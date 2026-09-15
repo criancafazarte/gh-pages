@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>teste de cabelo  - Criança Faz Arte</title>
+    <meta name="description" content="Descubra tudo sobre teste de cabelo: análise precisa, tipos e benefícios para saúde e estilo. Saiba mais e cuide melhor dos seus fios!">
+    
+    
+    
+    <link rel="icon" href="/static/uploads/iocne.png" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/static/uploads/iocne.png">
+    
+
+    <link rel="stylesheet" href="/themes/gshow_pop_v2/assets/css/style.css?v=2.0">
+    <!-- Bootstrap Icons (Usado internamente pelo CMS e para redes sociais) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Algumas lógicas do CMS dependem de classes Bootstrap puras (RaioX). Injetamos a versão ultra-leve do bootstrap apenas para os blocos do CMS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Sistema de Paletas de Cores -->
+    
+    <style>
+        :root {
+            --accent-color: #6f42c1 !important;
+            --accent-hover: #59359a !important;
+            --accent-dark: #472a7b !important;
+        }
+    </style>
+    
+
+    
+</head>
+<body>
+<header class="gs-header">
+    <div class="gs-header__container">
+        <!-- Lado Esquerdo -->
+        <div class="gs-header__left">
+            <button class="gs-header__menu-btn" id="gs-menu-toggle" aria-label="Abrir Menu">
+                <i class="bi bi-list"></i>
+                <span class="gs-header__menu-text">MENU</span>
+            </button>
+
+            <a href="/" class="gs-header__logo">
+                
+                    <img src="/static/uploads/crianca-faz-arte-2.png" alt="Criança Faz Arte">
+                
+            </a>
+        </div>
+
+        <!-- Centro: Nome do Site com fonte fina -->
+        <a href="/" class="gs-header__center">
+            Criança Faz Arte
+        </a>
+
+        <!-- Lado Direito: Buscar -->
+        <div class="gs-header__right">
+            <button class="gs-header__right-item" id="gs-search-toggle" aria-label="Pesquisar" style="background:none; border:none; color:#fff;">
+                <i class="bi bi-search"></i>
+                <span style="text-transform: uppercase;">Buscar</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- Overlay de Busca (Search Modal) -->
+<div class="gs-search-overlay" id="gs-search-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:9999; padding:2rem;">
+    <button id="gs-search-close" style="position:absolute; top:20px; right:30px; background:none; border:none; color:#fff; font-size:2rem; cursor:pointer;"><i class="bi bi-x-lg"></i></button>
+    <div style="max-width:600px; margin: 4rem auto 0; text-align:center;">
+        <input type="text" id="gs-search-input" placeholder="O que você está procurando?" style="width:100%; padding:1rem; font-size:1.5rem; border:none; border-bottom:2px solid var(--accent-color); background:transparent; color:#fff; outline:none; font-family:var(--font-ui);">
+        <div id="gs-search-results" style="margin-top:2rem; text-align:left; max-height:60vh; overflow-y:auto; font-family:var(--font-ui);"></div>
+    </div>
+</div>
+
+<!-- Sub-Barra de Categoria (Rosa Escuro) -->
+<div class="gs-header__subbar">
+    
+        <a href="/categoria/bebes/" style="color:#ffffff;">Bebês</a>
+    
+</div>
+
+<!-- Overlay Escuro do Menu -->
+<div class="gs-overlay" id="gs-overlay"></div>
+
+<!-- Menu Oculto (Offcanvas) -->
+<nav class="gs-nav-offcanvas" id="gs-offcanvas">
+    <button class="gs-nav-offcanvas__close" id="gs-menu-close" aria-label="Fechar Menu">
+        <i class="bi bi-x-lg"></i>
+    </button>
+    <br><br>
+    
+        <a href="/">INÍCIO</a>
+        
+            <a href="/categoria/atividades/">Atividades</a>
+        
+            <a href="/categoria/bebes/">Bebês</a>
+        
+            <a href="/categoria/blog/">Blog</a>
+        
+            <a href="/categoria/criancas/">Crianças</a>
+        
+            <a href="/categoria/educacao/">Educação</a>
+        
+    
+</nav>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- MENU HAMBURGUER LOGIC ---
+        const toggleBtn = document.getElementById('gs-menu-toggle');
+        const closeBtn = document.getElementById('gs-menu-close');
+        const offcanvas = document.getElementById('gs-offcanvas');
+        const overlay = document.getElementById('gs-overlay');
+
+        function openMenu() {
+            offcanvas.classList.add('open');
+            overlay.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMenu() {
+            offcanvas.classList.remove('open');
+            overlay.classList.remove('open');
+            document.body.style.overflow = 'auto';
+        }
+
+        if (toggleBtn) toggleBtn.addEventListener('click', openMenu);
+        if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+        if (overlay) overlay.addEventListener('click', closeMenu);
+
+        // --- SEARCH LOGIC ---
+        const searchToggle = document.getElementById('gs-search-toggle');
+        const searchOverlay = document.getElementById('gs-search-overlay');
+        const searchClose = document.getElementById('gs-search-close');
+        const searchInput = document.getElementById('gs-search-input');
+        const searchResults = document.getElementById('gs-search-results');
+        let postsData = [];
+
+        if (searchToggle && searchOverlay) {
+            searchToggle.addEventListener('click', function() {
+                searchOverlay.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+                searchInput.focus();
+                
+                // Fetch posts.json only once
+                if (postsData.length === 0) {
+                    fetch('/posts.json')
+                        .then(response => response.json())
+                        .then(data => { postsData = data; })
+                        .catch(err => console.error('Erro ao carregar pesquisa', err));
+                }
+            });
+            
+            searchClose.addEventListener('click', function() {
+                searchOverlay.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+            
+            searchInput.addEventListener('input', function(e) {
+                const query = e.target.value.toLowerCase();
+                searchResults.innerHTML = '';
+                if (query.length < 2) return;
+                
+                const filtered = postsData.filter(post => post.title.toLowerCase().includes(query));
+                
+                if (filtered.length === 0) {
+                    searchResults.innerHTML = '<p style="color:#aaa; text-align:center; padding:1rem;">Nenhum resultado encontrado.</p>';
+                    return;
+                }
+                
+                filtered.forEach(post => {
+                    const link = document.createElement('a');
+                    link.href = '/' + post.slug + '/';
+                    link.style.display = 'flex';
+                    link.style.gap = '15px';
+                    link.style.alignItems = 'center';
+                    link.style.padding = '10px 0';
+                    link.style.borderBottom = '1px solid #333';
+                    link.style.color = '#fff';
+                    link.style.textDecoration = 'none';
+                    
+                    let imgHtml = post.image ? `<img src="${post.image}" style="width:60px; height:60px; object-fit:cover; border-radius:4px;">` : `<div style="width:60px; height:60px; background:#444; border-radius:4px;"></div>`;
+                    
+                    link.innerHTML = imgHtml + `<div><div style="font-size:0.8rem; color:#aaa;">${post.date || ''}</div><div style="font-weight:700;">${post.title}</div></div>`;
+                    searchResults.appendChild(link);
+                });
+            });
+        }
+    });
+</script>
+
+<main class="container" style="padding-top: 3rem;">
+    <article>
+        <header class="post-header">
+            
+            <h1 class="post-title">teste de cabelo </h1>
+            
+            
+                <p style="font-size: 1.25rem; color: var(--text-muted); max-width: 800px; margin: 0 auto 2rem; line-height: 1.5;">Descubra tudo sobre teste de cabelo: análise precisa, tipos e benefícios para saúde e estilo. Saiba mais e cuide melhor dos seus fios!</p>
+            
+
+            <div class="post-meta" style="margin-top: 1rem; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); padding: 1rem 0; max-width: 760px; margin-left: auto; margin-right: auto;">
+                
+                    <div style="display: flex; align-items: center; gap: 0.5rem; justify-content: center;">
+                        
+                            <i class="bi bi-person-circle" style="font-size: 2rem; color: var(--text-muted);"></i>
+                        
+                        <span style="font-weight: 700; color: var(--text-main);">Por <a href="/autor/nadine-a-queiroga/" style="color: var(--accent-color);">Nadine A Queiroga</a></span>
+                    </div>
+                
+                <div style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 1rem; flex: 1 1 auto;">
+                    <time datetime="2026-08-08" style="color: var(--text-muted);">
+                        08/08/2026 00:00
+                    </time>
+                    <div style="display: flex; gap: 15px; font-size: 1.3rem; color: var(--accent-color);">
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        
+            <figure class="post-featured-image">
+                <img src="/static/uploads/teste-de-cabelo_1786153320.jpg" alt="teste de cabelo ">
+            </figure>
+        
+
+        
+
+        <div class="post-content">
+            <p>O <strong>teste de cabelo</strong> &eacute; uma ferramenta cada vez mais utilizada para avaliar diversas condi&ccedil;&otilde;es relacionadas &agrave; sa&uacute;de e ao consumo de subst&acirc;ncias. Essa an&aacute;lise oferece uma vis&atilde;o detalhada que vai muito al&eacute;m da simples avalia&ccedil;&atilde;o est&eacute;tica, permitindo identificar desde defici&ecirc;ncias nutricionais at&eacute; a presen&ccedil;a de drogas no organismo. Por isso, entender o funcionamento, as aplica&ccedil;&otilde;es e as vantagens desse m&eacute;todo pode ser fundamental para quem busca informa&ccedil;&otilde;es confi&aacute;veis sobre seu estado capilar e geral.</p>
+<p>Na &aacute;rea da sa&uacute;de, o exame capilar ganha destaque por trazer resultados precisos e duradouros, ajudando profissionais a estabelecer diagn&oacute;sticos mais completos. A frase exata " reflete a import&acirc;ncia do exame para quem deseja uma avalia&ccedil;&atilde;o detalhada que n&atilde;o depende apenas de exames tradicionais como sangue ou urina.</p>
+<h2>O Que &Eacute; O Teste De Cabelo?</h2>
+<p>O <strong>teste de cabelo</strong> consiste na an&aacute;lise laboratorial de uma amostra de fios coletados do couro cabeludo ou de outras &aacute;reas do corpo, com o objetivo de identificar elementos qu&iacute;micos, toxinas, minerais e outras subst&acirc;ncias presentes no organismo.</p>
+<p>Diferente de outros exames, a an&aacute;lise capilar permite observar a composi&ccedil;&atilde;o corporal ao longo do tempo, uma vez que os fios acumulam informa&ccedil;&otilde;es durante o crescimento. Isso possibilita o acompanhamento de altera&ccedil;&otilde;es metab&oacute;licas, exposi&ccedil;&atilde;o a metais pesados, defici&ecirc;ncias nutricionais e consumo de drogas por per&iacute;odos que podem variar de semanas a meses.</p>
+<h3>Como &eacute; Realizada a Coleta para o Teste?</h3>
+<p>A coleta &eacute; simples e indolor. Geralmente, &eacute; retirada uma pequena mecha de cabelo, pr&oacute;xima &agrave; raiz, para garantir que os resultados reflitam o estado mais recente do organismo. O cabelo precisa estar limpo, sem tinturas ou tratamentos qu&iacute;micos recentes que possam interferir no resultado.</p>
+<p>Ap&oacute;s a coleta, a amostra &eacute; enviada para um laborat&oacute;rio especializado, onde ser&aacute; submetida a an&aacute;lises espec&iacute;ficas, dependendo do objetivo do exame.</p>
+<h2>Principais Aplica&ccedil;&otilde;es Do Teste Capilar</h2>
+<p>O exame capilar tem um amplo espectro de utiliza&ccedil;&atilde;o, incluindo desde a &aacute;rea m&eacute;dica at&eacute; a forense. A seguir, algumas das aplica&ccedil;&otilde;es mais comuns que demonstram a import&acirc;ncia do teste.</p>
+<h3>Detec&ccedil;&atilde;o de Drogas e Subst&acirc;ncias T&oacute;xicas</h3>
+<p>Um dos usos mais conhecidos do teste de cabelo &eacute; a identifica&ccedil;&atilde;o do consumo de drogas il&iacute;citas ou medicamentos, como coca&iacute;na, maconha, anfetaminas e opi&aacute;ceos. Ao contr&aacute;rio de exames de sangue ou urina, que detectam o uso recente, o teste capilar pode revelar o consumo de subst&acirc;ncias em um per&iacute;odo de at&eacute; 90 dias, dependendo do comprimento do fio analisado.</p>
+<p>Al&eacute;m disso, a an&aacute;lise pode detectar a presen&ccedil;a de metais pesados como chumbo, merc&uacute;rio e ars&ecirc;nico, que podem estar relacionados &agrave; exposi&ccedil;&atilde;o ambiental ou ocupacional, oferecendo uma valiosa ferramenta para preven&ccedil;&atilde;o e diagn&oacute;stico de intoxica&ccedil;&otilde;es.</p>
+<h3>Avalia&ccedil;&atilde;o Nutricional e Sa&uacute;de do Cabelo</h3>
+<p>O exame tamb&eacute;m &eacute; capaz de analisar a concentra&ccedil;&atilde;o de minerais e vitaminas essenciais para a sa&uacute;de capilar e geral, como ferro, zinco, sel&ecirc;nio, magn&eacute;sio e c&aacute;lcio. Desequil&iacute;brios nesses nutrientes podem indicar problemas que v&atilde;o desde defici&ecirc;ncias alimentares at&eacute; dist&uacute;rbios metab&oacute;licos.</p>
+<p>Atrav&eacute;s do teste, &eacute; poss&iacute;vel identificar causas de queda de cabelo, fios fr&aacute;geis, ressecamento ou outros sintomas que podem estar ligados a uma alimenta&ccedil;&atilde;o inadequada ou a problemas internos.</p>
+<h3>Monitoramento de Tratamentos e Condi&ccedil;&otilde;es Cr&ocirc;nicas</h3>
+<p>Pacientes com condi&ccedil;&otilde;es cr&ocirc;nicas, como doen&ccedil;as autoimunes ou metab&oacute;licas, podem se beneficiar do exame para monitorar a efic&aacute;cia de tratamentos e ajustar interven&ccedil;&otilde;es. O teste capilar oferece dados que ajudam m&eacute;dicos a compreenderem melhor a evolu&ccedil;&atilde;o do quadro cl&iacute;nico.</p>
+<p>Al&eacute;m disso, o acompanhamento atrav&eacute;s do exame pode facilitar a preven&ccedil;&atilde;o de efeitos colaterais causados por excesso ou falta de determinados minerais e subst&acirc;ncias.</p>
+<h2>Vantagens Do Teste De Cabelo Em Rela&ccedil;&atilde;o A Outros Exames</h2>
+<p>Comparado a m&eacute;todos convencionais, o teste capilar possui diversas vantagens que justificam sua crescente popularidade.</p>
+<h3>Maior Janela de Detec&ccedil;&atilde;o</h3>
+<p>Enquanto exames de sangue e urina geralmente detectam subst&acirc;ncias no organismo por per&iacute;odos curtos (horas ou poucos dias), o teste capilar permite analisar um intervalo de semanas a meses, dependendo do comprimento do cabelo. Isso amplia a capacidade de rastrear h&aacute;bitos e exposi&ccedil;&otilde;es, fornecendo um panorama mais completo.</p>
+<h3>Coleta N&atilde;o Invasiva e Pr&aacute;tica</h3>
+<p>A coleta do cabelo &eacute; r&aacute;pida, simples e n&atilde;o invasiva, dispensando agulhas ou subst&acirc;ncias qu&iacute;micas. Isso reduz o desconforto do paciente e facilita a realiza&ccedil;&atilde;o do exame em diferentes contextos, incluindo cl&iacute;nicas, laborat&oacute;rios e ambientes forenses.</p>
+<h3>Resist&ecirc;ncia a Manipula&ccedil;&otilde;es</h3>
+<p>O cabelo &eacute; uma matriz biol&oacute;gica relativamente est&aacute;vel, resistente a altera&ccedil;&otilde;es externas e manipula&ccedil;&otilde;es, o que torna o teste menos suscet&iacute;vel a fraudes ou adultera&ccedil;&otilde;es, especialmente em situa&ccedil;&otilde;es legais e trabalhistas.</p>
+<h2>Limita&ccedil;&otilde;es E Cuidados Na Interpreta&ccedil;&atilde;o Dos Resultados</h2>
+<p>Embora o teste capilar traga muitas informa&ccedil;&otilde;es valiosas, &eacute; importante considerar algumas limita&ccedil;&otilde;es para evitar interpreta&ccedil;&otilde;es equivocadas.</p>
+<h3>Influ&ecirc;ncia de Tratamentos Qu&iacute;micos</h3>
+<p>Tinturas, alisamentos, permanentes e outros procedimentos podem alterar a estrutura dos fios e interferir na capta&ccedil;&atilde;o dos elementos analisados. Por isso, informar ao laborat&oacute;rio sobre qualquer tratamento recente &eacute; fundamental para a confiabilidade dos resultados.</p>
+<h3>Varia&ccedil;&otilde;es Individuais</h3>
+<p>A velocidade de crescimento do cabelo e caracter&iacute;sticas pessoais podem influenciar a concentra&ccedil;&atilde;o das subst&acirc;ncias detectadas. A interpreta&ccedil;&atilde;o deve ser feita por profissionais qualificados, considerando o contexto cl&iacute;nico e hist&oacute;rico do paciente.</p>
+<h3>N&atilde;o Substitui Exames Complementares</h3>
+<p>O teste capilar n&atilde;o substitui exames laboratoriais tradicionais, mas funciona como um complemento para diagn&oacute;stico e monitoramento. Em muitos casos, pode indicar a necessidade de avalia&ccedil;&otilde;es adicionais.</p>
+<h2>Como Se Preparar Para Um Teste De Cabelo</h2>
+<p>Para garantir a precis&atilde;o e confiabilidade do exame, algumas orienta&ccedil;&otilde;es s&atilde;o recomendadas antes da coleta.</p>
+<p>- Evitar lavar o cabelo com produtos qu&iacute;micos agressivos poucos dias antes da coleta.</p>
+<p>- N&atilde;o realizar colora&ccedil;&otilde;es, alisamentos ou procedimentos similares nas semanas que antecedem o teste.</p>
+<p>- Informar ao profissional respons&aacute;vel sobre uso de medicamentos, suplementos e tratamentos capilares recentes.</p>
+<p>- Caso o cabelo seja muito curto ou inexistente no couro cabeludo, &eacute; poss&iacute;vel coletar fios de outras &aacute;reas, como bra&ccedil;os ou barba.</p>
+<h2>Onde Realizar O Teste De Cabelo E Custos Envolvidos</h2>
+<p>O exame pode ser solicitado em cl&iacute;nicas especializadas, laborat&oacute;rios de an&aacute;lises cl&iacute;nicas e centros de diagn&oacute;stico capilar. &Eacute; importante escolher locais confi&aacute;veis e com experi&ecirc;ncia na realiza&ccedil;&atilde;o da an&aacute;lise para garantir resultados precisos.</p>
+<p>O custo do teste varia conforme o tipo de an&aacute;lise, a abrang&ecirc;ncia das subst&acirc;ncias pesquisadas e o laborat&oacute;rio escolhido. Em geral, os valores podem oscilar entre R$ 200 a R$ 800, dependendo do pacote de exames e da complexidade dos testes.</p>
+<h2>Tend&ecirc;ncias E Inova&ccedil;&otilde;es No Campo Da An&aacute;lise Capilar</h2>
+<p>A tecnologia aplicada ao teste de cabelo avan&ccedil;a constantemente, ampliando suas aplica&ccedil;&otilde;es e precis&atilde;o. Novos m&eacute;todos de espectrometria e an&aacute;lise molecular permitem detectar concentra&ccedil;&otilde;es cada vez menores de subst&acirc;ncias, com maior rapidez e seguran&ccedil;a.</p>
+<p>Al&eacute;m disso, a integra&ccedil;&atilde;o dos resultados da an&aacute;lise capilar com dados gen&eacute;ticos e biomarcadores est&aacute; abrindo portas para abordagens personalizadas na medicina preventiva e terap&ecirc;utica.</p>
+<h2>Perguntas Frequentes Sobre O Teste Capilar</h2>
+<h3>O teste de cabelo pode detectar uso espor&aacute;dico de drogas?</h3>
+<p>Sim, mas a sensibilidade depende do per&iacute;odo em que a droga foi consumida e do comprimento do cabelo analisado. O exame &eacute; mais eficaz para monitorar o consumo regular ou em per&iacute;odos mais longos.</p>
+<h3>Existe algum risco ou efeito colateral na coleta do exame?</h3>
+<p>N&atilde;o, a coleta &eacute; segura e indolor, n&atilde;o causando danos ao couro cabeludo ou aos fios.</p>
+<h3>Quanto tempo demora para receber os resultados?</h3>
+<p>O prazo varia conforme o laborat&oacute;rio, mas geralmente fica entre 7 a 15 dias &uacute;teis ap&oacute;s a coleta.</p>
+<h3>O teste capilar &eacute; aceito em processos legais?</h3>
+<p>Sim, devido &agrave; sua confiabilidade e resist&ecirc;ncia a adultera&ccedil;&otilde;es, &eacute; frequentemente utilizado em contextos forenses e trabalhistas.</p>
+<h2>Considera&ccedil;&otilde;es Finais</h2>
+<p>O exame capilar &eacute; uma ferramenta poderosa para analisar a sa&uacute;de e o hist&oacute;rico do organismo, oferecendo informa&ccedil;&otilde;es detalhadas que complementam os exames tradicionais. Atrav&eacute;s do <strong>teste de cabelo</strong>, &eacute; poss&iacute;vel identificar desde defici&ecirc;ncias nutricionais at&eacute; a exposi&ccedil;&atilde;o a subst&acirc;ncias t&oacute;xicas, melhorando o diagn&oacute;stico e a personaliza&ccedil;&atilde;o dos tratamentos.</p>
+<p>Investir em um exame confi&aacute;vel e realizado por profissionais capacitados garante que os dados obtidos sejam &uacute;teis para a tomada de decis&otilde;es cl&iacute;nicas, est&eacute;ticas e legais, refor&ccedil;ando a import&acirc;ncia dessa an&aacute;lise na rotina de cuidados com a sa&uacute;de.</p>
+<p>---</p>
+<p>Com tantas vantagens e aplica&ccedil;&otilde;es, o teste capilar continua se consolidando como uma t&eacute;cnica essencial para quem deseja um diagn&oacute;stico mais completo e eficaz, contribuindo para o bem-estar e a qualidade de vida.</p>
+        </div>
+
+        
+    </article>
+</main>
+
+<footer class="gs-footer">
+    <div class="container">
+        <div class="gs-footer__social">
+            
+            
+            
+            
+        </div>
+        
+        <ul class="gs-footer__menu">
+            
+        </ul>
+        
+        <div class="gs-footer__description" style="max-width: 600px; margin: 0 auto 2rem; color: var(--text-muted); font-size: 0.95rem; font-family: var(--font-ui);">
+            Um espaço dedicado a compartilhar ideias, artigos e tutoriais. Nossa missão é entregar conteúdo de valor e com qualidade para todos os nossos leitores.
+        </div>
+        
+        
+        <div class="gs-footer__copyright">
+            Somos um blog voltado para as crianças! Aqui você irá encontrar brincadeiras, sugestões, viagens, passeios, recreações, técnicas de aprendizado infantil e muito mais! O mundo da criança agora tem nome: Criança faz Arte! Todos os artigos aqui do site são revisados por uma pedagoga experiente. Então seja muito bem vindo e fique com a gente =)
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Carrossel nativo simplificado (substituto das chamadas de script originais caso tenha blocos CMS)
+    document.addEventListener('DOMContentLoaded', function() {
+        document.body.addEventListener('click', function(e) {
+            const btnPrev = e.target.closest('.btn-carousel-prev');
+            if (btnPrev) {
+                const wrapper = btnPrev.closest('div[id^="carrossel-"]');
+                const track = wrapper.querySelector('.dsc-track');
+                const item = track.querySelector('.dsc-item');
+                if (track && item) {
+                    const scrollAmount = item.offsetWidth + 20;
+                    if (track.scrollLeft <= 5) { track.scrollTo({ left: track.scrollWidth, behavior: 'smooth' }); } 
+                    else { track.scrollBy({ left: -scrollAmount, behavior: 'smooth' }); }
+                }
+                return;
+            }
+            const btnNext = e.target.closest('.btn-carousel-next');
+            if (btnNext) {
+                const wrapper = btnNext.closest('div[id^="carrossel-"]');
+                const track = wrapper.querySelector('.dsc-track');
+                const item = track.querySelector('.dsc-item');
+                if (track && item) {
+                    const scrollAmount = item.offsetWidth + 20;
+                    if (track.scrollLeft + track.offsetWidth >= track.scrollWidth - 5) { track.scrollTo({ left: 0, behavior: 'smooth' }); } 
+                    else { track.scrollBy({ left: scrollAmount, behavior: 'smooth' }); }
+                }
+                return;
+            }
+        });
+    });
+</script>
+</body>
+</html>

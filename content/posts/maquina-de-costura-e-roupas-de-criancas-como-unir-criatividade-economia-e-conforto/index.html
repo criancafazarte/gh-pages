@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Máquina de Costura e Roupas de Crianças: Como Unir Criatividade, Economia e Conforto - Criança Faz Arte</title>
+    <meta name="description" content="Costurar roupas infantis com a própria máquina de costura é mais do que uma tendência: é uma forma prática e econômica de oferecer estilo, conforto e personalid">
+    
+    
+    
+    <link rel="icon" href="/static/uploads/iocne.png" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/static/uploads/iocne.png">
+    
+
+    <link rel="stylesheet" href="/themes/gshow_pop_v2/assets/css/style.css?v=2.0">
+    <!-- Bootstrap Icons (Usado internamente pelo CMS e para redes sociais) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Algumas lógicas do CMS dependem de classes Bootstrap puras (RaioX). Injetamos a versão ultra-leve do bootstrap apenas para os blocos do CMS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Sistema de Paletas de Cores -->
+    
+    <style>
+        :root {
+            --accent-color: #6f42c1 !important;
+            --accent-hover: #59359a !important;
+            --accent-dark: #472a7b !important;
+        }
+    </style>
+    
+
+    
+</head>
+<body>
+<header class="gs-header">
+    <div class="gs-header__container">
+        <!-- Lado Esquerdo -->
+        <div class="gs-header__left">
+            <button class="gs-header__menu-btn" id="gs-menu-toggle" aria-label="Abrir Menu">
+                <i class="bi bi-list"></i>
+                <span class="gs-header__menu-text">MENU</span>
+            </button>
+
+            <a href="/" class="gs-header__logo">
+                
+                    <img src="/static/uploads/crianca-faz-arte-2.png" alt="Criança Faz Arte">
+                
+            </a>
+        </div>
+
+        <!-- Centro: Nome do Site com fonte fina -->
+        <a href="/" class="gs-header__center">
+            Criança Faz Arte
+        </a>
+
+        <!-- Lado Direito: Buscar -->
+        <div class="gs-header__right">
+            <button class="gs-header__right-item" id="gs-search-toggle" aria-label="Pesquisar" style="background:none; border:none; color:#fff;">
+                <i class="bi bi-search"></i>
+                <span style="text-transform: uppercase;">Buscar</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- Overlay de Busca (Search Modal) -->
+<div class="gs-search-overlay" id="gs-search-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:9999; padding:2rem;">
+    <button id="gs-search-close" style="position:absolute; top:20px; right:30px; background:none; border:none; color:#fff; font-size:2rem; cursor:pointer;"><i class="bi bi-x-lg"></i></button>
+    <div style="max-width:600px; margin: 4rem auto 0; text-align:center;">
+        <input type="text" id="gs-search-input" placeholder="O que você está procurando?" style="width:100%; padding:1rem; font-size:1.5rem; border:none; border-bottom:2px solid var(--accent-color); background:transparent; color:#fff; outline:none; font-family:var(--font-ui);">
+        <div id="gs-search-results" style="margin-top:2rem; text-align:left; max-height:60vh; overflow-y:auto; font-family:var(--font-ui);"></div>
+    </div>
+</div>
+
+<!-- Sub-Barra de Categoria (Rosa Escuro) -->
+<div class="gs-header__subbar">
+    
+        <a href="/categoria/blog/" style="color:#ffffff;">Blog</a>
+    
+</div>
+
+<!-- Overlay Escuro do Menu -->
+<div class="gs-overlay" id="gs-overlay"></div>
+
+<!-- Menu Oculto (Offcanvas) -->
+<nav class="gs-nav-offcanvas" id="gs-offcanvas">
+    <button class="gs-nav-offcanvas__close" id="gs-menu-close" aria-label="Fechar Menu">
+        <i class="bi bi-x-lg"></i>
+    </button>
+    <br><br>
+    
+        <a href="/">INÍCIO</a>
+        
+            <a href="/categoria/atividades/">Atividades</a>
+        
+            <a href="/categoria/bebes/">Bebês</a>
+        
+            <a href="/categoria/blog/">Blog</a>
+        
+            <a href="/categoria/criancas/">Crianças</a>
+        
+            <a href="/categoria/educacao/">Educação</a>
+        
+    
+</nav>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- MENU HAMBURGUER LOGIC ---
+        const toggleBtn = document.getElementById('gs-menu-toggle');
+        const closeBtn = document.getElementById('gs-menu-close');
+        const offcanvas = document.getElementById('gs-offcanvas');
+        const overlay = document.getElementById('gs-overlay');
+
+        function openMenu() {
+            offcanvas.classList.add('open');
+            overlay.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMenu() {
+            offcanvas.classList.remove('open');
+            overlay.classList.remove('open');
+            document.body.style.overflow = 'auto';
+        }
+
+        if (toggleBtn) toggleBtn.addEventListener('click', openMenu);
+        if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+        if (overlay) overlay.addEventListener('click', closeMenu);
+
+        // --- SEARCH LOGIC ---
+        const searchToggle = document.getElementById('gs-search-toggle');
+        const searchOverlay = document.getElementById('gs-search-overlay');
+        const searchClose = document.getElementById('gs-search-close');
+        const searchInput = document.getElementById('gs-search-input');
+        const searchResults = document.getElementById('gs-search-results');
+        let postsData = [];
+
+        if (searchToggle && searchOverlay) {
+            searchToggle.addEventListener('click', function() {
+                searchOverlay.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+                searchInput.focus();
+                
+                // Fetch posts.json only once
+                if (postsData.length === 0) {
+                    fetch('/posts.json')
+                        .then(response => response.json())
+                        .then(data => { postsData = data; })
+                        .catch(err => console.error('Erro ao carregar pesquisa', err));
+                }
+            });
+            
+            searchClose.addEventListener('click', function() {
+                searchOverlay.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+            
+            searchInput.addEventListener('input', function(e) {
+                const query = e.target.value.toLowerCase();
+                searchResults.innerHTML = '';
+                if (query.length < 2) return;
+                
+                const filtered = postsData.filter(post => post.title.toLowerCase().includes(query));
+                
+                if (filtered.length === 0) {
+                    searchResults.innerHTML = '<p style="color:#aaa; text-align:center; padding:1rem;">Nenhum resultado encontrado.</p>';
+                    return;
+                }
+                
+                filtered.forEach(post => {
+                    const link = document.createElement('a');
+                    link.href = '/' + post.slug + '/';
+                    link.style.display = 'flex';
+                    link.style.gap = '15px';
+                    link.style.alignItems = 'center';
+                    link.style.padding = '10px 0';
+                    link.style.borderBottom = '1px solid #333';
+                    link.style.color = '#fff';
+                    link.style.textDecoration = 'none';
+                    
+                    let imgHtml = post.image ? `<img src="${post.image}" style="width:60px; height:60px; object-fit:cover; border-radius:4px;">` : `<div style="width:60px; height:60px; background:#444; border-radius:4px;"></div>`;
+                    
+                    link.innerHTML = imgHtml + `<div><div style="font-size:0.8rem; color:#aaa;">${post.date || ''}</div><div style="font-weight:700;">${post.title}</div></div>`;
+                    searchResults.appendChild(link);
+                });
+            });
+        }
+    });
+</script>
+
+<main class="container" style="padding-top: 3rem;">
+    <article>
+        <header class="post-header">
+            
+            <h1 class="post-title">Máquina de Costura e Roupas de Crianças: Como Unir Criatividade, Economia e Conforto</h1>
+            
+            
+                <p style="font-size: 1.25rem; color: var(--text-muted); max-width: 800px; margin: 0 auto 2rem; line-height: 1.5;">Costurar roupas infantis com a própria máquina de costura é mais do que uma tendência: é uma forma prática e econômica de oferecer estilo, conforto e personalid</p>
+            
+
+            <div class="post-meta" style="margin-top: 1rem; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); padding: 1rem 0; max-width: 760px; margin-left: auto; margin-right: auto;">
+                
+                    <div style="display: flex; align-items: center; gap: 0.5rem; justify-content: center;">
+                        
+                            <i class="bi bi-person-circle" style="font-size: 2rem; color: var(--text-muted);"></i>
+                        
+                        <span style="font-weight: 700; color: var(--text-main);">Por <a href="/autor/nadine-a-queiroga/" style="color: var(--accent-color);">Nadine A Queiroga</a></span>
+                    </div>
+                
+                <div style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 1rem; flex: 1 1 auto;">
+                    <time datetime="2026-02-05" style="color: var(--text-muted);">
+                        05/02/2026 11:34
+                    </time>
+                    <div style="display: flex; gap: 15px; font-size: 1.3rem; color: var(--accent-color);">
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        
+            <figure class="post-featured-image">
+                <img src="/static/uploads/roupas-de-criancas.jpg" alt="Máquina de Costura e Roupas de Crianças: Como Unir Criatividade, Economia e Conforto">
+            </figure>
+        
+
+        
+
+        <div class="post-content">
+            <p data-start="247" data-end="567">Costurar roupas infantis com a própria máquina de costura é mais do que uma tendência: é uma forma prática e econômica de oferecer estilo, conforto e personalidade ao guarda-roupa dos pequenos.</p>
+<p data-start="247" data-end="567">Se você está pensando em começar a confeccionar roupas de criança ou até mesmo empreender nessa área, este artigo é para você.</p>
+<h2 data-start="569" data-end="636">Por Que Investir em uma Máquina de Costura para Roupas Infantis?</h2>
+<p data-start="638" data-end="962">A infância é uma fase marcada por crescimento rápido, brincadeiras intensas e mudanças constantes. Isso significa que as roupas das crianças precisam ser confortáveis, duráveis, e frequentemente substituídas. Ter uma <strong data-start="855" data-end="885">máquina de costura em casa</strong> pode ser a solução ideal para atender essas demandas de forma personalizada.</p>
+<p data-start="964" data-end="1001">Entre os principais benefícios estão:</p>
+<ul data-start="1003" data-end="1399">
+<li data-start="1003" data-end="1139">
+<p data-start="1005" data-end="1139"><strong data-start="1005" data-end="1017">Economia</strong>: Fazer roupas em casa pode ser mais barato do que comprar peças prontas, especialmente com o reaproveitamento de tecidos.</p>
+</li>
+<li data-start="1140" data-end="1249">
+<p data-start="1142" data-end="1249"><strong data-start="1142" data-end="1158">Criatividade</strong>: Você pode escolher estampas, cores e modelos que combinem com a personalidade da criança.</p>
+</li>
+<li data-start="1250" data-end="1399">
+<p data-start="1252" data-end="1399"><strong data-start="1252" data-end="1276">Qualidade e conforto</strong>: Costurando em casa, é possível priorizar tecidos antialérgicos e modelagens que não irritem a pele sensível dos pequenos.</p>
+</li>
+</ul>
+<h2 data-start="1401" data-end="1465">Os Tipos de Máquina de Costura Ideais para Roupas de Crianças</h2>
+<p data-start="1467" data-end="1653">A escolha da <strong data-start="1480" data-end="1508">máquina de costura certa</strong> é um dos passos mais importantes para começar. Veja abaixo algumas sugestões de modelos ideais para quem pretende trabalhar com roupas infantis:</p>
+<h3 data-start="1655" data-end="1684">1. <strong data-start="1662" data-end="1684">Máquinas Mecânicas</strong></h3>
+<p data-start="1686" data-end="1908">São simples e ótimas para iniciantes. Permitem costuras básicas e já são suficientes para fazer camisetas, vestidos, calças e macacões infantis. Modelos como a <strong data-start="1846" data-end="1862">Singer M2405</strong> são muito procurados por quem está começando.</p>
+<h3 data-start="1910" data-end="1941">2. <strong data-start="1917" data-end="1941">Máquinas Eletrônicas</strong></h3>
+<p data-start="1943" data-end="2207">Essas máquinas possuem recursos mais avançados, como pontos decorativos, controle automático de velocidade e maior precisão. Para quem deseja profissionalizar a produção, uma máquina como a <strong data-start="2133" data-end="2152">Brother CS6000i</strong> ou a <strong data-start="2158" data-end="2175">Janome 2030DC</strong> pode ser uma excelente escolha.</p>
+<h3 data-start="2209" data-end="2250">3. <strong data-start="2216" data-end="2250">Máquinas Overloque e Ultralock</strong></h3>
+<p data-start="2252" data-end="2503">Fundamentais para dar acabamento profissional às roupas, essas máquinas cortam o excesso de tecido e fazem o arremate das costuras ao mesmo tempo. Isso evita que as peças desfiem com o uso ou após várias lavagens, o que é essencial quando se trata de roupas infantis, que exigem resistência e durabilidade.</p>
+<p data-start="2252" data-end="2503">Uma excelente escolha nesse segmento é a <a href="https://www.maquinadecosturatech.com.br/post/maquina-de-costura-singer-ultralock-14hd854-review" target="_blank" rel="noopener noreferrer">Máquina de Costura Singer Ultralock 14HD854</a>, conhecida por sua robustez, agilidade e qualidade no acabamento, sendo ideal para quem deseja elevar o padrão das peças produzidas.</p>
+<h2 data-start="2505" data-end="2551">Tecidos Mais Indicados para Roupas Infantis</h2>
+<p data-start="2553" data-end="2698">A escolha do tecido é essencial para garantir conforto e praticidade. Para roupas de bebê e crianças pequenas, prefira tecidos naturais e macios:</p>
+<ul data-start="2700" data-end="2963">
+<li data-start="2700" data-end="2763">
+<p data-start="2702" data-end="2763"><strong data-start="2702" data-end="2722">Malha de algodão</strong>: Ideal para bodies, camisetas e pijamas.</p>
+</li>
+<li data-start="2764" data-end="2829">
+<p data-start="2766" data-end="2829"><strong data-start="2766" data-end="2782">Moletom leve</strong>: Perfeito para roupas de inverno confortáveis.</p>
+</li>
+<li data-start="2830" data-end="2895">
+<p data-start="2832" data-end="2895"><strong data-start="2832" data-end="2845">Tricoline</strong>: Ótimo para vestidos e camisas mais arrumadinhas.</p>
+</li>
+<li data-start="2896" data-end="2963">
+<p data-start="2898" data-end="2963"><strong data-start="2898" data-end="2915">Soft ou plush</strong>: Muito usados em macacões e roupas para dormir.</p>
+</li>
+</ul>
+<p data-start="2965" data-end="3065">Evite tecidos ásperos ou sintéticos que podem causar alergias ou atrapalhar a mobilidade da criança.</p>
+<h2 data-start="3067" data-end="3112">Dicas de Modelagens e Moldes para Crianças</h2>
+<p data-start="3114" data-end="3355">Um dos pontos mais interessantes de costurar roupas infantis é a variedade de modelos disponíveis. Há muitos moldes gratuitos na internet, e você também pode adquirir revistas especializadas ou até investir em um curso de modelagem infantil.</p>
+<p data-start="3357" data-end="3389">Algumas peças que fazem sucesso:</p>
+<ul data-start="3391" data-end="3590">
+<li data-start="3391" data-end="3434">
+<p data-start="3393" data-end="3434">Vestidinhos rodados com estampas lúdicas;</p>
+</li>
+<li data-start="3435" data-end="3480">
+<p data-start="3437" data-end="3480">Macacões para bebê com abotoamento prático;</p>
+</li>
+<li data-start="3481" data-end="3529">
+<p data-start="3483" data-end="3529">Conjuntinhos de camiseta e short para brincar;</p>
+</li>
+<li data-start="3530" data-end="3590">
+<p data-start="3532" data-end="3590">Calças com elástico, que facilitam a autonomia da criança.</p>
+</li>
+</ul>
+<p data-start="3592" data-end="3728">Uma dica de ouro: faça testes com retalhos antes de cortar o tecido final. Isso evita desperdício e garante um melhor caimento da roupa.</p>
+<h2 data-start="3730" data-end="3774">Como Costurar com Segurança e Praticidade</h2>
+<p data-start="3776" data-end="3934">Costurar roupas para crianças requer cuidado com os acabamentos, botões, zíperes e até mesmo etiquetas. Veja algumas dicas para garantir segurança e conforto:</p>
+<ul data-start="3936" data-end="4314">
+<li data-start="3936" data-end="4015">
+<p data-start="3938" data-end="4015"><strong data-start="3938" data-end="3965">Use costuras reforçadas</strong> em pontos de tensão, como entrepernas e laterais.</p>
+</li>
+<li data-start="4016" data-end="4089">
+<p data-start="4018" data-end="4089"><strong data-start="4018" data-end="4053">Evite peças com botões pequenos</strong> ou soltos que possam ser engolidos.</p>
+</li>
+<li data-start="4090" data-end="4169">
+<p data-start="4092" data-end="4169"><strong data-start="4092" data-end="4122">Use zíperes com protetores</strong> para evitar que a pele da criança fique presa.</p>
+</li>
+<li data-start="4170" data-end="4249">
+<p data-start="4172" data-end="4249"><strong data-start="4172" data-end="4213">Prefira elásticos macios e ajustáveis</strong>, principalmente em roupas de bebês.</p>
+</li>
+<li data-start="4250" data-end="4314">
+<p data-start="4252" data-end="4314"><strong data-start="4252" data-end="4285">Cuidado com etiquetas ásperas</strong>, que podem incomodar a pele.</p>
+</li>
+</ul>
+<h2 data-start="4316" data-end="4366">Roupas de Crianças como Oportunidade de Negócio</h2>
+<p data-start="4368" data-end="4607">A produção artesanal de roupas infantis está em alta. Muitas mães e costureiras têm encontrado nesse segmento uma forma de complementar a renda ou até abrir um negócio próprio. Afinal, o mercado infantil é um dos que mais cresce no Brasil.</p>
+<p data-start="4609" data-end="4681">Dentre os diferenciais competitivos para se destacar nesse nicho, estão:</p>
+<ul data-start="4683" data-end="5093">
+<li data-start="4683" data-end="4776">
+<p data-start="4685" data-end="4776"><strong data-start="4685" data-end="4705">Peças exclusivas</strong>: Personalizar com nome da criança ou estampas diferentes agrega valor.</p>
+</li>
+<li data-start="4777" data-end="4880">
+<p data-start="4779" data-end="4880"><strong data-start="4779" data-end="4801">Temáticas sazonais</strong>: Roupas para festas juninas, Natal, Halloween ou volta às aulas fazem sucesso.</p>
+</li>
+<li data-start="4881" data-end="4984">
+<p data-start="4883" data-end="4984"><strong data-start="4883" data-end="4910">Roupa igual mãe e filha</strong>: Essa tendência está em alta e gera grande engajamento nas redes sociais.</p>
+</li>
+<li data-start="4985" data-end="5093">
+<p data-start="4987" data-end="5093"><strong data-start="4987" data-end="5007">Sustentabilidade</strong>: Marcas que reaproveitam tecidos e apostam na produção consciente têm ganhado espaço.</p>
+</li>
+</ul>
+<p data-start="5095" data-end="5223">Se a ideia for vender, plataformas como <strong data-start="5135" data-end="5179">Elo7, Shopee, Mercado Livre ou Instagram</strong> são excelentes vitrines para seus produtos.</p>
+<h2 data-start="5225" data-end="5278">Organização e Ferramentas Auxiliares para o Ateliê</h2>
+<p data-start="5280" data-end="5430">Além da máquina de costura, quem deseja trabalhar com roupas de criança precisa de um espaço minimamente organizado. Veja alguns itens indispensáveis:</p>
+<ul data-start="5432" data-end="5692">
+<li data-start="5432" data-end="5471">
+<p data-start="5434" data-end="5471"><strong data-start="5434" data-end="5451">Mesa de corte</strong> com boa iluminação;</p>
+</li>
+<li data-start="5472" data-end="5529">
+<p data-start="5474" data-end="5529"><strong data-start="5474" data-end="5494">Tesouras afiadas</strong>, alfinetes, fita métrica e réguas;</p>
+</li>
+<li data-start="5530" data-end="5584">
+<p data-start="5532" data-end="5584"><strong data-start="5532" data-end="5551">Ferro de passar</strong> para dar acabamento às costuras;</p>
+</li>
+<li data-start="5585" data-end="5640">
+<p data-start="5587" data-end="5640"><strong data-start="5587" data-end="5613">Overloque ou Ultralock</strong> para acabamentos duráveis;</p>
+</li>
+<li data-start="5641" data-end="5692">
+<p data-start="5643" data-end="5692"><strong data-start="5643" data-end="5691">Organizadores de linhas, botões e aviamentos</strong>.</p>
+</li>
+</ul>
+<p data-start="5694" data-end="5800">Se possível, monte um cantinho fixo para facilitar sua rotina e tornar a costura mais prática e prazerosa.</p>
+<h2 data-start="5802" data-end="5845">Aprendizado Contínuo: Cursos e Tutoriais</h2>
+<p data-start="5847" data-end="6093">Mesmo que você já saiba costurar, especializar-se em roupas infantis é um diferencial. Hoje há diversos cursos online e gratuitos no YouTube, além de escolas como <strong data-start="6010" data-end="6019">Senac</strong>, <strong data-start="6021" data-end="6046">Escola de Moda Sigbol</strong>, e plataformas como <strong data-start="6067" data-end="6080">Domestika</strong> e <strong data-start="6083" data-end="6092">Udemy</strong>.</p>
+<p data-start="6095" data-end="6204">A prática aliada ao conhecimento técnico é o que transforma peças simples em roupas vendáveis e de qualidade.</p>
+<h2 data-start="6206" data-end="6251">Tendências em Roupas Infantis para Apostar</h2>
+<p data-start="6253" data-end="6344">Assim como a moda adulta, o vestuário infantil segue tendências. Algumas que estão em alta:</p>
+<ul data-start="6346" data-end="6630">
+<li data-start="6346" data-end="6410">
+<p data-start="6348" data-end="6410"><strong data-start="6348" data-end="6379">Estampas com temas naturais</strong> (flores, bichinhos, planetas);</p>
+</li>
+<li data-start="6411" data-end="6480">
+<p data-start="6413" data-end="6480"><strong data-start="6413" data-end="6440">Cores suaves e terrosas</strong>, como areia, verde-musgo e rosa antigo;</p>
+</li>
+<li data-start="6481" data-end="6548">
+<p data-start="6483" data-end="6548"><strong data-start="6483" data-end="6504">Modelagem unissex</strong>, que facilita o reaproveitamento das peças;</p>
+</li>
+<li data-start="6549" data-end="6630">
+<p data-start="6551" data-end="6630"><strong data-start="6551" data-end="6587">Tecidos orgânicos e sustentáveis</strong>, como algodão orgânico e viscose de bambu.</p>
+</li>
+</ul>
+<p data-start="6632" data-end="6736">Ficar atento às tendências ajuda a oferecer produtos mais desejados pelo público e aumentar suas vendas.</p>
+<hr data-start="6738" data-end="6741">
+<h2 data-start="6743" data-end="6755">Conclusão</h2>
+<p data-start="6757" data-end="7070">Costurar roupas de criança com sua <strong data-start="6792" data-end="6814">máquina de costura</strong> pode ser uma forma criativa de economizar, vestir melhor seus filhos ou até iniciar um negócio rentável. O segredo está em escolher uma boa máquina, investir em tecidos confortáveis, manter a segurança nas peças e aprimorar continuamente suas habilidades.</p>
+<p data-start="7072" data-end="7319">Se você ainda está em dúvida sobre qual equipamento adquirir, considere investir em modelos versáteis e duráveis como a <strong data-start="7192" data-end="7239">Máquina de Costura Singer Ultralock 14HD854</strong>, que oferece praticidade e acabamento profissional para qualquer peça infantil.</p>
+<p data-start="7321" data-end="7430">Seja como hobby ou profissão, a costura infantil abre um mundo de possibilidades. Basta dar o primeiro ponto!</p>
+        </div>
+
+        
+    </article>
+</main>
+
+<footer class="gs-footer">
+    <div class="container">
+        <div class="gs-footer__social">
+            
+            
+            
+            
+        </div>
+        
+        <ul class="gs-footer__menu">
+            
+        </ul>
+        
+        <div class="gs-footer__description" style="max-width: 600px; margin: 0 auto 2rem; color: var(--text-muted); font-size: 0.95rem; font-family: var(--font-ui);">
+            Um espaço dedicado a compartilhar ideias, artigos e tutoriais. Nossa missão é entregar conteúdo de valor e com qualidade para todos os nossos leitores.
+        </div>
+        
+        
+        <div class="gs-footer__copyright">
+            Somos um blog voltado para as crianças! Aqui você irá encontrar brincadeiras, sugestões, viagens, passeios, recreações, técnicas de aprendizado infantil e muito mais! O mundo da criança agora tem nome: Criança faz Arte! Todos os artigos aqui do site são revisados por uma pedagoga experiente. Então seja muito bem vindo e fique com a gente =)
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Carrossel nativo simplificado (substituto das chamadas de script originais caso tenha blocos CMS)
+    document.addEventListener('DOMContentLoaded', function() {
+        document.body.addEventListener('click', function(e) {
+            const btnPrev = e.target.closest('.btn-carousel-prev');
+            if (btnPrev) {
+                const wrapper = btnPrev.closest('div[id^="carrossel-"]');
+                const track = wrapper.querySelector('.dsc-track');
+                const item = track.querySelector('.dsc-item');
+                if (track && item) {
+                    const scrollAmount = item.offsetWidth + 20;
+                    if (track.scrollLeft <= 5) { track.scrollTo({ left: track.scrollWidth, behavior: 'smooth' }); } 
+                    else { track.scrollBy({ left: -scrollAmount, behavior: 'smooth' }); }
+                }
+                return;
+            }
+            const btnNext = e.target.closest('.btn-carousel-next');
+            if (btnNext) {
+                const wrapper = btnNext.closest('div[id^="carrossel-"]');
+                const track = wrapper.querySelector('.dsc-track');
+                const item = track.querySelector('.dsc-item');
+                if (track && item) {
+                    const scrollAmount = item.offsetWidth + 20;
+                    if (track.scrollLeft + track.offsetWidth >= track.scrollWidth - 5) { track.scrollTo({ left: 0, behavior: 'smooth' }); } 
+                    else { track.scrollBy({ left: scrollAmount, behavior: 'smooth' }); }
+                }
+                return;
+            }
+        });
+    });
+</script>
+</body>
+</html>

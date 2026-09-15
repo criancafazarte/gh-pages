@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dicas de presentes para crianças - Criança Faz Arte</title>
+    <meta name="description" content="Encontre dicas criativas e divertidas de presentes para crianças de todas as idades. Surpreenda com opções que encantam e estimulam!">
+    
+    
+    
+    <link rel="icon" href="/static/uploads/iocne.png" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/static/uploads/iocne.png">
+    
+
+    <link rel="stylesheet" href="/themes/gshow_pop_v2/assets/css/style.css?v=2.0">
+    <!-- Bootstrap Icons (Usado internamente pelo CMS e para redes sociais) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Algumas lógicas do CMS dependem de classes Bootstrap puras (RaioX). Injetamos a versão ultra-leve do bootstrap apenas para os blocos do CMS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Sistema de Paletas de Cores -->
+    
+    <style>
+        :root {
+            --accent-color: #6f42c1 !important;
+            --accent-hover: #59359a !important;
+            --accent-dark: #472a7b !important;
+        }
+    </style>
+    
+
+    
+</head>
+<body>
+<header class="gs-header">
+    <div class="gs-header__container">
+        <!-- Lado Esquerdo -->
+        <div class="gs-header__left">
+            <button class="gs-header__menu-btn" id="gs-menu-toggle" aria-label="Abrir Menu">
+                <i class="bi bi-list"></i>
+                <span class="gs-header__menu-text">MENU</span>
+            </button>
+
+            <a href="/" class="gs-header__logo">
+                
+                    <img src="/static/uploads/crianca-faz-arte-2.png" alt="Criança Faz Arte">
+                
+            </a>
+        </div>
+
+        <!-- Centro: Nome do Site com fonte fina -->
+        <a href="/" class="gs-header__center">
+            Criança Faz Arte
+        </a>
+
+        <!-- Lado Direito: Buscar -->
+        <div class="gs-header__right">
+            <button class="gs-header__right-item" id="gs-search-toggle" aria-label="Pesquisar" style="background:none; border:none; color:#fff;">
+                <i class="bi bi-search"></i>
+                <span style="text-transform: uppercase;">Buscar</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- Overlay de Busca (Search Modal) -->
+<div class="gs-search-overlay" id="gs-search-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:9999; padding:2rem;">
+    <button id="gs-search-close" style="position:absolute; top:20px; right:30px; background:none; border:none; color:#fff; font-size:2rem; cursor:pointer;"><i class="bi bi-x-lg"></i></button>
+    <div style="max-width:600px; margin: 4rem auto 0; text-align:center;">
+        <input type="text" id="gs-search-input" placeholder="O que você está procurando?" style="width:100%; padding:1rem; font-size:1.5rem; border:none; border-bottom:2px solid var(--accent-color); background:transparent; color:#fff; outline:none; font-family:var(--font-ui);">
+        <div id="gs-search-results" style="margin-top:2rem; text-align:left; max-height:60vh; overflow-y:auto; font-family:var(--font-ui);"></div>
+    </div>
+</div>
+
+<!-- Sub-Barra de Categoria (Rosa Escuro) -->
+<div class="gs-header__subbar">
+    
+        <a href="/categoria/blog/" style="color:#ffffff;">Blog</a>
+    
+</div>
+
+<!-- Overlay Escuro do Menu -->
+<div class="gs-overlay" id="gs-overlay"></div>
+
+<!-- Menu Oculto (Offcanvas) -->
+<nav class="gs-nav-offcanvas" id="gs-offcanvas">
+    <button class="gs-nav-offcanvas__close" id="gs-menu-close" aria-label="Fechar Menu">
+        <i class="bi bi-x-lg"></i>
+    </button>
+    <br><br>
+    
+        <a href="/">INÍCIO</a>
+        
+            <a href="/categoria/atividades/">Atividades</a>
+        
+            <a href="/categoria/bebes/">Bebês</a>
+        
+            <a href="/categoria/blog/">Blog</a>
+        
+            <a href="/categoria/criancas/">Crianças</a>
+        
+            <a href="/categoria/educacao/">Educação</a>
+        
+    
+</nav>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- MENU HAMBURGUER LOGIC ---
+        const toggleBtn = document.getElementById('gs-menu-toggle');
+        const closeBtn = document.getElementById('gs-menu-close');
+        const offcanvas = document.getElementById('gs-offcanvas');
+        const overlay = document.getElementById('gs-overlay');
+
+        function openMenu() {
+            offcanvas.classList.add('open');
+            overlay.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMenu() {
+            offcanvas.classList.remove('open');
+            overlay.classList.remove('open');
+            document.body.style.overflow = 'auto';
+        }
+
+        if (toggleBtn) toggleBtn.addEventListener('click', openMenu);
+        if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+        if (overlay) overlay.addEventListener('click', closeMenu);
+
+        // --- SEARCH LOGIC ---
+        const searchToggle = document.getElementById('gs-search-toggle');
+        const searchOverlay = document.getElementById('gs-search-overlay');
+        const searchClose = document.getElementById('gs-search-close');
+        const searchInput = document.getElementById('gs-search-input');
+        const searchResults = document.getElementById('gs-search-results');
+        let postsData = [];
+
+        if (searchToggle && searchOverlay) {
+            searchToggle.addEventListener('click', function() {
+                searchOverlay.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+                searchInput.focus();
+                
+                // Fetch posts.json only once
+                if (postsData.length === 0) {
+                    fetch('/posts.json')
+                        .then(response => response.json())
+                        .then(data => { postsData = data; })
+                        .catch(err => console.error('Erro ao carregar pesquisa', err));
+                }
+            });
+            
+            searchClose.addEventListener('click', function() {
+                searchOverlay.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+            
+            searchInput.addEventListener('input', function(e) {
+                const query = e.target.value.toLowerCase();
+                searchResults.innerHTML = '';
+                if (query.length < 2) return;
+                
+                const filtered = postsData.filter(post => post.title.toLowerCase().includes(query));
+                
+                if (filtered.length === 0) {
+                    searchResults.innerHTML = '<p style="color:#aaa; text-align:center; padding:1rem;">Nenhum resultado encontrado.</p>';
+                    return;
+                }
+                
+                filtered.forEach(post => {
+                    const link = document.createElement('a');
+                    link.href = '/' + post.slug + '/';
+                    link.style.display = 'flex';
+                    link.style.gap = '15px';
+                    link.style.alignItems = 'center';
+                    link.style.padding = '10px 0';
+                    link.style.borderBottom = '1px solid #333';
+                    link.style.color = '#fff';
+                    link.style.textDecoration = 'none';
+                    
+                    let imgHtml = post.image ? `<img src="${post.image}" style="width:60px; height:60px; object-fit:cover; border-radius:4px;">` : `<div style="width:60px; height:60px; background:#444; border-radius:4px;"></div>`;
+                    
+                    link.innerHTML = imgHtml + `<div><div style="font-size:0.8rem; color:#aaa;">${post.date || ''}</div><div style="font-weight:700;">${post.title}</div></div>`;
+                    searchResults.appendChild(link);
+                });
+            });
+        }
+    });
+</script>
+
+<main class="container" style="padding-top: 3rem;">
+    <article>
+        <header class="post-header">
+            
+            <h1 class="post-title">Dicas de presentes para crianças</h1>
+            
+            
+                <p style="font-size: 1.25rem; color: var(--text-muted); max-width: 800px; margin: 0 auto 2rem; line-height: 1.5;">Encontre dicas criativas e divertidas de presentes para crianças de todas as idades. Surpreenda com opções que encantam e estimulam!</p>
+            
+
+            <div class="post-meta" style="margin-top: 1rem; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); padding: 1rem 0; max-width: 760px; margin-left: auto; margin-right: auto;">
+                
+                    <div style="display: flex; align-items: center; gap: 0.5rem; justify-content: center;">
+                        
+                            <i class="bi bi-person-circle" style="font-size: 2rem; color: var(--text-muted);"></i>
+                        
+                        <span style="font-weight: 700; color: var(--text-main);">Por <a href="/autor/nadine-a-queiroga/" style="color: var(--accent-color);">Nadine A Queiroga</a></span>
+                    </div>
+                
+                <div style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 1rem; flex: 1 1 auto;">
+                    <time datetime="2026-02-10" style="color: var(--text-muted);">
+                        10/02/2026 21:00
+                    </time>
+                    <div style="display: flex; gap: 15px; font-size: 1.3rem; color: var(--accent-color);">
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        
+            <figure class="post-featured-image">
+                <img src="/static/uploads/dicas-de-presentes-para-criancas.jpg" alt="Dicas de presentes para crianças">
+            </figure>
+        
+
+        
+
+        <div class="post-content">
+            <p>Escolher o presente perfeito para uma criança pode parecer um desafio, não é mesmo? Afinal, com tantas opções por aí, fica difícil saber o que vai realmente agradar — e não acabar esquecido numa gaveta qualquer. Sabe de uma coisa? Presentear vai muito além de só entregar um objeto; envolve entender o universo da criança, suas curiosidades, seu jeito de brincar e até o que está rolando de tendência no momento. Se você já se pegou quebrando a cabeça para encontrar um presente que seja legal, útil e que faça os olhos da criança brilharem, fica tranquilo que esse papo é pra você.</p>
+<h2>Por que o presente certo faz toda a diferença?</h2>
+<p>Imagine só: aquela criança recebendo um brinquedo que nem sabe direito o que fazer, ou um presente que logo perde a graça. Chato, né? Presentes têm esse poder incrível de criar memórias afetivas, construir vínculos e até estimular o desenvolvimento. Claro, não é só sobre "comprar algo” — é sobre pensar no que vai trazer alegria, aprendizado ou simplesmente diversão de verdade.</p>
+<p>Agora, será que todos os brinquedos e objetos que vemos por aí têm esse potencial? Nem sempre. É aquela velha história: nem tudo que reluz é ouro, e nem todo brinquedo popular vai virar o favorito. Por isso, entender a criança, sua faixa etária e interesses é o primeiro passo para acertar no presente.</p>
+<h2>Entendendo as fases da infância para escolher melhor</h2>
+<p>Você já reparou como as crianças mudam rápido? O que é legal para um bebê dificilmente vai fazer sentido para uma criança de 6 anos, e esse mesmo garoto pode estar numa vibe completamente diferente aos 10. Cada etapa tem suas peculiaridades — e isso influencia na escolha do presente, claro.</p>
+<h3>Bebês (0 a 2 anos): explorar o mundo com os sentidos</h3>
+<p>Nessa fase, o foco é todo no desenvolvimento sensorial. Brinquedos que mexem com cores, texturas, sons e movimentos são sucesso garantido. Mas cuidado: segurança sempre em primeiro lugar, né? Brinquedos com peças grandes, materiais atóxicos e sem pontas afiadas são a pedida.</p>
+<ul>
+<li>Chocalhos coloridos</li>
+<li>Livros de tecido ou plástico resistente</li>
+<li>Tapetes de atividades com sons e texturas</li>
+</ul>
+<p> </p>
+<p>Ah, e tem os brinquedos que ajudam a dar os primeiros passos — aqueles andadores ou carrinhos de empurrar que fazem a criança se sentir super independente. É fofo e muito importante para o desenvolvimento motor.</p>
+<h3>Crianças pequenas (3 a 5 anos): criatividade e imaginação à solta</h3>
+<p>Se você pensa que nessa idade a criança só quer correr e bagunçar, está meio certo — mas não só isso. O lance aqui é estimular a criatividade, o faz de conta, o aprendizado lúdico. Jogos de montar, bonecos, massinhas, livros com histórias divertidas — tudo que faça a cabecinha funcionar e a imaginação voar.</p>
+<p>Quer saber? Brinquedos que permitem múltiplas formas de brincar costumam ser um sucesso. Por exemplo, blocos de montar não são só blocos — são castelos, naves espaciais, carros e o que a criança quiser inventar.</p>
+<h3>Crianças maiores (6 a 10 anos): desafios e descobertas</h3>
+<p>Aí o jogo muda um pouco. As crianças já querem algo que as desafie, que estimule a lógica, o raciocínio, mas também que se encaixe nas suas paixões — seja esporte, ciência, música ou artes. Que tal pensar em kits de experimentos, jogos de tabuleiro estratégicos, instrumentos musicais básicos ou até materiais para artesanato?</p>
+<p>E por que não um livro que conte uma história incrível? A leitura nessa idade abre portas para mundos novos — e, sinceramente, não tem presente mais valioso que o hábito de ler. Além do mais, é uma forma de a criança se expressar e entender melhor o que sente e pensa.</p>
+<h2>Presentes que unem diversão e aprendizado: o combo perfeito</h2>
+<p>Quando a gente pensa em presentes para crianças, bate aquela dúvida: será que brinquedo educativo é chato? Nada disso! Na verdade, ele pode ser o que vai fazer a criança ficar vidrada por horas, sem nem perceber que está aprendendo. E isso vale para qualquer idade.</p>
+<p>Por exemplo, jogos de lógica ou quebra-cabeças ajudam a desenvolver o pensamento crítico e a paciência. Kits de construção, como LEGO, fazem a criança exercitar a criatividade e coordenação motora. Até brinquedos que envolvem programação básica — sim, já existem para crianças — dão um passo à frente para o futuro.</p>
+<p>O segredo está em escolher algo que combine o útil com o prazeroso. Afinal, ninguém quer forçar uma criança a brincar, né? Queremos que ela se jogue de cabeça, que se divirta de verdade.</p>
+<h2>Na dúvida, aposte em experiências e presentes personalizados</h2>
+<p>Se você já ficou sem ideia, aqui vai uma dica que vale ouro: experiências. Presentes não precisam ser só objetos — podem ser momentos incríveis. Que tal um ingresso para um parque temático, uma aula de culinária infantil, uma ida ao teatro ou até uma oficina de arte? Essas lembranças ficam para sempre — e a criança ganha muito mais que um brinquedo.</p>
+<p>Além disso, presentes personalizados têm um charme todo especial. Pode ser uma mochila com o nome da criança, um livro de histórias onde ela é a protagonista, ou até uma camiseta com uma estampa que tenha tudo a ver com seu personagem favorito. Esses detalhes mostram cuidado, atenção — e sinceramente, isso é o que toca o coração.</p>
+<h2>Presentes criativos que fogem do óbvio</h2>
+<p>Quer sair da mesmice? Experimente pensar fora da caixa. Presentes que estimulem hobbies diferentes ou que tragam uma pitada de surpresa costumam fazer sucesso. Por exemplo:</p>
+<ul>
+<li>Terrários para crianças que gostam de plantas — um mini jardim na mão delas</li>
+<li>Instrumentos musicais simples, como ukulele ou pandeiro</li>
+<li>Material para construção de robôs ou gadgets eletrônicos básicos</li>
+<li>Caixas de assinatura mensal com kits de atividades variadas</li>
+</ul>
+<p> </p>
+<p>E claro, não podemos esquecer daqueles itens que parecem simples, mas fazem toda a diferença no dia a dia — como roupas com estampas divertidas, mochilas estilosas ou até <a href="https://www.canequita.com.br/caneca/canecas-divertidas/" rel="noopener" target="_blank">canecas divertidas</a> (sim, tem crianças que amam ter uma caneca só delas!). Esses mimos, além de úteis, trazem um sorriso no rosto só de olhar.</p>
+<h2>Como encaixar presentes na rotina sem exageros</h2>
+<p>Já parou para pensar que, às vezes, menos é mais? Crianças não precisam de uma montanha de brinquedos para serem felizes — e, na real, o excesso pode até tirar o interesse por qualquer coisa. Presentes são muito mais legais quando vêm com um propósito, uma história, um significado.</p>
+<p>Além disso, presentear com moderação ajuda a criança a valorizar mais o que recebe. E isso é um aprendizado que fica para a vida toda, sabe? Ensinar o valor das coisas, o cuidado, o respeito pelo que se ganha, tudo isso faz parte do presente, mesmo que não venha embrulhado no papel colorido.</p>
+<h2>Quer impressionar? Invista em presentes que contam histórias</h2>
+<p>Já percebeu como as crianças adoram ouvir histórias? Seja na hora de dormir, na escola ou na roda de amigos, contar histórias é uma forma poderosa de conectar, ensinar e divertir. Então, que tal dar um presente que tenha uma história própria?</p>
+<p>Pode ser um livro com personagens que a criança se identifica, um brinquedo artesanal feito por artesãos locais, ou até algo que traga uma mensagem especial — de amizade, coragem, respeito. Esses presentes, além de terem valor material, carregam emoções e ensinamentos que ficam para sempre.</p>
+<h2>Para fechar com chave de ouro: dicas rápidas para não errar</h2>
+<ul>
+<li>Observe os interesses da criança — qual desenho, esporte ou hobby ela curte?</li>
+<li>Considere a faixa etária para garantir segurança e adequação</li>
+<li>Pense em presentes que incentivem a criatividade e o aprendizado</li>
+<li>Não subestime o poder de experiências e presentes personalizados</li>
+<li>Lembre-se do equilíbrio: qualidade é melhor que quantidade</li>
+<li>Inclua a criança na escolha, quando possível — isso faz toda a diferença</li>
+<li> </li>
+</ul>
+<p>Enfim, presentear é uma arte — e como toda arte, envolve olhar com o coração, entender o outro e, claro, se divertir no processo. Agora, com essas dicas na manga, você está mais que preparado para arrasar na escolha e conquistar aquele sorriso que vale mais que tudo. Porque, no fim das contas, é isso que importa, não é?</p>
+        </div>
+
+        
+    </article>
+</main>
+
+<footer class="gs-footer">
+    <div class="container">
+        <div class="gs-footer__social">
+            
+            
+            
+            
+        </div>
+        
+        <ul class="gs-footer__menu">
+            
+        </ul>
+        
+        <div class="gs-footer__description" style="max-width: 600px; margin: 0 auto 2rem; color: var(--text-muted); font-size: 0.95rem; font-family: var(--font-ui);">
+            Um espaço dedicado a compartilhar ideias, artigos e tutoriais. Nossa missão é entregar conteúdo de valor e com qualidade para todos os nossos leitores.
+        </div>
+        
+        
+        <div class="gs-footer__copyright">
+            Somos um blog voltado para as crianças! Aqui você irá encontrar brincadeiras, sugestões, viagens, passeios, recreações, técnicas de aprendizado infantil e muito mais! O mundo da criança agora tem nome: Criança faz Arte! Todos os artigos aqui do site são revisados por uma pedagoga experiente. Então seja muito bem vindo e fique com a gente =)
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Carrossel nativo simplificado (substituto das chamadas de script originais caso tenha blocos CMS)
+    document.addEventListener('DOMContentLoaded', function() {
+        document.body.addEventListener('click', function(e) {
+            const btnPrev = e.target.closest('.btn-carousel-prev');
+            if (btnPrev) {
+                const wrapper = btnPrev.closest('div[id^="carrossel-"]');
+                const track = wrapper.querySelector('.dsc-track');
+                const item = track.querySelector('.dsc-item');
+                if (track && item) {
+                    const scrollAmount = item.offsetWidth + 20;
+                    if (track.scrollLeft <= 5) { track.scrollTo({ left: track.scrollWidth, behavior: 'smooth' }); } 
+                    else { track.scrollBy({ left: -scrollAmount, behavior: 'smooth' }); }
+                }
+                return;
+            }
+            const btnNext = e.target.closest('.btn-carousel-next');
+            if (btnNext) {
+                const wrapper = btnNext.closest('div[id^="carrossel-"]');
+                const track = wrapper.querySelector('.dsc-track');
+                const item = track.querySelector('.dsc-item');
+                if (track && item) {
+                    const scrollAmount = item.offsetWidth + 20;
+                    if (track.scrollLeft + track.offsetWidth >= track.scrollWidth - 5) { track.scrollTo({ left: 0, behavior: 'smooth' }); } 
+                    else { track.scrollBy({ left: scrollAmount, behavior: 'smooth' }); }
+                }
+                return;
+            }
+        });
+    });
+</script>
+</body>
+</html>

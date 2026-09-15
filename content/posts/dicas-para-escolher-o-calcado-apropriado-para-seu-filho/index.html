@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dicas para escolher o calçado apropriado para seu filho - Criança Faz Arte</title>
+    <meta name="description" content="Saiba como escolher o calçado ideal para o conforto e saúde dos pés do seu filho com dicas práticas e especialistas. Confira!">
+    
+    
+    
+    <link rel="icon" href="/static/uploads/iocne.png" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/static/uploads/iocne.png">
+    
+
+    <link rel="stylesheet" href="/themes/gshow_pop_v2/assets/css/style.css?v=2.0">
+    <!-- Bootstrap Icons (Usado internamente pelo CMS e para redes sociais) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Algumas lógicas do CMS dependem de classes Bootstrap puras (RaioX). Injetamos a versão ultra-leve do bootstrap apenas para os blocos do CMS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Sistema de Paletas de Cores -->
+    
+    <style>
+        :root {
+            --accent-color: #6f42c1 !important;
+            --accent-hover: #59359a !important;
+            --accent-dark: #472a7b !important;
+        }
+    </style>
+    
+
+    
+</head>
+<body>
+<header class="gs-header">
+    <div class="gs-header__container">
+        <!-- Lado Esquerdo -->
+        <div class="gs-header__left">
+            <button class="gs-header__menu-btn" id="gs-menu-toggle" aria-label="Abrir Menu">
+                <i class="bi bi-list"></i>
+                <span class="gs-header__menu-text">MENU</span>
+            </button>
+
+            <a href="/" class="gs-header__logo">
+                
+                    <img src="/static/uploads/crianca-faz-arte-2.png" alt="Criança Faz Arte">
+                
+            </a>
+        </div>
+
+        <!-- Centro: Nome do Site com fonte fina -->
+        <a href="/" class="gs-header__center">
+            Criança Faz Arte
+        </a>
+
+        <!-- Lado Direito: Buscar -->
+        <div class="gs-header__right">
+            <button class="gs-header__right-item" id="gs-search-toggle" aria-label="Pesquisar" style="background:none; border:none; color:#fff;">
+                <i class="bi bi-search"></i>
+                <span style="text-transform: uppercase;">Buscar</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- Overlay de Busca (Search Modal) -->
+<div class="gs-search-overlay" id="gs-search-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:9999; padding:2rem;">
+    <button id="gs-search-close" style="position:absolute; top:20px; right:30px; background:none; border:none; color:#fff; font-size:2rem; cursor:pointer;"><i class="bi bi-x-lg"></i></button>
+    <div style="max-width:600px; margin: 4rem auto 0; text-align:center;">
+        <input type="text" id="gs-search-input" placeholder="O que você está procurando?" style="width:100%; padding:1rem; font-size:1.5rem; border:none; border-bottom:2px solid var(--accent-color); background:transparent; color:#fff; outline:none; font-family:var(--font-ui);">
+        <div id="gs-search-results" style="margin-top:2rem; text-align:left; max-height:60vh; overflow-y:auto; font-family:var(--font-ui);"></div>
+    </div>
+</div>
+
+<!-- Sub-Barra de Categoria (Rosa Escuro) -->
+<div class="gs-header__subbar">
+    
+        <a href="/categoria/blog/" style="color:#ffffff;">Blog</a>
+    
+</div>
+
+<!-- Overlay Escuro do Menu -->
+<div class="gs-overlay" id="gs-overlay"></div>
+
+<!-- Menu Oculto (Offcanvas) -->
+<nav class="gs-nav-offcanvas" id="gs-offcanvas">
+    <button class="gs-nav-offcanvas__close" id="gs-menu-close" aria-label="Fechar Menu">
+        <i class="bi bi-x-lg"></i>
+    </button>
+    <br><br>
+    
+        <a href="/">INÍCIO</a>
+        
+            <a href="/categoria/atividades/">Atividades</a>
+        
+            <a href="/categoria/bebes/">Bebês</a>
+        
+            <a href="/categoria/blog/">Blog</a>
+        
+            <a href="/categoria/criancas/">Crianças</a>
+        
+            <a href="/categoria/educacao/">Educação</a>
+        
+    
+</nav>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- MENU HAMBURGUER LOGIC ---
+        const toggleBtn = document.getElementById('gs-menu-toggle');
+        const closeBtn = document.getElementById('gs-menu-close');
+        const offcanvas = document.getElementById('gs-offcanvas');
+        const overlay = document.getElementById('gs-overlay');
+
+        function openMenu() {
+            offcanvas.classList.add('open');
+            overlay.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMenu() {
+            offcanvas.classList.remove('open');
+            overlay.classList.remove('open');
+            document.body.style.overflow = 'auto';
+        }
+
+        if (toggleBtn) toggleBtn.addEventListener('click', openMenu);
+        if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+        if (overlay) overlay.addEventListener('click', closeMenu);
+
+        // --- SEARCH LOGIC ---
+        const searchToggle = document.getElementById('gs-search-toggle');
+        const searchOverlay = document.getElementById('gs-search-overlay');
+        const searchClose = document.getElementById('gs-search-close');
+        const searchInput = document.getElementById('gs-search-input');
+        const searchResults = document.getElementById('gs-search-results');
+        let postsData = [];
+
+        if (searchToggle && searchOverlay) {
+            searchToggle.addEventListener('click', function() {
+                searchOverlay.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+                searchInput.focus();
+                
+                // Fetch posts.json only once
+                if (postsData.length === 0) {
+                    fetch('/posts.json')
+                        .then(response => response.json())
+                        .then(data => { postsData = data; })
+                        .catch(err => console.error('Erro ao carregar pesquisa', err));
+                }
+            });
+            
+            searchClose.addEventListener('click', function() {
+                searchOverlay.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+            
+            searchInput.addEventListener('input', function(e) {
+                const query = e.target.value.toLowerCase();
+                searchResults.innerHTML = '';
+                if (query.length < 2) return;
+                
+                const filtered = postsData.filter(post => post.title.toLowerCase().includes(query));
+                
+                if (filtered.length === 0) {
+                    searchResults.innerHTML = '<p style="color:#aaa; text-align:center; padding:1rem;">Nenhum resultado encontrado.</p>';
+                    return;
+                }
+                
+                filtered.forEach(post => {
+                    const link = document.createElement('a');
+                    link.href = '/' + post.slug + '/';
+                    link.style.display = 'flex';
+                    link.style.gap = '15px';
+                    link.style.alignItems = 'center';
+                    link.style.padding = '10px 0';
+                    link.style.borderBottom = '1px solid #333';
+                    link.style.color = '#fff';
+                    link.style.textDecoration = 'none';
+                    
+                    let imgHtml = post.image ? `<img src="${post.image}" style="width:60px; height:60px; object-fit:cover; border-radius:4px;">` : `<div style="width:60px; height:60px; background:#444; border-radius:4px;"></div>`;
+                    
+                    link.innerHTML = imgHtml + `<div><div style="font-size:0.8rem; color:#aaa;">${post.date || ''}</div><div style="font-weight:700;">${post.title}</div></div>`;
+                    searchResults.appendChild(link);
+                });
+            });
+        }
+    });
+</script>
+
+<main class="container" style="padding-top: 3rem;">
+    <article>
+        <header class="post-header">
+            
+            <h1 class="post-title">Dicas para escolher o calçado apropriado para seu filho</h1>
+            
+            
+                <p style="font-size: 1.25rem; color: var(--text-muted); max-width: 800px; margin: 0 auto 2rem; line-height: 1.5;">Saiba como escolher o calçado ideal para o conforto e saúde dos pés do seu filho com dicas práticas e especialistas. Confira!</p>
+            
+
+            <div class="post-meta" style="margin-top: 1rem; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); padding: 1rem 0; max-width: 760px; margin-left: auto; margin-right: auto;">
+                
+                    <div style="display: flex; align-items: center; gap: 0.5rem; justify-content: center;">
+                        
+                            <i class="bi bi-person-circle" style="font-size: 2rem; color: var(--text-muted);"></i>
+                        
+                        <span style="font-weight: 700; color: var(--text-main);">Por <a href="/autor/nadine-a-queiroga/" style="color: var(--accent-color);">Nadine A Queiroga</a></span>
+                    </div>
+                
+                <div style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 1rem; flex: 1 1 auto;">
+                    <time datetime="2026-08-24" style="color: var(--text-muted);">
+                        24/08/2026 00:00
+                    </time>
+                    <div style="display: flex; gap: 15px; font-size: 1.3rem; color: var(--accent-color);">
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        
+            <figure class="post-featured-image">
+                <img src="/static/uploads/dicas-para-escolher-o-calcado-apropriado-para-seu-filho.jpg" alt="Dicas para escolher o calçado apropriado para seu filho">
+            </figure>
+        
+
+        
+
+        <div class="post-content">
+            <p>Escolher o <strong>cal&ccedil;ado apropriado para seu filho</strong> &eacute; uma tarefa que exige aten&ccedil;&atilde;o e cuidado. O conforto, a seguran&ccedil;a e o desenvolvimento saud&aacute;vel dos p&eacute;s da crian&ccedil;a dependem muito do tipo de sapato escolhido.</p>
+<p>Muitas vezes, pais n&atilde;o d&atilde;o a devida import&acirc;ncia a esse item, mas ele pode influenciar diretamente na postura, no equil&iacute;brio e at&eacute; na sa&uacute;de a longo prazo. Para garantir o melhor para os pequenos, &eacute; fundamental entender quais aspectos considerar antes da compra.</p>
+<h2>Import&acirc;ncia De Um Cal&ccedil;ado Adequado Para Crian&ccedil;as</h2>
+<p>Os p&eacute;s das crian&ccedil;as est&atilde;o em constante crescimento e desenvolvimento, especialmente nos primeiros anos de vida. Um cal&ccedil;ado inadequado pode causar problemas como deformidades, dores, bolhas e at&eacute; dificuldades na marcha. Al&eacute;m disso, o sapato influencia no desenvolvimento dos m&uacute;sculos e ossos, que ainda est&atilde;o em forma&ccedil;&atilde;o.</p>
+<p>Por isso, optar por modelos que ofere&ccedil;am suporte, flexibilidade e conforto &eacute; essencial para um crescimento saud&aacute;vel. Um <strong>cal&ccedil;ado infantil</strong> bem escolhido contribui para a seguran&ccedil;a da crian&ccedil;a durante as atividades di&aacute;rias, prevenindo quedas e les&otilde;es.</p>
+<h2>Fatores Essenciais Para Escolher O Cal&ccedil;ado Ideal</h2>
+<h3>Tamanho correto</h3>
+<p>Um dos erros mais comuns &eacute; comprar sapatos que sejam grandes demais para a crian&ccedil;a, acreditando que ela usar&aacute; por mais tempo. Por&eacute;m, um cal&ccedil;ado muito grande pode causar trope&ccedil;os, deslizamentos e prejudicar a forma como a crian&ccedil;a anda. Por outro lado, sapatos pequenos machucam e limitam o crescimento dos p&eacute;s.</p>
+<p>Para evitar esses problemas, &eacute; importante medir os p&eacute;s da crian&ccedil;a periodicamente e optar por modelos que tenham um espa&ccedil;o extra de aproximadamente 1 cm na ponta, permitindo o crescimento natural. Verifique tamb&eacute;m a largura do cal&ccedil;ado, que deve se ajustar ao formato do p&eacute; sem apertar.</p>
+<h3>Material do cal&ccedil;ado</h3>
+<p>O <strong>material do cal&ccedil;ado</strong> influencia diretamente na respirabilidade, conforto e durabilidade do sapato. Para crian&ccedil;as, o ideal &eacute; escolher tecidos ou couros naturais, que permitem que os p&eacute;s "respirem" e evitam o ac&uacute;mulo de suor. Isso ajuda a prevenir odores e infec&ccedil;&otilde;es.</p>
+<p>Evite materiais sint&eacute;ticos r&iacute;gidos, que podem causar desconforto e machucados, especialmente em peles sens&iacute;veis. Modelos com forro acolchoado s&atilde;o recomendados, pois oferecem maior prote&ccedil;&atilde;o e maciez.</p>
+<h3>Solado flex&iacute;vel e antiderrapante</h3>
+<p>A flexibilidade do solado &eacute; fundamental para acompanhar o movimento natural dos p&eacute;s da crian&ccedil;a. Solados muito r&iacute;gidos limitam a liberdade de movimento e podem prejudicar o desenvolvimento dos m&uacute;sculos e articula&ccedil;&otilde;es.</p>
+<p>Al&eacute;m disso, o solado deve ser antiderrapante para garantir seguran&ccedil;a ao caminhar, correr e brincar. Pisos escorregadios s&atilde;o comuns em ambientes infantis, e o risco de quedas pode ser minimizado com a escolha de cal&ccedil;ados que ofere&ccedil;am boa ader&ecirc;ncia.</p>
+<h3>Fechamento seguro</h3>
+<p>O tipo de fechamento do cal&ccedil;ado deve garantir que ele permane&ccedil;a firme no p&eacute;, evitando escorreg&otilde;es. Os modelos com velcro s&atilde;o uma &oacute;tima op&ccedil;&atilde;o para crian&ccedil;as pequenas, pois facilitam o cal&ccedil;ar e descal&ccedil;ar, al&eacute;m de oferecerem ajuste personalizado.</p>
+<p>Para crian&ccedil;as maiores, cadar&ccedil;os ou fivelas podem ser indicados, desde que a crian&ccedil;a saiba us&aacute;-los corretamente. Sapatos sem fechamento ou muito largos devem ser evitados, pois podem causar desconforto e instabilidade.</p>
+<h3>Design e estilo que agradem &agrave; crian&ccedil;a</h3>
+<p>Embora a funcionalidade seja prioridade, considerar o gosto da crian&ccedil;a pelo design do cal&ccedil;ado &eacute; importante para que ela se sinta confort&aacute;vel e feliz em us&aacute;-lo. Modelos com cores vibrantes, personagens favoritos ou estampas divertidas podem estimular a crian&ccedil;a a querer usar o sapato, facilitando o dia a dia dos pais.</p>
+<p>No entanto, &eacute; preciso equilibrar o apelo visual com os aspectos t&eacute;cnicos para garantir que o cal&ccedil;ado seja, acima de tudo, adequado para o p&eacute;.</p>
+<h2>Cuidados Especiais Para Diferentes Idades</h2>
+<h3>Cal&ccedil;ados para beb&ecirc;s que est&atilde;o engatinhando</h3>
+<p>Os beb&ecirc;s que ainda n&atilde;o andam precisam de sapatos que protejam os p&eacute;s, mas que tamb&eacute;m permitam o m&aacute;ximo de mobilidade poss&iacute;vel. Modelos muito r&iacute;gidos ou com solado duro devem ser evitados.</p>
+<p>Sapatos macios, com solado flex&iacute;vel e feitos de materiais naturais s&atilde;o o ideal para essa fase. Muitos especialistas recomendam o uso de meias antiderrapantes em casa, para evitar escorreg&otilde;es, deixando os cal&ccedil;ados para ocasi&otilde;es externas.</p>
+<h3>Cal&ccedil;ados para crian&ccedil;as que est&atilde;o aprendendo a andar</h3>
+<p>Quando os pequenos come&ccedil;am a dar os primeiros passos, a escolha do cal&ccedil;ado se torna ainda mais importante. O cal&ccedil;ado deve oferecer apoio, mas n&atilde;o restringir o movimento natural dos p&eacute;s.</p>
+<p>Nessa fase, prefira sapatos com solado flex&iacute;vel, fechamento seguro e material respir&aacute;vel. O cal&ccedil;ado deve ser leve para n&atilde;o atrapalhar o equil&iacute;brio. Verificar o ajuste correto e o conforto ao experimentar &eacute; fundamental.</p>
+<h3>Cal&ccedil;ados para crian&ccedil;as mais velhas e ativas</h3>
+<p>Para crian&ccedil;as que j&aacute; correm, pulam e praticam esportes, o cal&ccedil;ado precisa oferecer mais suporte e prote&ccedil;&atilde;o. Modelos esportivos com amortecimento, suporte para o arco do p&eacute; e solado resistente s&atilde;o indicados.</p>
+<p>Al&eacute;m disso, &eacute; importante que o cal&ccedil;ado seja dur&aacute;vel, pois o uso intenso pode desgast&aacute;-lo rapidamente. Checar regularmente as condi&ccedil;&otilde;es do sapato e substituir quando necess&aacute;rio evita les&otilde;es e desconfortos.</p>
+<h2>Dicas Para Experimentar O Cal&ccedil;ado Com Seu Filho</h2>
+<h3>Fa&ccedil;a a medi&ccedil;&atilde;o dos p&eacute;s</h3>
+<p>Antes da compra, use uma r&eacute;gua ou um medidor pr&oacute;prio para verificar o tamanho dos p&eacute;s da crian&ccedil;a. Me&ccedil;a ambos os p&eacute;s, pois podem haver pequenas diferen&ccedil;as. Esse cuidado ajuda a escolher o tamanho ideal.</p>
+<h3>Experimente o cal&ccedil;ado no final do dia</h3>
+<p>Os p&eacute;s tendem a inchar ao longo do dia, especialmente ap&oacute;s atividades. Por isso, a melhor hora para experimentar sapatos &eacute; no final da tarde ou &agrave; noite, garantindo que o cal&ccedil;ado n&atilde;o fique apertado em situa&ccedil;&otilde;es normais.</p>
+<h3>Use meias adequadas</h3>
+<p>Na hora de experimentar o cal&ccedil;ado, a crian&ccedil;a deve estar usando o tipo de meia que normalmente utilizar&aacute; com o sapato. Isso evita que o cal&ccedil;ado fique muito apertado ou folgado.</p>
+<h3>Observe a rea&ccedil;&atilde;o da crian&ccedil;a</h3>
+<p>Pe&ccedil;a que a crian&ccedil;a caminhe, corra e pule com o cal&ccedil;ado para avaliar o conforto e a estabilidade. Se houver reclama&ccedil;&otilde;es de desconforto, dores ou dificuldade para andar, o cal&ccedil;ado pode n&atilde;o ser o ideal.</p>
+<h2>Onde Comprar Cal&ccedil;ados Infantis De Qualidade</h2>
+<p>Optar por lojas confi&aacute;veis e marcas reconhecidas pode fazer toda a diferen&ccedil;a. Marcas especializadas em cal&ccedil;ados infantis investem em tecnologia e design voltados para o conforto e seguran&ccedil;a dos pequenos.</p>
+<p>Al&eacute;m disso, muitas lojas oferecem promo&ccedil;&otilde;es e descontos que facilitam a aquisi&ccedil;&atilde;o de cal&ccedil;ados adequados sem comprometer o or&ccedil;amento. Por exemplo, ao comprar online, &eacute; poss&iacute;vel utilizar um <a href="https://cupons2u.com.br/store/cupom-olympikus/" target="_blank" rel="noopener">cupom Olympikus</a> para obter benef&iacute;cios exclusivos na compra de cal&ccedil;ados esportivos para crian&ccedil;as.</p>
+<h2>Manuten&ccedil;&atilde;o E Cuidados Com Os Cal&ccedil;ados Infantis</h2>
+<h3>Limpeza adequada</h3>
+<p>Manter os cal&ccedil;ados limpos prolonga sua vida &uacute;til e garante higiene para os p&eacute;s da crian&ccedil;a. Use produtos espec&iacute;ficos para o material do sapato e evite molhar excessivamente. Para cal&ccedil;ados de couro, aplique creme hidratante para evitar rachaduras.</p>
+<h3>Armazenamento correto</h3>
+<p>Guarde os cal&ccedil;ados em local arejado e longe da umidade para evitar mofo e deforma&ccedil;&otilde;es. Se poss&iacute;vel, utilize formas ou enchimentos para manter o formato original.</p>
+<h3>Inspe&ccedil;&atilde;o frequente</h3>
+<p>Verifique regularmente o estado do solado, fechamento e costuras. Substitua o cal&ccedil;ado assim que apresentar sinais de desgaste que possam comprometer a seguran&ccedil;a ou o conforto.</p>
+<h2>Erros Comuns Ao Escolher Cal&ccedil;ados Para Crian&ccedil;as</h2>
+<h3>Comprar sapatos para "crescer"</h3>
+<p>Como mencionado, sapatos muito grandes prejudicam a marcha e podem causar acidentes. Sempre compre o tamanho correto, mesmo que isso signifique trocar o cal&ccedil;ado com mais frequ&ecirc;ncia.</p>
+<h3>Priorizar apenas o visual</h3>
+<p>Embora o design seja importante, o conforto e a seguran&ccedil;a devem ser os crit&eacute;rios principais. Um sapato bonito, mas desconfort&aacute;vel, dificilmente ser&aacute; usado pela crian&ccedil;a.</p>
+<h3>Negligenciar a avalia&ccedil;&atilde;o regular</h3>
+<p>O tamanho e a forma dos p&eacute;s das crian&ccedil;as mudam rapidamente. Ignorar essa evolu&ccedil;&atilde;o pode levar ao uso de cal&ccedil;ados inadequados, gerando desconforto e problemas futuros.</p>
+<h2>Conclus&atilde;o</h2>
+<p>A escolha do <strong>cal&ccedil;ado apropriado para seu filho</strong> &eacute; fundamental para garantir o desenvolvimento saud&aacute;vel dos p&eacute;s e o bem-estar da crian&ccedil;a. Considerar o tamanho correto, o material, a flexibilidade do solado e o tipo de fechamento s&atilde;o passos essenciais para acertar na compra.</p>
+<p>Al&eacute;m disso, respeitar as necessidades espec&iacute;ficas de cada fase infantil e manter os cuidados com a manuten&ccedil;&atilde;o do sapato ajudam a prolongar sua vida &uacute;til e a proteger os pequenos durante as atividades di&aacute;rias.</p>
+<p>Ao investir em cal&ccedil;ados de qualidade e bem ajustados, voc&ecirc; estar&aacute; contribuindo para a sa&uacute;de e felicidade do seu filho, garantindo que ele possa brincar, correr e crescer com seguran&ccedil;a e conforto.</p>
+        </div>
+
+        
+    </article>
+</main>
+
+<footer class="gs-footer">
+    <div class="container">
+        <div class="gs-footer__social">
+            
+            
+            
+            
+        </div>
+        
+        <ul class="gs-footer__menu">
+            
+        </ul>
+        
+        <div class="gs-footer__description" style="max-width: 600px; margin: 0 auto 2rem; color: var(--text-muted); font-size: 0.95rem; font-family: var(--font-ui);">
+            Um espaço dedicado a compartilhar ideias, artigos e tutoriais. Nossa missão é entregar conteúdo de valor e com qualidade para todos os nossos leitores.
+        </div>
+        
+        
+        <div class="gs-footer__copyright">
+            Somos um blog voltado para as crianças! Aqui você irá encontrar brincadeiras, sugestões, viagens, passeios, recreações, técnicas de aprendizado infantil e muito mais! O mundo da criança agora tem nome: Criança faz Arte! Todos os artigos aqui do site são revisados por uma pedagoga experiente. Então seja muito bem vindo e fique com a gente =)
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Carrossel nativo simplificado (substituto das chamadas de script originais caso tenha blocos CMS)
+    document.addEventListener('DOMContentLoaded', function() {
+        document.body.addEventListener('click', function(e) {
+            const btnPrev = e.target.closest('.btn-carousel-prev');
+            if (btnPrev) {
+                const wrapper = btnPrev.closest('div[id^="carrossel-"]');
+                const track = wrapper.querySelector('.dsc-track');
+                const item = track.querySelector('.dsc-item');
+                if (track && item) {
+                    const scrollAmount = item.offsetWidth + 20;
+                    if (track.scrollLeft <= 5) { track.scrollTo({ left: track.scrollWidth, behavior: 'smooth' }); } 
+                    else { track.scrollBy({ left: -scrollAmount, behavior: 'smooth' }); }
+                }
+                return;
+            }
+            const btnNext = e.target.closest('.btn-carousel-next');
+            if (btnNext) {
+                const wrapper = btnNext.closest('div[id^="carrossel-"]');
+                const track = wrapper.querySelector('.dsc-track');
+                const item = track.querySelector('.dsc-item');
+                if (track && item) {
+                    const scrollAmount = item.offsetWidth + 20;
+                    if (track.scrollLeft + track.offsetWidth >= track.scrollWidth - 5) { track.scrollTo({ left: 0, behavior: 'smooth' }); } 
+                    else { track.scrollBy({ left: scrollAmount, behavior: 'smooth' }); }
+                }
+                return;
+            }
+        });
+    });
+</script>
+</body>
+</html>

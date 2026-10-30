@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quando é o momento certo de levar seu filho ao ortodontista - Criança Faz Arte</title>
+    <meta name="description" content="Descubra o momento ideal para levar seu filho ao ortodontista e garantir um sorriso saudável desde cedo. Confira dicas essenciais!">
+    
+    
+    <link rel="canonical" href="https://www.criancafazarte.com.br/quando-e-o-momento-certo-de-levar-seu-filho-ao-ortodontista/" />
+    
+    
+    
+    
+    <link rel="icon" href="/static/uploads/iocne.png" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/static/uploads/iocne.png">
+    
+
+    <link rel="stylesheet" href="/themes/gshow_pop_v2/assets/css/style.css?v=2.0">
+    <!-- Bootstrap Icons (Usado internamente pelo CMS e para redes sociais) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Algumas lógicas do CMS dependem de classes Bootstrap puras (RaioX). Injetamos a versão ultra-leve do bootstrap apenas para os blocos do CMS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Sistema de Paletas de Cores -->
+    
+    <style>
+        :root {
+            --accent-color: #6f42c1 !important;
+            --accent-hover: #59359a !important;
+            --accent-dark: #472a7b !important;
+        }
+    </style>
+    
+
+    
+</head>
+<body>
+<header class="gs-header">
+    <div class="gs-header__container">
+        <!-- Lado Esquerdo -->
+        <div class="gs-header__left">
+            <button class="gs-header__menu-btn" id="gs-menu-toggle" aria-label="Abrir Menu">
+                <i class="bi bi-list"></i>
+                <span class="gs-header__menu-text">MENU</span>
+            </button>
+
+            <a href="/" class="gs-header__logo">
+                
+                    <img src="/static/uploads/crianca-faz-arte-2.png" alt="Criança Faz Arte">
+                
+            </a>
+        </div>
+
+        <!-- Centro: Nome do Site com fonte fina -->
+        <a href="/" class="gs-header__center">
+            Criança Faz Arte
+        </a>
+
+        <!-- Lado Direito: Buscar -->
+        <div class="gs-header__right">
+            <button class="gs-header__right-item" id="gs-search-toggle" aria-label="Pesquisar" style="background:none; border:none; color:#fff;">
+                <i class="bi bi-search"></i>
+                <span style="text-transform: uppercase;">Buscar</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- Overlay de Busca (Search Modal) -->
+<div class="gs-search-overlay" id="gs-search-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:9999; padding:2rem;">
+    <button id="gs-search-close" style="position:absolute; top:20px; right:30px; background:none; border:none; color:#fff; font-size:2rem; cursor:pointer;"><i class="bi bi-x-lg"></i></button>
+    <div style="max-width:600px; margin: 4rem auto 0; text-align:center;">
+        <input type="text" id="gs-search-input" placeholder="O que você está procurando?" style="width:100%; padding:1rem; font-size:1.5rem; border:none; border-bottom:2px solid var(--accent-color); background:transparent; color:#fff; outline:none; font-family:var(--font-ui);">
+        <div id="gs-search-results" style="margin-top:2rem; text-align:left; max-height:60vh; overflow-y:auto; font-family:var(--font-ui);"></div>
+    </div>
+</div>
+
+<!-- Sub-Barra de Categoria (Rosa Escuro) -->
+<div class="gs-header__subbar">
+    
+        <a href="/categoria/blog/" style="color:#ffffff;">Blog</a>
+    
+</div>
+
+<!-- Overlay Escuro do Menu -->
+<div class="gs-overlay" id="gs-overlay"></div>
+
+<!-- Menu Oculto (Offcanvas) -->
+<nav class="gs-nav-offcanvas" id="gs-offcanvas">
+    <button class="gs-nav-offcanvas__close" id="gs-menu-close" aria-label="Fechar Menu">
+        <i class="bi bi-x-lg"></i>
+    </button>
+    <br><br>
+    
+        <a href="/">INÍCIO</a>
+        
+            <a href="/categoria/atividades/">Atividades</a>
+        
+            <a href="/categoria/bebes/">Bebês</a>
+        
+            <a href="/categoria/blog/">Blog</a>
+        
+            <a href="/categoria/criancas/">Crianças</a>
+        
+            <a href="/categoria/educacao/">Educação</a>
+        
+    
+</nav>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- MENU HAMBURGUER LOGIC ---
+        const toggleBtn = document.getElementById('gs-menu-toggle');
+        const closeBtn = document.getElementById('gs-menu-close');
+        const offcanvas = document.getElementById('gs-offcanvas');
+        const overlay = document.getElementById('gs-overlay');
+
+        function openMenu() {
+            offcanvas.classList.add('open');
+            overlay.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMenu() {
+            offcanvas.classList.remove('open');
+            overlay.classList.remove('open');
+            document.body.style.overflow = 'auto';
+        }
+
+        if (toggleBtn) toggleBtn.addEventListener('click', openMenu);
+        if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+        if (overlay) overlay.addEventListener('click', closeMenu);
+
+        // --- SEARCH LOGIC ---
+        const searchToggle = document.getElementById('gs-search-toggle');
+        const searchOverlay = document.getElementById('gs-search-overlay');
+        const searchClose = document.getElementById('gs-search-close');
+        const searchInput = document.getElementById('gs-search-input');
+        const searchResults = document.getElementById('gs-search-results');
+        let postsData = [];
+
+        if (searchToggle && searchOverlay) {
+            searchToggle.addEventListener('click', function() {
+                searchOverlay.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+                searchInput.focus();
+                
+                // Fetch posts.json only once
+                if (postsData.length === 0) {
+                    fetch('/posts.json')
+                        .then(response => response.json())
+                        .then(data => { postsData = data; })
+                        .catch(err => console.error('Erro ao carregar pesquisa', err));
+                }
+            });
+            
+            searchClose.addEventListener('click', function() {
+                searchOverlay.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+            
+            searchInput.addEventListener('input', function(e) {
+                const query = e.target.value.toLowerCase();
+                searchResults.innerHTML = '';
+                if (query.length < 2) return;
+                
+                const filtered = postsData.filter(post => post.title.toLowerCase().includes(query));
+                
+                if (filtered.length === 0) {
+                    searchResults.innerHTML = '<p style="color:#aaa; text-align:center; padding:1rem;">Nenhum resultado encontrado.</p>';
+                    return;
+                }
+                
+                filtered.forEach(post => {
+                    const link = document.createElement('a');
+                    link.href = '/' + post.slug + '/';
+                    link.style.display = 'flex';
+                    link.style.gap = '15px';
+                    link.style.alignItems = 'center';
+                    link.style.padding = '10px 0';
+                    link.style.borderBottom = '1px solid #333';
+                    link.style.color = '#fff';
+                    link.style.textDecoration = 'none';
+                    
+                    let imgHtml = post.image ? `<img src="${post.image}" style="width:60px; height:60px; object-fit:cover; border-radius:4px;">` : `<div style="width:60px; height:60px; background:#444; border-radius:4px;"></div>`;
+                    
+                    link.innerHTML = imgHtml + `<div><div style="font-size:0.8rem; color:#aaa;">${post.date || ''}</div><div style="font-weight:700;">${post.title}</div></div>`;
+                    searchResults.appendChild(link);
+                });
+            });
+        }
+    });
+</script>
+
+<main class="container" style="padding-top: 3rem;">
+    <article>
+        <header class="post-header">
+            
+            <h1 class="post-title">Quando é o momento certo de levar seu filho ao ortodontista</h1>
+            
+            
+                <p style="font-size: 1.25rem; color: var(--text-muted); max-width: 800px; margin: 0 auto 2rem; line-height: 1.5;">Descubra o momento ideal para levar seu filho ao ortodontista e garantir um sorriso saudável desde cedo. Confira dicas essenciais!</p>
+            
+
+            <div class="post-meta" style="margin-top: 1rem; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); padding: 1rem 0; max-width: 760px; margin-left: auto; margin-right: auto;">
+                
+                    <div style="display: flex; align-items: center; gap: 0.5rem; justify-content: center;">
+                        
+                            <i class="bi bi-person-circle" style="font-size: 2rem; color: var(--text-muted);"></i>
+                        
+                        <span style="font-weight: 700; color: var(--text-main);">Por <a href="/autor/nadine-a-queiroga/" style="color: var(--accent-color);">Nadine A Queiroga</a></span>
+                    </div>
+                
+                <div style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 1rem; flex: 1 1 auto;">
+                    <time datetime="2026-10-30" style="color: var(--text-muted);">
+                        30/10/2026 00:00
+                    </time>
+                    <div style="display: flex; gap: 15px; font-size: 1.3rem; color: var(--accent-color);">
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        
+            <figure class="post-featured-image">
+                <img src="/static/uploads/quando-e-o-momento-certo-de-levar-seu-filho-ao-ortodontista.jpg" alt="Quando é o momento certo de levar seu filho ao ortodontista">
+            </figure>
+        
+
+        
+
+        <div class="post-content">
+            <p>Cuidar da sa&uacute;de bucal das crian&ccedil;as &eacute; uma das prioridades para garantir um desenvolvimento adequado e um sorriso saud&aacute;vel ao longo da vida. Muitas vezes, os pais se perguntam qual &eacute; a melhor idade para consultar um ortodontista, ou seja, um especialista respons&aacute;vel por corrigir problemas relacionados ao alinhamento dos dentes e da mand&iacute;bula. Saber identificar o momento certo para essa avalia&ccedil;&atilde;o &eacute; fundamental para evitar complica&ccedil;&otilde;es futuras e otimizar o tratamento.</p>
+<p>No contexto de <a href="https://dentistadramarcelarodrigues.com/ortodontia-infantil/" target="_blank" rel="noopener">Ortodontia Infantil em Fortaleza</a>, h&aacute; um crescente interesse por parte das fam&iacute;lias em buscar cuidados preventivos que assegurem o bem-estar dos pequenos. A ortodontia precoce pode trazer in&uacute;meros benef&iacute;cios, desde corrigir h&aacute;bitos prejudiciais at&eacute; prevenir o surgimento de problemas mais s&eacute;rios, como a m&aacute; oclus&atilde;o dent&aacute;ria.</p>
+<h2>Por Que &Eacute; Importante Consultar Um Ortodontista Na Inf&acirc;ncia?</h2>
+<p>A inf&acirc;ncia &eacute; uma fase crucial para o desenvolvimento facial e dent&aacute;rio. Durante esse per&iacute;odo, os ossos da face e da mand&iacute;bula ainda est&atilde;o em crescimento, o que torna mais f&aacute;cil e eficiente a corre&ccedil;&atilde;o de irregularidades. Al&eacute;m disso, a interven&ccedil;&atilde;o precoce pode evitar tratamentos mais complexos e demorados no futuro.</p>
+<p><strong>Problemas ortod&ocirc;nticos n&atilde;o tratados</strong> podem afetar n&atilde;o apenas a est&eacute;tica do sorriso, mas tamb&eacute;m a mastiga&ccedil;&atilde;o, a fala e at&eacute; a sa&uacute;de geral da crian&ccedil;a. Uma m&aacute; oclus&atilde;o, por exemplo, pode levar ao desgaste dent&aacute;rio, dores na articula&ccedil;&atilde;o temporomandibular (ATM) e dificuldades respirat&oacute;rias.</p>
+<p>Levar a crian&ccedil;a ao ortodontista permite uma avalia&ccedil;&atilde;o detalhada do desenvolvimento dent&aacute;rio e facial, possibilitando a identifica&ccedil;&atilde;o de sinais que indicam a necessidade de interven&ccedil;&atilde;o. O especialista poder&aacute; orientar os pais sobre o momento ideal para iniciar o tratamento, que pode variar de acordo com cada caso.</p>
+<h2>Qual A Idade Ideal Para A Primeira Consulta Ortod&ocirc;ntica?</h2>
+<p>A recomenda&ccedil;&atilde;o da Associa&ccedil;&atilde;o Brasileira de Ortodontia e Ortopedia Facial (ABOR) e de diversas entidades internacionais &eacute; que a <strong>primeira avalia&ccedil;&atilde;o ortod&ocirc;ntica</strong> seja realizada por volta dos 7 anos de idade. Nessa fase, a crian&ccedil;a j&aacute; apresenta uma combina&ccedil;&atilde;o de dentes de leite e dentes permanentes, facilitando a an&aacute;lise do desenvolvimento.</p>
+<p>No entanto, isso n&atilde;o significa que n&atilde;o haja necessidade de aten&ccedil;&atilde;o antes dessa idade. Em alguns casos, sinais de problemas podem aparecer ainda na primeira inf&acirc;ncia, exigindo um acompanhamento antecipado.</p>
+<h3>Sinais que indicam a necessidade de uma avalia&ccedil;&atilde;o precoce</h3>
+<p>Existem alguns ind&iacute;cios que podem sugerir a necessidade de levar a crian&ccedil;a ao ortodontista antes dos 7 anos, tais como:</p>
+<p>- <strong>Dificuldade para morder ou mastigar alimentos</strong>;</p>
+<p>- <strong>Respira&ccedil;&atilde;o oral constante</strong>;</p>
+<p>- <strong>Mordida cruzada ou aberta</strong>;</p>
+<p>- <strong>Presen&ccedil;a de h&aacute;bitos prejudiciais</strong>, como suc&ccedil;&atilde;o prolongada do dedo, uso excessivo de chupeta ou mamadeira;</p>
+<p>- <strong>Dentes desalinhados ou apinhados</strong>;</p>
+<p>- <strong>Estalos ou dores na mand&iacute;bula</strong>;</p>
+<p>- <strong>Dentes que n&atilde;o se encaixam corretamente ao fechar a boca</strong>.</p>
+<p>A observa&ccedil;&atilde;o cuidadosa desses sinais pelos pais e cuidadores &eacute; fundamental para garantir uma interven&ccedil;&atilde;o r&aacute;pida, que pode prevenir problemas mais graves.</p>
+<h2>Benef&iacute;cios Da Ortodontia Precoce</h2>
+<p>A ortodontia realizada na inf&acirc;ncia, chamada tamb&eacute;m de ortodontia interceptativa, tem como objetivo <strong>corrigir ou minimizar anomalias na denti&ccedil;&atilde;o e na estrutura &oacute;ssea</strong> enquanto o crescimento ainda est&aacute; ativo. Isso traz vantagens como:</p>
+<p>- <strong>Redu&ccedil;&atilde;o da necessidade de extra&ccedil;&atilde;o dent&aacute;ria</strong> no futuro;</p>
+<p>- <strong>Melhora do desenvolvimento facial harmonioso</strong>;</p>
+<p>- <strong>Preven&ccedil;&atilde;o de problemas funcionais</strong>, como dificuldades na fala e na mastiga&ccedil;&atilde;o;</p>
+<p>- <strong>Aumento da autoestima da crian&ccedil;a</strong>, ao evitar problemas est&eacute;ticos;</p>
+<p>- <strong>Tratamentos menos invasivos e mais r&aacute;pidos</strong>.</p>
+<p>Al&eacute;m disso, o ortodontista pode indicar exerc&iacute;cios e orienta&ccedil;&otilde;es para eliminar h&aacute;bitos que prejudicam o desenvolvimento dos dentes e da mand&iacute;bula, como a suc&ccedil;&atilde;o digital.</p>
+<h2>Como Identificar Se Seu Filho Precisa De Tratamento Ortod&ocirc;ntico</h2>
+<p>Nem toda crian&ccedil;a necessita de aparelho ortod&ocirc;ntico ou interven&ccedil;&atilde;o imediata, por isso &eacute; importante compreender quais situa&ccedil;&otilde;es realmente demandam acompanhamento ou corre&ccedil;&atilde;o. Alguns dos problemas mais comuns que o ortodontista avalia incluem:</p>
+<h3>M&aacute; oclus&atilde;o</h3>
+<p>A m&aacute; oclus&atilde;o &eacute; o desalinhamento dos dentes superiores com os inferiores e pode ser classificada em diferentes tipos, como a mordida cruzada, aberta, profunda ou sobremordida. Cada uma dessas condi&ccedil;&otilde;es pode prejudicar a fun&ccedil;&atilde;o mastigat&oacute;ria e a est&eacute;tica do sorriso.</p>
+<h3>Apinhamento dent&aacute;rio</h3>
+<p>Quando n&atilde;o h&aacute; espa&ccedil;o suficiente na arcada dent&aacute;ria, os dentes podem nascer sobrepostos ou desalinhados, causando desconforto e dificultando a higiene bucal.</p>
+<h3>Dentes ect&oacute;picos ou impactados</h3>
+<p>Dentes que nascem fora do lugar correto ou que ficam retidos na gengiva exigem avalia&ccedil;&atilde;o especializada para evitar complica&ccedil;&otilde;es.</p>
+<h3>Problemas de crescimento &oacute;sseo</h3>
+<p>Altera&ccedil;&otilde;es no crescimento dos ossos da face e da mand&iacute;bula podem causar assimetrias e dificuldades funcionais, que necessitam de interven&ccedil;&atilde;o ortop&eacute;dica.</p>
+<h2>O Que Esperar Da Primeira Consulta Ortod&ocirc;ntica Infantil</h2>
+<p>Durante a primeira visita ao ortodontista, o profissional far&aacute; uma an&aacute;lise cl&iacute;nica e poder&aacute; solicitar exames complementares, como radiografias e modelos da arcada dent&aacute;ria. O objetivo &eacute; entender o est&aacute;gio de desenvolvimento da crian&ccedil;a e identificar poss&iacute;veis problemas.</p>
+<p>O ortodontista tamb&eacute;m conversar&aacute; com os pais para obter informa&ccedil;&otilde;es sobre h&aacute;bitos da crian&ccedil;a, hist&oacute;rico familiar e quaisquer queixas relacionadas &agrave; sa&uacute;de bucal. A partir da&iacute;, ser&aacute; elaborado um plano de acompanhamento ou tratamento personalizado.</p>
+<h2>Quando Iniciar O Tratamento Ortod&ocirc;ntico</h2>
+<p>A decis&atilde;o sobre o momento de iniciar o tratamento varia conforme a complexidade do caso e o grau de desenvolvimento da crian&ccedil;a. Em alguns casos, o acompanhamento pode ser suficiente at&eacute; que todos os dentes permanentes estejam presentes, por volta dos 12 anos. Em outros, a interven&ccedil;&atilde;o precoce &eacute; recomendada para corrigir problemas &oacute;sseos ou dent&aacute;rios que podem piorar com o tempo.</p>
+<p>O tratamento pode envolver aparelhos m&oacute;veis, fixos ou at&eacute; dispositivos ortop&eacute;dicos para estimular o crescimento adequado da mand&iacute;bula. O acompanhamento regular &eacute; essencial para garantir a efic&aacute;cia e o conforto do paciente.</p>
+<h2>Import&acirc;ncia Da Preven&ccedil;&atilde;o E Do Acompanhamento Cont&iacute;nuo</h2>
+<p>Manter a sa&uacute;de bucal do seu filho sob vigil&acirc;ncia constante ajuda a identificar altera&ccedil;&otilde;es no desenvolvimento e a prevenir complica&ccedil;&otilde;es. Consultas regulares ao dentista e ao ortodontista s&atilde;o fundamentais para garantir que o sorriso da crian&ccedil;a se desenvolva de forma saud&aacute;vel.</p>
+<p>Al&eacute;m disso, &eacute; importante incentivar h&aacute;bitos de higiene adequados, como escova&ccedil;&atilde;o correta e uso do fio dental, e evitar comportamentos que possam prejudicar os dentes, como roer unhas ou morder objetos.</p>
+<h2>Como Escolher Um Ortodontista Para Seu Filho</h2>
+<p>Para garantir um tratamento eficaz e seguro, &eacute; fundamental escolher um profissional qualificado e experiente em ortodontia infantil. Algumas dicas para essa escolha incluem:</p>
+<p>- Verificar a forma&ccedil;&atilde;o e especializa&ccedil;&atilde;o do ortodontista;</p>
+<p>- Buscar refer&ecirc;ncias e avalia&ccedil;&otilde;es de outros pacientes;</p>
+<p>- Observar a estrutura da cl&iacute;nica e os recursos dispon&iacute;veis;</p>
+<p>- Avaliar a comunica&ccedil;&atilde;o do profissional com a crian&ccedil;a e os pais, para que o tratamento seja tranquilo e compreendido por todos.</p>
+<p>A confian&ccedil;a no ortodontista &eacute; um fator importante para o sucesso do tratamento, especialmente com crian&ccedil;as, que precisam se sentir seguras e confort&aacute;veis durante as consultas.</p>
+<h2>Considera&ccedil;&otilde;es Finais</h2>
+<p>Saber identificar o momento certo para levar seu filho ao ortodontista &eacute; essencial para garantir um desenvolvimento dent&aacute;rio saud&aacute;vel e prevenir problemas futuros. A avalia&ccedil;&atilde;o precoce, aliada ao acompanhamento adequado, permite corrigir irregularidades de forma mais simples e eficaz, promovendo n&atilde;o apenas um sorriso bonito, mas tamb&eacute;m a sa&uacute;de funcional da boca.</p>
+<p>Fam&iacute;lias que investem na sa&uacute;de bucal infantil desde cedo proporcionam &agrave;s crian&ccedil;as uma melhor qualidade de vida, autoestima elevada e maior bem-estar. Portanto, fiquem atentos aos sinais e n&atilde;o hesitem em buscar orienta&ccedil;&atilde;o profissional quando houver d&uacute;vidas sobre o desenvolvimento dent&aacute;rio dos pequenos.</p>
+        </div>
+
+        
+    </article>
+</main>
+
+<footer class="gs-footer">
+    <div class="container">
+        <div class="gs-footer__social">
+            
+            
+            
+            
+        </div>
+        
+        <ul class="gs-footer__menu">
+            
+        </ul>
+        
+        <div class="gs-footer__description" style="max-width: 600px; margin: 0 auto 2rem; color: var(--text-muted); font-size: 0.95rem; font-family: var(--font-ui);">
+            Um espaço dedicado a compartilhar ideias, artigos e tutoriais. Nossa missão é entregar conteúdo de valor e com qualidade para todos os nossos leitores.
+        </div>
+        
+        
+        <div class="gs-footer__copyright">
+            Somos um blog voltado para as crianças! Aqui você irá encontrar brincadeiras, sugestões, viagens, passeios, recreações, técnicas de aprendizado infantil e muito mais! O mundo da criança agora tem nome: Criança faz Arte! Todos os artigos aqui do site são revisados por uma pedagoga experiente. Então seja muito bem vindo e fique com a gente =)
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Carrossel nativo simplificado (substituto das chamadas de script originais caso tenha blocos CMS)
+    document.addEventListener('DOMContentLoaded', function() {
+        document.body.addEventListener('click', function(e) {
+            const btnPrev = e.target.closest('.btn-carousel-prev');
+            if (btnPrev) {
+                const wrapper = btnPrev.closest('div[id^="carrossel-"]');
+                const track = wrapper.querySelector('.dsc-track');
+                const item = track.querySelector('.dsc-item');
+                if (track && item) {
+                    const scrollAmount = item.offsetWidth + 20;
+                    if (track.scrollLeft <= 5) { track.scrollTo({ left: track.scrollWidth, behavior: 'smooth' }); } 
+                    else { track.scrollBy({ left: -scrollAmount, behavior: 'smooth' }); }
+                }
+                return;
+            }
+            const btnNext = e.target.closest('.btn-carousel-next');
+            if (btnNext) {
+                const wrapper = btnNext.closest('div[id^="carrossel-"]');
+                const track = wrapper.querySelector('.dsc-track');
+                const item = track.querySelector('.dsc-item');
+                if (track && item) {
+                    const scrollAmount = item.offsetWidth + 20;
+                    if (track.scrollLeft + track.offsetWidth >= track.scrollWidth - 5) { track.scrollTo({ left: 0, behavior: 'smooth' }); } 
+                    else { track.scrollBy({ left: scrollAmount, behavior: 'smooth' }); }
+                }
+                return;
+            }
+        });
+    });
+</script>
+</body>
+</html>

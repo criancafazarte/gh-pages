@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animais em Extinção Explicados para os Filhos: Como Despertar o Amor e o Cuidado com a Natureza - Criança Faz Arte</title>
+    <meta name="description" content="">
+    
+    
+    <link rel="canonical" href="https://www.criancafazarte.com.br/animais-em-extinção-explicados-para-os-filhos-como-despertar-o-amor-e-o-cuidado-com-a-natureza/" />
+    
+    
+    
+    
+    <link rel="icon" href="/static/uploads/iocne.png" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/static/uploads/iocne.png">
+    
+
+    <link rel="stylesheet" href="/themes/gshow_pop_v2/assets/css/style.css?v=2.0">
+    <!-- Bootstrap Icons (Usado internamente pelo CMS e para redes sociais) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Algumas lógicas do CMS dependem de classes Bootstrap puras (RaioX). Injetamos a versão ultra-leve do bootstrap apenas para os blocos do CMS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Sistema de Paletas de Cores -->
+    
+    <style>
+        :root {
+            --accent-color: #6f42c1 !important;
+            --accent-hover: #59359a !important;
+            --accent-dark: #472a7b !important;
+        }
+    </style>
+    
+
+    
+</head>
+<body>
+<header class="gs-header">
+    <div class="gs-header__container">
+        <!-- Lado Esquerdo -->
+        <div class="gs-header__left">
+            <button class="gs-header__menu-btn" id="gs-menu-toggle" aria-label="Abrir Menu">
+                <i class="bi bi-list"></i>
+                <span class="gs-header__menu-text">MENU</span>
+            </button>
+
+            <a href="/" class="gs-header__logo">
+                
+                    <img src="/static/uploads/crianca-faz-arte-2.png" alt="Criança Faz Arte">
+                
+            </a>
+        </div>
+
+        <!-- Centro: Nome do Site com fonte fina -->
+        <a href="/" class="gs-header__center">
+            Criança Faz Arte
+        </a>
+
+        <!-- Lado Direito: Buscar -->
+        <div class="gs-header__right">
+            <button class="gs-header__right-item" id="gs-search-toggle" aria-label="Pesquisar" style="background:none; border:none; color:#fff;">
+                <i class="bi bi-search"></i>
+                <span style="text-transform: uppercase;">Buscar</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- Overlay de Busca (Search Modal) -->
+<div class="gs-search-overlay" id="gs-search-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:9999; padding:2rem;">
+    <button id="gs-search-close" style="position:absolute; top:20px; right:30px; background:none; border:none; color:#fff; font-size:2rem; cursor:pointer;"><i class="bi bi-x-lg"></i></button>
+    <div style="max-width:600px; margin: 4rem auto 0; text-align:center;">
+        <input type="text" id="gs-search-input" placeholder="O que você está procurando?" style="width:100%; padding:1rem; font-size:1.5rem; border:none; border-bottom:2px solid var(--accent-color); background:transparent; color:#fff; outline:none; font-family:var(--font-ui);">
+        <div id="gs-search-results" style="margin-top:2rem; text-align:left; max-height:60vh; overflow-y:auto; font-family:var(--font-ui);"></div>
+    </div>
+</div>
+
+<!-- Sub-Barra de Categoria (Rosa Escuro) -->
+<div class="gs-header__subbar">
+    
+        <a href="/categoria/bebes/" style="color:#ffffff;">Bebês</a>
+    
+</div>
+
+<!-- Overlay Escuro do Menu -->
+<div class="gs-overlay" id="gs-overlay"></div>
+
+<!-- Menu Oculto (Offcanvas) -->
+<nav class="gs-nav-offcanvas" id="gs-offcanvas">
+    <button class="gs-nav-offcanvas__close" id="gs-menu-close" aria-label="Fechar Menu">
+        <i class="bi bi-x-lg"></i>
+    </button>
+    <br><br>
+    
+        <a href="/">INÍCIO</a>
+        
+            <a href="/categoria/atividades/">Atividades</a>
+        
+            <a href="/categoria/bebes/">Bebês</a>
+        
+            <a href="/categoria/blog/">Blog</a>
+        
+            <a href="/categoria/criancas/">Crianças</a>
+        
+            <a href="/categoria/educacao/">Educação</a>
+        
+    
+</nav>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- MENU HAMBURGUER LOGIC ---
+        const toggleBtn = document.getElementById('gs-menu-toggle');
+        const closeBtn = document.getElementById('gs-menu-close');
+        const offcanvas = document.getElementById('gs-offcanvas');
+        const overlay = document.getElementById('gs-overlay');
+
+        function openMenu() {
+            offcanvas.classList.add('open');
+            overlay.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMenu() {
+            offcanvas.classList.remove('open');
+            overlay.classList.remove('open');
+            document.body.style.overflow = 'auto';
+        }
+
+        if (toggleBtn) toggleBtn.addEventListener('click', openMenu);
+        if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+        if (overlay) overlay.addEventListener('click', closeMenu);
+
+        // --- SEARCH LOGIC ---
+        const searchToggle = document.getElementById('gs-search-toggle');
+        const searchOverlay = document.getElementById('gs-search-overlay');
+        const searchClose = document.getElementById('gs-search-close');
+        const searchInput = document.getElementById('gs-search-input');
+        const searchResults = document.getElementById('gs-search-results');
+        let postsData = [];
+
+        if (searchToggle && searchOverlay) {
+            searchToggle.addEventListener('click', function() {
+                searchOverlay.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+                searchInput.focus();
+                
+                // Fetch posts.json only once
+                if (postsData.length === 0) {
+                    fetch('/posts.json')
+                        .then(response => response.json())
+                        .then(data => { postsData = data; })
+                        .catch(err => console.error('Erro ao carregar pesquisa', err));
+                }
+            });
+            
+            searchClose.addEventListener('click', function() {
+                searchOverlay.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+            
+            searchInput.addEventListener('input', function(e) {
+                const query = e.target.value.toLowerCase();
+                searchResults.innerHTML = '';
+                if (query.length < 2) return;
+                
+                const filtered = postsData.filter(post => post.title.toLowerCase().includes(query));
+                
+                if (filtered.length === 0) {
+                    searchResults.innerHTML = '<p style="color:#aaa; text-align:center; padding:1rem;">Nenhum resultado encontrado.</p>';
+                    return;
+                }
+                
+                filtered.forEach(post => {
+                    const link = document.createElement('a');
+                    link.href = '/' + post.slug + '/';
+                    link.style.display = 'flex';
+                    link.style.gap = '15px';
+                    link.style.alignItems = 'center';
+                    link.style.padding = '10px 0';
+                    link.style.borderBottom = '1px solid #333';
+                    link.style.color = '#fff';
+                    link.style.textDecoration = 'none';
+                    
+                    let imgHtml = post.image ? `<img src="${post.image}" style="width:60px; height:60px; object-fit:cover; border-radius:4px;">` : `<div style="width:60px; height:60px; background:#444; border-radius:4px;"></div>`;
+                    
+                    link.innerHTML = imgHtml + `<div><div style="font-size:0.8rem; color:#aaa;">${post.date || ''}</div><div style="font-weight:700;">${post.title}</div></div>`;
+                    searchResults.appendChild(link);
+                });
+            });
+        }
+    });
+</script>
+
+<main class="container" style="padding-top: 3rem;">
+    <article>
+        <header class="post-header">
+            
+            <h1 class="post-title">Animais em Extinção Explicados para os Filhos: Como Despertar o Amor e o Cuidado com a Natureza</h1>
+            
+            
+
+            <div class="post-meta" style="margin-top: 1rem; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); padding: 1rem 0; max-width: 760px; margin-left: auto; margin-right: auto;">
+                
+                    <div style="display: flex; align-items: center; gap: 0.5rem; justify-content: center;">
+                        
+                            <i class="bi bi-person-circle" style="font-size: 2rem; color: var(--text-muted);"></i>
+                        
+                        <span style="font-weight: 700; color: var(--text-main);">Por <a href="/autor/nadine-a-queiroga/" style="color: var(--accent-color);">Nadine A Queiroga</a></span>
+                    </div>
+                
+                <div style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 1rem; flex: 1 1 auto;">
+                    <time datetime="2026-10-01" style="color: var(--text-muted);">
+                        01/10/2026 17:42
+                    </time>
+                    <div style="display: flex; gap: 15px; font-size: 1.3rem; color: var(--accent-color);">
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        
+            <figure class="post-featured-image">
+                <img src="/static/uploads/animais-em-extincao-explicados-para-os-filhos-como-despertar-o-amor-e-o-cuidado-com-a-natureza.webp?v=1790876572" alt="Animais em Extinção Explicados para os Filhos: Como Despertar o Amor e o Cuidado com a Natureza">
+            </figure>
+        
+
+        
+
+        <div class="post-content">
+            <p>Ensinar as crian&ccedil;as sobre a import&acirc;ncia da vida selvagem &eacute; uma tarefa fundamental para garantir um futuro mais sustent&aacute;vel e harmonioso com o meio ambiente. Muitas vezes, os pequenos t&ecirc;m curiosidade sobre os bichos que vivem na floresta, no mar ou at&eacute; mesmo no quintal de casa, mas n&atilde;o compreendem completamente os perigos que algumas esp&eacute;cies enfrentam hoje. A conscientiza&ccedil;&atilde;o sobre <a href="https://www.jabutigre.com.br/blog/arara-caninde-esta-em-extincao" target="_blank" rel="noopener">animais em extin&ccedil;&atilde;o</a> pode ser um ponto de partida para cultivar o respeito e a prote&ccedil;&atilde;o da natureza desde cedo.</p>
+<p>Ao abordar esse tema, o desafio &eacute; transmitir informa&ccedil;&otilde;es complexas de maneira acess&iacute;vel e envolvente, para que as crian&ccedil;as sintam-se motivadas a cuidar do planeta. Contar hist&oacute;rias, usar exemplos visuais e promover atividades pr&aacute;ticas ajuda a despertar o amor pelos seres vivos e a criar uma conex&atilde;o emocional que ultrapassa o simples conhecimento.</p>
+<h2>Por Que Algumas Esp&eacute;cies Est&atilde;o Desaparecendo?</h2>
+<p>Antes de conversar com as crian&ccedil;as, &eacute; importante entender os motivos que levam muitos animais a desaparecerem da Terra. Isso facilita explicar de forma clara e verdadeira o que est&aacute; acontecendo. Entre as principais causas est&atilde;o:</p>
+<h3>Destrui&ccedil;&atilde;o do habitat natural</h3>
+<p>&Agrave; medida que as cidades crescem e as florestas s&atilde;o derrubadas para agricultura ou constru&ccedil;&atilde;o, muitos animais perdem seu lar. Eles precisam de ambientes espec&iacute;ficos para sobreviver, como florestas densas, rios limpos ou recifes de coral, e quando esses lugares desaparecem, a vida selvagem sofre.</p>
+<h3>Ca&ccedil;a e com&eacute;rcio ilegal</h3>
+<p>Infelizmente, algumas esp&eacute;cies s&atilde;o ca&ccedil;adas por suas peles, presas, ou simplesmente para serem vendidas como animais de estima&ccedil;&atilde;o ex&oacute;ticos. Essa pr&aacute;tica desequilibra ecossistemas inteiros e coloca em risco a sobreviv&ecirc;ncia de v&aacute;rias popula&ccedil;&otilde;es.</p>
+<h3>Polui&ccedil;&atilde;o e mudan&ccedil;as clim&aacute;ticas</h3>
+<p>O lixo no mar, o uso excessivo de produtos qu&iacute;micos e o aumento das temperaturas do planeta afetam diretamente os animais que vivem em ambientes delicados. Esp&eacute;cies que dependem de &aacute;guas frias ou &aacute;reas espec&iacute;ficas est&atilde;o particularmente vulner&aacute;veis a essas mudan&ccedil;as.</p>
+<h2>Como Explicar A Situa&ccedil;&atilde;o Para As Crian&ccedil;as?</h2>
+<p>Conversar com os filhos sobre temas ambientais pode ser desafiador, especialmente quando envolve conceitos dif&iacute;ceis ou tristes. No entanto, &eacute; poss&iacute;vel abordar o assunto de forma leve e inspiradora.</p>
+<h3>Use hist&oacute;rias e personagens</h3>
+<p>Criar narrativas com animais que enfrentam desafios, mas que tamb&eacute;m t&ecirc;m a chance de serem ajudados, torna o aprendizado mais interessante. Por exemplo, contar a hist&oacute;ria de uma tartaruga marinha que precisa encontrar um caminho seguro para desovar pode ajudar a crian&ccedil;a a entender o ciclo da vida e a import&acirc;ncia de proteger as praias limpas.</p>
+<h3>Utilize recursos visuais</h3>
+<p>Livros ilustrados, v&iacute;deos educativos e at&eacute; brinquedos tem&aacute;ticos s&atilde;o ferramentas poderosas para captar a aten&ccedil;&atilde;o dos pequenos. Mostrar imagens de diferentes animais e seus ambientes naturais ajuda a formar uma conex&atilde;o visual e emocional com a fauna.</p>
+<h3>Incentive perguntas e curiosidade</h3>
+<p>Estimular a crian&ccedil;a a perguntar e expressar suas d&uacute;vidas faz com que o assunto seja absorvido de forma natural. Responder com paci&ecirc;ncia e clareza fortalece o v&iacute;nculo e mostra que cuidar dos seres vivos &eacute; uma responsabilidade compartilhada.</p>
+<h2>Atividades Para Despertar O Amor Pela Natureza</h2>
+<p>A pr&aacute;tica &eacute; um dos melhores caminhos para fixar o aprendizado e criar h&aacute;bitos positivos. Existem v&aacute;rias formas de envolver as crian&ccedil;as em a&ccedil;&otilde;es concretas que promovem o respeito pelos animais e pelo meio ambiente.</p>
+<h3>Visitas a parques e reservas naturais</h3>
+<p>Levar os filhos para conhecer espa&ccedil;os protegidos proporciona uma experi&ecirc;ncia direta com a biodiversidade. Observar animais em seu habitat e ouvir orienta&ccedil;&otilde;es de guias pode ser emocionante e educativo, incentivando o cuidado e a admira&ccedil;&atilde;o pela vida selvagem.</p>
+<h3>Plantio de &aacute;rvores e hortas</h3>
+<p>Participar do cultivo de plantas ensina sobre o ciclo da natureza e a import&acirc;ncia de manter o equil&iacute;brio ecol&oacute;gico. Al&eacute;m disso, essas atividades promovem o trabalho em equipe, a paci&ecirc;ncia e o contato com o solo, elementos essenciais para formar cidad&atilde;os conscientes.</p>
+<h3>Projetos de reciclagem e limpeza</h3>
+<p>Realizar a&ccedil;&otilde;es simples, como separar o lixo corretamente ou ajudar a limpar &aacute;reas p&uacute;blicas, mostra como pequenas atitudes fazem diferen&ccedil;a. Explicar que res&iacute;duos descartados no meio ambiente podem prejudicar os animais ajuda a criar uma consci&ecirc;ncia ecol&oacute;gica pr&aacute;tica.</p>
+<h2>A Import&acirc;ncia De Valores Como Respeito E Responsabilidade</h2>
+<p>Mais do que transmitir informa&ccedil;&otilde;es cient&iacute;ficas, educar para o cuidado com os seres vivos envolve refor&ccedil;ar valores essenciais que ser&atilde;o levados para toda a vida. O respeito &agrave; diversidade, a empatia pelos que compartilham o planeta e a responsabilidade pelas pr&oacute;prias a&ccedil;&otilde;es s&atilde;o pilares que sustentam uma rela&ccedil;&atilde;o saud&aacute;vel com o meio ambiente.</p>
+<h3>Incentive o senso de pertencimento</h3>
+<p>Fazer com que as crian&ccedil;as se sintam parte do mundo natural ajuda a criar um v&iacute;nculo afetivo que ultrapassa o ambiente familiar. Quando a crian&ccedil;a entende que seu bem-estar est&aacute; ligado ao equil&iacute;brio da natureza, ela se torna naturalmente mais cuidadosa.</p>
+<h3>D&ecirc; o exemplo</h3>
+<p>As atitudes dos adultos s&atilde;o o espelho para as crian&ccedil;as. Demonstrar respeito pela natureza, evitar desperd&iacute;cios e defender pr&aacute;ticas sustent&aacute;veis refor&ccedil;a o aprendizado e motiva a replica&ccedil;&atilde;o desses comportamentos.</p>
+<h3>Promova a empatia pelos animais</h3>
+<p>Ensinar que os animais sentem dor, medo e alegria ajuda a desenvolver uma postura compassiva. Explicar que o desaparecimento de uma esp&eacute;cie afeta todo o ecossistema desperta o entendimento sobre a interdepend&ecirc;ncia da vida.</p>
+<h2>Tecnologias E Ferramentas Para Aprender Sobre A Natureza</h2>
+<p>O mundo digital oferece diversas oportunidades para complementar o ensino ambiental de forma interativa e atualizada. Aplicativos, jogos educativos e plataformas online podem ser aliados importantes para manter o interesse e ampliar o conhecimento.</p>
+<h3>Aplicativos educativos</h3>
+<p>Existem apps que exploram a biodiversidade, mostram curiosidades sobre diferentes esp&eacute;cies e ensinam pr&aacute;ticas sustent&aacute;veis. Muitos deles s&atilde;o desenvolvidos com linguagem acess&iacute;vel para crian&ccedil;as, facilitando a compreens&atilde;o.</p>
+<h3>V&iacute;deos e document&aacute;rios</h3>
+<p>Produ&ccedil;&otilde;es audiovisuais focadas em natureza e meio ambiente s&atilde;o recursos din&acirc;micos para despertar a curiosidade. Escolher conte&uacute;dos que mostrem a beleza dos habitats naturais e a import&acirc;ncia da conserva&ccedil;&atilde;o ajuda a criar uma vis&atilde;o positiva.</p>
+<h3>Redes sociais e comunidades online</h3>
+<p>Participar de grupos que compartilham informa&ccedil;&otilde;es sobre preserva&ccedil;&atilde;o pode incentivar o aprendizado cont&iacute;nuo e permitir que pais e filhos troquem experi&ecirc;ncias e ideias.</p>
+<h2>Exemplos De Animais Que Precisam De Ajuda</h2>
+<p>Trazer exemplos reais e pr&oacute;ximos da realidade pode tornar o tema mais concreto para as crian&ccedil;as. Destacar algumas esp&eacute;cies que enfrentam dificuldades mostra que a prote&ccedil;&atilde;o &eacute; urgente e poss&iacute;vel.</p>
+<h3>On&ccedil;a-pintada</h3>
+<p>S&iacute;mbolo da fauna brasileira, a on&ccedil;a-pintada sofre com a perda de seu habitat e a ca&ccedil;a ilegal. Explicar que ela &eacute; fundamental para controlar outras popula&ccedil;&otilde;es de animais ajuda a entender seu papel no equil&iacute;brio da natureza.</p>
+<h3>Mico-le&atilde;o-dourado</h3>
+<p>Esse pequeno primata vive nas florestas do Rio de Janeiro e &eacute; um exemplo de recupera&ccedil;&atilde;o gra&ccedil;as a projetos de conserva&ccedil;&atilde;o. Mostrar que o esfor&ccedil;o coletivo pode salvar esp&eacute;cies traz esperan&ccedil;a e motiva&ccedil;&atilde;o.</p>
+<h3>Tartarugas marinhas</h3>
+<p>Essas criaturas enfrentam amea&ccedil;as tanto na terra, onde desovam, quanto no mar, devido &agrave; polui&ccedil;&atilde;o e pesca. Contar suas hist&oacute;rias aproxima as crian&ccedil;as do mundo marinho e ressalta a import&acirc;ncia das praias limpas.</p>
+<h2>Como Envolver A Escola E A Comunidade</h2>
+<p>A educa&ccedil;&atilde;o ambiental ganha for&ccedil;a quando ultrapassa os muros da casa e se estende para o ambiente escolar e social. Envolver outras crian&ccedil;as, professores e vizinhos fortalece a rede de cuidado com o meio ambiente.</p>
+<h3>Projetos escolares</h3>
+<p>Incentivar a cria&ccedil;&atilde;o de clubes da natureza, feiras ambientais e atividades em grupo estimula o trabalho colaborativo e cria um espa&ccedil;o para troca de conhecimento.</p>
+<h3>Eventos comunit&aacute;rios</h3>
+<p>Participar de mutir&otilde;es de limpeza, plantio coletivo e palestras cria um senso de pertencimento e responsabilidade compartilhada.</p>
+<h3>Parcerias com organiza&ccedil;&otilde;es ambientais</h3>
+<p>Muitas ONGs oferecem programas educativos, materiais did&aacute;ticos e atividades que podem ser incorporadas &agrave; rotina das crian&ccedil;as, ampliando o impacto do aprendizado.</p>
+<p>---</p>
+<p>Despertar o amor e o cuidado pela natureza desde cedo &eacute; um investimento para o futuro do planeta. Ao tornar o conhecimento acess&iacute;vel e prazeroso para os filhos, cria-se uma gera&ccedil;&atilde;o consciente, preparada para proteger a diversidade e manter o equil&iacute;brio dos ecossistemas. Cada gesto, por menor que pare&ccedil;a, contribui para que o mundo continue sendo um lugar rico em vida e beleza para todos.</p>
+        </div>
+
+        
+    </article>
+</main>
+
+<footer class="gs-footer">
+    <div class="container">
+        <div class="gs-footer__social">
+            
+            
+            
+            
+        </div>
+        
+        <ul class="gs-footer__menu">
+            
+        </ul>
+        
+        <div class="gs-footer__description" style="max-width: 600px; margin: 0 auto 2rem; color: var(--text-muted); font-size: 0.95rem; font-family: var(--font-ui);">
+            Um espaço dedicado a compartilhar ideias, artigos e tutoriais. Nossa missão é entregar conteúdo de valor e com qualidade para todos os nossos leitores.
+        </div>
+        
+        
+        <div class="gs-footer__copyright">
+            Somos um blog voltado para as crianças! Aqui você irá encontrar brincadeiras, sugestões, viagens, passeios, recreações, técnicas de aprendizado infantil e muito mais! O mundo da criança agora tem nome: Criança faz Arte! Todos os artigos aqui do site são revisados por uma pedagoga experiente. Então seja muito bem vindo e fique com a gente =)
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Carrossel nativo simplificado (substituto das chamadas de script originais caso tenha blocos CMS)
+    document.addEventListener('DOMContentLoaded', function() {
+        document.body.addEventListener('click', function(e) {
+            const btnPrev = e.target.closest('.btn-carousel-prev');
+            if (btnPrev) {
+                const wrapper = btnPrev.closest('div[id^="carrossel-"]');
+                const track = wrapper.querySelector('.dsc-track');
+                const item = track.querySelector('.dsc-item');
+                if (track && item) {
+                    const scrollAmount = item.offsetWidth + 20;
+                    if (track.scrollLeft <= 5) { track.scrollTo({ left: track.scrollWidth, behavior: 'smooth' }); } 
+                    else { track.scrollBy({ left: -scrollAmount, behavior: 'smooth' }); }
+                }
+                return;
+            }
+            const btnNext = e.target.closest('.btn-carousel-next');
+            if (btnNext) {
+                const wrapper = btnNext.closest('div[id^="carrossel-"]');
+                const track = wrapper.querySelector('.dsc-track');
+                const item = track.querySelector('.dsc-item');
+                if (track && item) {
+                    const scrollAmount = item.offsetWidth + 20;
+                    if (track.scrollLeft + track.offsetWidth >= track.scrollWidth - 5) { track.scrollTo({ left: 0, behavior: 'smooth' }); } 
+                    else { track.scrollBy({ left: scrollAmount, behavior: 'smooth' }); }
+                }
+                return;
+            }
+        });
+    });
+</script>
+</body>
+</html>

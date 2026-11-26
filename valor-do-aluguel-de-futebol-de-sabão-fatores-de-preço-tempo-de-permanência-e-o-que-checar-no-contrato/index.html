@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valor do Aluguel de Futebol de Sabão: Fatores de Preço, Tempo de Permanência e O Que Checar no Contrato - Criança Faz Arte</title>
+    <meta name="description" content="">
+    
+    
+    <link rel="canonical" href="https://www.criancafazarte.com.br/valor-do-aluguel-de-futebol-de-sabão-fatores-de-preço-tempo-de-permanência-e-o-que-checar-no-contrato/" />
+    
+    
+    
+    
+    <link rel="icon" href="/static/uploads/iocne.png" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/static/uploads/iocne.png">
+    
+
+    <link rel="stylesheet" href="/themes/gshow_pop_v2/assets/css/style.css?v=2.0">
+    <!-- Bootstrap Icons (Usado internamente pelo CMS e para redes sociais) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Algumas lógicas do CMS dependem de classes Bootstrap puras (RaioX). Injetamos a versão ultra-leve do bootstrap apenas para os blocos do CMS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Sistema de Paletas de Cores -->
+    
+    <style>
+        :root {
+            --accent-color: #6f42c1 !important;
+            --accent-hover: #59359a !important;
+            --accent-dark: #472a7b !important;
+        }
+    </style>
+    
+
+    
+</head>
+<body>
+<header class="gs-header">
+    <div class="gs-header__container">
+        <!-- Lado Esquerdo -->
+        <div class="gs-header__left">
+            <button class="gs-header__menu-btn" id="gs-menu-toggle" aria-label="Abrir Menu">
+                <i class="bi bi-list"></i>
+                <span class="gs-header__menu-text">MENU</span>
+            </button>
+
+            <a href="/" class="gs-header__logo">
+                
+                    <img src="/static/uploads/crianca-faz-arte-2.png" alt="Criança Faz Arte">
+                
+            </a>
+        </div>
+
+        <!-- Centro: Nome do Site com fonte fina -->
+        <a href="/" class="gs-header__center">
+            Criança Faz Arte
+        </a>
+
+        <!-- Lado Direito: Buscar -->
+        <div class="gs-header__right">
+            <button class="gs-header__right-item" id="gs-search-toggle" aria-label="Pesquisar" style="background:none; border:none; color:#fff;">
+                <i class="bi bi-search"></i>
+                <span style="text-transform: uppercase;">Buscar</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- Overlay de Busca (Search Modal) -->
+<div class="gs-search-overlay" id="gs-search-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:9999; padding:2rem;">
+    <button id="gs-search-close" style="position:absolute; top:20px; right:30px; background:none; border:none; color:#fff; font-size:2rem; cursor:pointer;"><i class="bi bi-x-lg"></i></button>
+    <div style="max-width:600px; margin: 4rem auto 0; text-align:center;">
+        <input type="text" id="gs-search-input" placeholder="O que você está procurando?" style="width:100%; padding:1rem; font-size:1.5rem; border:none; border-bottom:2px solid var(--accent-color); background:transparent; color:#fff; outline:none; font-family:var(--font-ui);">
+        <div id="gs-search-results" style="margin-top:2rem; text-align:left; max-height:60vh; overflow-y:auto; font-family:var(--font-ui);"></div>
+    </div>
+</div>
+
+<!-- Sub-Barra de Categoria (Rosa Escuro) -->
+<div class="gs-header__subbar">
+    
+        <a href="/categoria/atividades/" style="color:#ffffff;">Atividades</a>
+    
+</div>
+
+<!-- Overlay Escuro do Menu -->
+<div class="gs-overlay" id="gs-overlay"></div>
+
+<!-- Menu Oculto (Offcanvas) -->
+<nav class="gs-nav-offcanvas" id="gs-offcanvas">
+    <button class="gs-nav-offcanvas__close" id="gs-menu-close" aria-label="Fechar Menu">
+        <i class="bi bi-x-lg"></i>
+    </button>
+    <br><br>
+    
+        <a href="/">INÍCIO</a>
+        
+            <a href="/categoria/atividades/">Atividades</a>
+        
+            <a href="/categoria/bebes/">Bebês</a>
+        
+            <a href="/categoria/blog/">Blog</a>
+        
+            <a href="/categoria/criancas/">Crianças</a>
+        
+            <a href="/categoria/educacao/">Educação</a>
+        
+    
+</nav>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- MENU HAMBURGUER LOGIC ---
+        const toggleBtn = document.getElementById('gs-menu-toggle');
+        const closeBtn = document.getElementById('gs-menu-close');
+        const offcanvas = document.getElementById('gs-offcanvas');
+        const overlay = document.getElementById('gs-overlay');
+
+        function openMenu() {
+            offcanvas.classList.add('open');
+            overlay.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMenu() {
+            offcanvas.classList.remove('open');
+            overlay.classList.remove('open');
+            document.body.style.overflow = 'auto';
+        }
+
+        if (toggleBtn) toggleBtn.addEventListener('click', openMenu);
+        if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+        if (overlay) overlay.addEventListener('click', closeMenu);
+
+        // --- SEARCH LOGIC ---
+        const searchToggle = document.getElementById('gs-search-toggle');
+        const searchOverlay = document.getElementById('gs-search-overlay');
+        const searchClose = document.getElementById('gs-search-close');
+        const searchInput = document.getElementById('gs-search-input');
+        const searchResults = document.getElementById('gs-search-results');
+        let postsData = [];
+
+        if (searchToggle && searchOverlay) {
+            searchToggle.addEventListener('click', function() {
+                searchOverlay.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+                searchInput.focus();
+                
+                // Fetch posts.json only once
+                if (postsData.length === 0) {
+                    fetch('/posts.json')
+                        .then(response => response.json())
+                        .then(data => { postsData = data; })
+                        .catch(err => console.error('Erro ao carregar pesquisa', err));
+                }
+            });
+            
+            searchClose.addEventListener('click', function() {
+                searchOverlay.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+            
+            searchInput.addEventListener('input', function(e) {
+                const query = e.target.value.toLowerCase();
+                searchResults.innerHTML = '';
+                if (query.length < 2) return;
+                
+                const filtered = postsData.filter(post => post.title.toLowerCase().includes(query));
+                
+                if (filtered.length === 0) {
+                    searchResults.innerHTML = '<p style="color:#aaa; text-align:center; padding:1rem;">Nenhum resultado encontrado.</p>';
+                    return;
+                }
+                
+                filtered.forEach(post => {
+                    const link = document.createElement('a');
+                    link.href = '/' + post.slug + '/';
+                    link.style.display = 'flex';
+                    link.style.gap = '15px';
+                    link.style.alignItems = 'center';
+                    link.style.padding = '10px 0';
+                    link.style.borderBottom = '1px solid #333';
+                    link.style.color = '#fff';
+                    link.style.textDecoration = 'none';
+                    
+                    let imgHtml = post.image ? `<img src="${post.image}" style="width:60px; height:60px; object-fit:cover; border-radius:4px;">` : `<div style="width:60px; height:60px; background:#444; border-radius:4px;"></div>`;
+                    
+                    link.innerHTML = imgHtml + `<div><div style="font-size:0.8rem; color:#aaa;">${post.date || ''}</div><div style="font-weight:700;">${post.title}</div></div>`;
+                    searchResults.appendChild(link);
+                });
+            });
+        }
+    });
+</script>
+
+<main class="container" style="padding-top: 3rem;">
+    <article>
+        <header class="post-header">
+            
+            <h1 class="post-title">Valor do Aluguel de Futebol de Sabão: Fatores de Preço, Tempo de Permanência e O Que Checar no Contrato</h1>
+            
+            
+
+            <div class="post-meta" style="margin-top: 1rem; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); padding: 1rem 0; max-width: 760px; margin-left: auto; margin-right: auto;">
+                
+                    <div style="display: flex; align-items: center; gap: 0.5rem; justify-content: center;">
+                        
+                            <i class="bi bi-person-circle" style="font-size: 2rem; color: var(--text-muted);"></i>
+                        
+                        <span style="font-weight: 700; color: var(--text-main);">Por <a href="/autor/nadine-a-queiroga/" style="color: var(--accent-color);">Nadine A Queiroga</a></span>
+                    </div>
+                
+                <div style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 1rem; flex: 1 1 auto;">
+                    <time datetime="2026-10-13" style="color: var(--text-muted);">
+                        13/10/2026 14:10
+                    </time>
+                    <div style="display: flex; gap: 15px; font-size: 1.3rem; color: var(--accent-color);">
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        
+            <figure class="post-featured-image">
+                <img src="/static/uploads/valor-do-aluguel-de-futebol-de-sabao-fatores-de-preco-tempo-de-permanencia-e-o-que-checar-no-contrato-1791900605.webp?v=1791900618" alt="Valor do Aluguel de Futebol de Sabão: Fatores de Preço, Tempo de Permanência e O Que Checar no Contrato">
+            </figure>
+        
+
+        
+
+        <div class="post-content">
+            <p>O futebol de sab&atilde;o &eacute; uma atividade recreativa que vem ganhando muita popularidade em festas, eventos corporativos, anivers&aacute;rios e celebra&ccedil;&otilde;es em geral. Combina divers&atilde;o, esporte e muita risada, tornando-se uma op&ccedil;&atilde;o excelente para entretenimento ao ar livre. Quem deseja contratar essa atra&ccedil;&atilde;o muitas vezes busca entender o <a href="https://tontonlocacoes.com.br/brinquedos/aluguel-de-futebol-de-sabao-em-sao-paulo/" target="_blank" rel="noopener">valor do aluguel de futebol de sab&atilde;o</a> para planejar o or&ccedil;amento e garantir uma experi&ecirc;ncia satisfat&oacute;ria sem surpresas.</p>
+<p>O custo do aluguel pode variar bastante, dependendo de diversos fatores que influenciam diretamente no pre&ccedil;o final. Al&eacute;m disso, a dura&ccedil;&atilde;o da loca&ccedil;&atilde;o e o que est&aacute; especificado no contrato s&atilde;o aspectos essenciais para evitar transtornos. Compreender esses pontos &eacute; fundamental para fazer uma escolha consciente e aproveitar ao m&aacute;ximo essa modalidade de lazer.</p>
+<h2>Fatores Que Influenciam O Pre&ccedil;o Do Futebol De Sab&atilde;o</h2>
+<p>O pre&ccedil;o para alugar um campo de futebol de sab&atilde;o n&atilde;o &eacute; fixo e pode sofrer varia&ccedil;&otilde;es conforme diferentes crit&eacute;rios. Conhecer esses elementos ajuda a identificar qual &eacute; a melhor op&ccedil;&atilde;o para o seu evento e a negociar com os fornecedores.</p>
+<h3>Tamanho e Estrutura do Campo</h3>
+<p>Um dos principais determinantes do custo est&aacute; no tamanho do campo e na qualidade da estrutura oferecida. Campos maiores, que comportam mais jogadores, exigem mais materiais, como lona especial, arma&ccedil;&atilde;o, bomba de ar e sistema de sab&atilde;o, elevando o pre&ccedil;o do aluguel.</p>
+<p>Al&eacute;m disso, a robustez da estrutura, resist&ecirc;ncia do material e a presen&ccedil;a de acess&oacute;rios adicionais, como redes laterais, ilumina&ccedil;&atilde;o para eventos noturnos e sistema de drenagem, tamb&eacute;m impactam no custo final.</p>
+<h3>Quantidade de Participantes e Equipamentos</h3>
+<p>O n&uacute;mero de participantes previstos influencia diretamente no pre&ccedil;o. Algumas empresas cobram por pessoa, enquanto outras oferecem pacotes fechados. Equipamentos extras, como bolas especiais, kits de prote&ccedil;&atilde;o (joelheiras, cotoveleiras) e itens promocionais, podem estar inclusos ou oferecidos como adicionais.</p>
+<h3>Localiza&ccedil;&atilde;o do Evento</h3>
+<p>A regi&atilde;o onde o futebol de sab&atilde;o ser&aacute; instalado &eacute; outro fator importante. Deslocamentos longos exigem log&iacute;stica mais complexa e podem gerar taxas adicionais. Cidades grandes e capitais tendem a apresentar pre&ccedil;os mais altos devido &agrave; demanda e aos custos operacionais.</p>
+<h3>Tempo de Montagem e Desmontagem</h3>
+<p>O tempo necess&aacute;rio para montar e desmontar o campo tamb&eacute;m interfere no or&ccedil;amento. Eventos com hor&aacute;rios apertados ou locais de dif&iacute;cil acesso podem demandar mais trabalho e, consequentemente, um custo maior.</p>
+<h3>Servi&ccedil;os Complementares</h3>
+<p>Alguns fornecedores oferecem pacotes completos que incluem monitores para supervisionar a brincadeira, equipe para manuten&ccedil;&atilde;o do sab&atilde;o durante o evento e limpeza ao final. Esses servi&ccedil;os agregam valor, mas tamb&eacute;m elevam o pre&ccedil;o.</p>
+<h2>Tempo De Perman&ecirc;ncia E Como Ele Impacta No Custo</h2>
+<p>O per&iacute;odo pelo qual o campo de futebol de sab&atilde;o ser&aacute; alugado &eacute; um dos pontos que determina a tarifa. Geralmente, o aluguel &eacute; feito por hora, mas h&aacute; op&ccedil;&otilde;es para per&iacute;odos mais longos, como meio dia ou dia inteiro.</p>
+<h3>Aluguel por Hora</h3>
+<p>Essa &eacute; a modalidade mais comum, ideal para eventos curtos, como anivers&aacute;rios ou festas corporativas. O pre&ccedil;o por hora pode variar conforme a empresa e a demanda, mas normalmente inclui montagem e desmontagem. &Eacute; importante confirmar com o fornecedor se o tempo total cobrado inclui esses processos ou se s&atilde;o cobrados &agrave; parte.</p>
+<h3>Pacotes Di&aacute;rios ou por Turno</h3>
+<p>Para eventos maiores ou que se estendem por v&aacute;rias horas, contratar o futebol de sab&atilde;o por meio per&iacute;odo (turno) ou dia inteiro pode ser mais vantajoso financeiramente. Muitas empresas oferecem descontos progressivos para loca&ccedil;&otilde;es mais longas.</p>
+<h3>Tempo Extra e Multas</h3>
+<p>&Eacute; essencial verificar no contrato o que acontece em caso de atraso na devolu&ccedil;&atilde;o do equipamento. Algumas empresas aplicam multas por hora excedida, o que pode aumentar consideravelmente o custo final. Planejamento e comunica&ccedil;&atilde;o clara com o fornecedor evitam problemas.</p>
+<h2>Aspectos Essenciais Para Verificar No Contrato De Loca&ccedil;&atilde;o</h2>
+<p>Assinar um contrato de aluguel para o futebol de sab&atilde;o &eacute; uma etapa crucial que garante seguran&ccedil;a para ambas as partes. Antes de fechar neg&oacute;cio, alguns pontos precisam ser analisados com aten&ccedil;&atilde;o.</p>
+<h3>Descri&ccedil;&atilde;o Completa do Servi&ccedil;o</h3>
+<p>O contrato deve detalhar exatamente o que est&aacute; inclu&iacute;do na loca&ccedil;&atilde;o: tamanho do campo, equipamentos fornecidos, quantidade de sab&atilde;o, n&uacute;mero de monitores, hor&aacute;rios de montagem e desmontagem, entre outros. Isso evita surpresas e garante que o que foi acordado seja entregue.</p>
+<h3>Condi&ccedil;&otilde;es de Pagamento e Cancelamento</h3>
+<p>Estipular claramente os valores, formas de pagamento, prazos e pol&iacute;ticas para cancelamento ou remarca&ccedil;&atilde;o protege tanto o contratante quanto o fornecedor. Questione se h&aacute; multas ou taxas para cancelamento tardio e quais s&atilde;o as condi&ccedil;&otilde;es para reembolso.</p>
+<h3>Responsabilidades e Seguro</h3>
+<p>&Eacute; importante que o contrato estabele&ccedil;a as responsabilidades de cada parte, principalmente em casos de danos ao equipamento ou acidentes durante a atividade. Verifique se a empresa possui seguro ou cobertura para eventuais incidentes.</p>
+<h3>Limita&ccedil;&otilde;es de Uso e Seguran&ccedil;a</h3>
+<p>Condi&ccedil;&otilde;es sobre o uso adequado do campo e orienta&ccedil;&otilde;es para garantir a seguran&ccedil;a dos participantes costumam estar no contrato. Isso inclui regras sobre o n&uacute;mero m&aacute;ximo de jogadores, faixa et&aacute;ria permitida, vestimentas recomendadas e cuidados para evitar acidentes.</p>
+<h3>Atendimento e Suporte T&eacute;cnico</h3>
+<p>Confirme se o fornecedor disponibiliza suporte durante o evento para resolver problemas t&eacute;cnicos ou emerg&ecirc;ncias. A agilidade no atendimento pode fazer toda a diferen&ccedil;a para o sucesso da atividade.</p>
+<h2>Dicas Para Economizar E Garantir Qualidade Na Loca&ccedil;&atilde;o</h2>
+<p>Contratar o futebol de sab&atilde;o pode ser um investimento significativo, mas algumas estrat&eacute;gias ajudam a encontrar o melhor custo-benef&iacute;cio.</p>
+<h3>Pesquise e Compare Or&ccedil;amentos</h3>
+<p>Solicitar cota&ccedil;&otilde;es de diferentes fornecedores permite avaliar pre&ccedil;os e servi&ccedil;os inclusos. Muitas vezes, empresas que cobram um pouco mais oferecem vantagens que compensam, como maior qualidade dos materiais ou equipe especializada.</p>
+<h3>Reserve com Anteced&ecirc;ncia</h3>
+<p>Garantir a reserva com anteced&ecirc;ncia pode evitar pre&ccedil;os mais altos, especialmente em per&iacute;odos de alta demanda, como feriados e finais de semana.</p>
+<h3>Negocie Pacotes e Servi&ccedil;os Adicionais</h3>
+<p>Ao contratar para eventos maiores, vale a pena negociar descontos ou inclus&atilde;o de servi&ccedil;os extras. Algumas empresas oferecem brindes ou condi&ccedil;&otilde;es especiais para contratos fechados com anteced&ecirc;ncia.</p>
+<h3>Verifique Avalia&ccedil;&otilde;es e Reputa&ccedil;&atilde;o</h3>
+<p>Consultar avalia&ccedil;&otilde;es de clientes anteriores e buscar refer&ecirc;ncias ajuda a escolher fornecedores confi&aacute;veis e que realmente entregam o que prometem.</p>
+<h3>Aten&ccedil;&atilde;o &agrave; Qualidade do Sab&atilde;o Utilizado</h3>
+<p>O sab&atilde;o utilizado deve ser seguro para a pele e olhos, preferencialmente biodegrad&aacute;vel e n&atilde;o t&oacute;xico. Essa informa&ccedil;&atilde;o deve constar no contrato ou ser confirmada com o fornecedor para evitar problemas de sa&uacute;de.</p>
+<h2>Benef&iacute;cios Do Futebol De Sab&atilde;o Para Eventos</h2>
+<p>Al&eacute;m da divers&atilde;o garantida, o futebol de sab&atilde;o traz diversos benef&iacute;cios que justificam seu investimento.</p>
+<h3>Incentivo &agrave; Atividade F&iacute;sica</h3>
+<p>A pr&aacute;tica do futebol de sab&atilde;o exige movimenta&ccedil;&atilde;o constante, promovendo exerc&iacute;cio f&iacute;sico de forma l&uacute;dica e prazerosa para crian&ccedil;as e adultos.</p>
+<h3>Socializa&ccedil;&atilde;o e Trabalho em Equipe</h3>
+<p>A din&acirc;mica do jogo estimula a intera&ccedil;&atilde;o entre os participantes, fortalecendo v&iacute;nculos sociais e habilidades de trabalho em equipe.</p>
+<h3>Op&ccedil;&atilde;o Vers&aacute;til para Diferentes P&uacute;blicos</h3>
+<p>Por ser uma atividade acess&iacute;vel e divertida, atende a diferentes faixas et&aacute;rias e tipos de evento, desde festas infantis at&eacute; confraterniza&ccedil;&otilde;es empresariais.</p>
+<h3>Cria&ccedil;&atilde;o de Mem&oacute;rias Duradouras</h3>
+<p>A experi&ecirc;ncia &uacute;nica do futebol de sab&atilde;o gera momentos inesquec&iacute;veis, tornando o evento mais especial e marcante.</p>
+<h2>Conclus&atilde;o</h2>
+<p>Entender os fatores que impactam o pre&ccedil;o do aluguel, a influ&ecirc;ncia do tempo de perman&ecirc;ncia e os detalhes contratuais &eacute; fundamental para garantir uma contrata&ccedil;&atilde;o segura e econ&ocirc;mica do futebol de sab&atilde;o. Avaliar cuidadosamente as op&ccedil;&otilde;es dispon&iacute;veis, negociar condi&ccedil;&otilde;es e esclarecer todas as d&uacute;vidas com o fornecedor contribuem para uma experi&ecirc;ncia divertida, segura e livre de imprevistos. Essa modalidade de entretenimento &eacute;, sem d&uacute;vida, uma excelente escolha para quem busca inova&ccedil;&atilde;o e muita alegria em suas celebra&ccedil;&otilde;es.</p>
+        </div>
+
+        
+    </article>
+</main>
+
+<footer class="gs-footer">
+    <div class="container">
+        <div class="gs-footer__social">
+            
+            
+            
+            
+        </div>
+        
+        <ul class="gs-footer__menu">
+            
+        </ul>
+        
+        <div class="gs-footer__description" style="max-width: 600px; margin: 0 auto 2rem; color: var(--text-muted); font-size: 0.95rem; font-family: var(--font-ui);">
+            Um espaço dedicado a compartilhar ideias, artigos e tutoriais. Nossa missão é entregar conteúdo de valor e com qualidade para todos os nossos leitores.
+        </div>
+        
+        
+        <div class="gs-footer__copyright">
+            Somos um blog voltado para as crianças! Aqui você irá encontrar brincadeiras, sugestões, viagens, passeios, recreações, técnicas de aprendizado infantil e muito mais! O mundo da criança agora tem nome: Criança faz Arte! Todos os artigos aqui do site são revisados por uma pedagoga experiente. Então seja muito bem vindo e fique com a gente =)
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Carrossel nativo simplificado (substituto das chamadas de script originais caso tenha blocos CMS)
+    document.addEventListener('DOMContentLoaded', function() {
+        document.body.addEventListener('click', function(e) {
+            const btnPrev = e.target.closest('.btn-carousel-prev');
+            if (btnPrev) {
+                const wrapper = btnPrev.closest('div[id^="carrossel-"]');
+                const track = wrapper.querySelector('.dsc-track');
+                const item = track.querySelector('.dsc-item');
+                if (track && item) {
+                    const scrollAmount = item.offsetWidth + 20;
+                    if (track.scrollLeft <= 5) { track.scrollTo({ left: track.scrollWidth, behavior: 'smooth' }); } 
+                    else { track.scrollBy({ left: -scrollAmount, behavior: 'smooth' }); }
+                }
+                return;
+            }
+            const btnNext = e.target.closest('.btn-carousel-next');
+            if (btnNext) {
+                const wrapper = btnNext.closest('div[id^="carrossel-"]');
+                const track = wrapper.querySelector('.dsc-track');
+                const item = track.querySelector('.dsc-item');
+                if (track && item) {
+                    const scrollAmount = item.offsetWidth + 20;
+                    if (track.scrollLeft + track.offsetWidth >= track.scrollWidth - 5) { track.scrollTo({ left: 0, behavior: 'smooth' }); } 
+                    else { track.scrollBy({ left: scrollAmount, behavior: 'smooth' }); }
+                }
+                return;
+            }
+        });
+    });
+</script>
+</body>
+</html>
